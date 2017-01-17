@@ -1,6 +1,8 @@
 ﻿using NFine.Application.SystemManage;
+using NFine.Application.WebManage;
 using NFine.Code;
 using NFine.Domain.Entity.SystemManage;
+using NFine.Domain.Entity.WebManage;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -12,6 +14,7 @@ namespace NFine.Web
         private OrganizeApp organizeApp = new OrganizeApp();
         private RoleApp roleApp = new RoleApp();
         private DutyApp dutyApp = new DutyApp();
+        private WebNodeApp nodeApp = new WebNodeApp();
 
         public Log FileLog
         {
@@ -56,6 +59,10 @@ namespace NFine.Web
         public void BindOrganizeId(string Value, bool IsDefault = false)
         {
             List<SelectListItem> list = new List<SelectListItem>();
+            if (IsDefault)
+            {
+                list.Add(new SelectListItem() { Value = "", Text = "请选择" });
+            }
             var data = organizeApp.GetList();
             foreach (OrganizeEntity item in data)
             {
@@ -72,6 +79,10 @@ namespace NFine.Web
         public void BindDepartmentId(string Value, bool IsDefault = false)
         {
             List<SelectListItem> list = new List<SelectListItem>();
+            if (IsDefault)
+            {
+                list.Add(new SelectListItem() { Value = "", Text = "请选择" });
+            }
             var data = organizeApp.GetList();
             foreach (OrganizeEntity item in data)
             {
@@ -88,6 +99,10 @@ namespace NFine.Web
         public void BindRoleId(string Value, bool IsDefault = false)
         {
             List<SelectListItem> list = new List<SelectListItem>();
+            if (IsDefault)
+            {
+                list.Add(new SelectListItem() { Value = "", Text = "请选择" });
+            }
             var data = roleApp.GetList();
             foreach (RoleEntity item in data)
             {
@@ -104,12 +119,36 @@ namespace NFine.Web
         public void BindDutyId(string Value, bool IsDefault = false)
         {
             List<SelectListItem> list = new List<SelectListItem>();
-            var data =dutyApp.GetList();
+            if (IsDefault)
+            {
+                list.Add(new SelectListItem() { Value = "", Text = "请选择" });
+            }
+            var data = dutyApp.GetList();
             foreach (RoleEntity item in data)
             {
                 list.Add(new SelectListItem() { Value = item.F_Id, Text = item.F_FullName });
             }
             ViewBag.F_DutyId = new SelectList(list, "Value", "Text", Value);
+        }
+
+        /// <summary>
+        /// 绑定父栏目
+        /// </summary>
+        /// <param name="Value"></param>
+        /// <param name="IsDefault"></param>
+        public void BindParentNode(string Value, bool IsDefault = false)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (IsDefault)
+            {
+                list.Add(new SelectListItem() { Value = "", Text = "请选择" });
+            }
+            var data = nodeApp.GetList();
+            foreach (WebNodeEntity item in data)
+            {
+                list.Add(new SelectListItem() { Value = item.F_Id, Text = item.F_FullName });
+            }
+            ViewBag.F_ParentId = new SelectList(list, "Value", "Text", Value);
         }
 
     }

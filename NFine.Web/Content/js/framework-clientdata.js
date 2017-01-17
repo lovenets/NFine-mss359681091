@@ -9,6 +9,7 @@ $.clientsInit = function () {
         role: [],
         duty: [],
         user: [],
+        node: [],
         authorizeMenu: [],
         authorizeButton: []
     };
@@ -23,6 +24,7 @@ $.clientsInit = function () {
                 dataJson.organize = data.organize;
                 dataJson.role = data.role;
                 dataJson.duty = data.duty;
+                dataJson.node = data.node;
                 dataJson.authorizeMenu = eval(data.authorizeMenu);
                 dataJson.authorizeButton = data.authorizeButton;
             }

@@ -39,6 +39,7 @@ namespace NFine.Web.Areas.SystemManage.Controllers
             var data = userApp.GetForm(keyValue);
             return Content(data.ToJson());
         }
+
         [HttpPost]
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
@@ -47,6 +48,7 @@ namespace NFine.Web.Areas.SystemManage.Controllers
             userApp.SubmitForm(userEntity, userLogOnEntity, keyValue);
             return Success("操作成功。");
         }
+
         [HttpPost]
         [HandlerAuthorize]
         [HandlerAjaxOnly]
@@ -56,11 +58,13 @@ namespace NFine.Web.Areas.SystemManage.Controllers
             userApp.DeleteForm(keyValue);
             return Success("删除成功。");
         }
+
         [HttpGet]
         public ActionResult RevisePassword()
         {
             return View();
         }
+
         [HttpPost]
         [HandlerAjaxOnly]
         //[HandlerAuthorize]
@@ -70,6 +74,7 @@ namespace NFine.Web.Areas.SystemManage.Controllers
             userLogOnApp.RevisePassword(userPassword, keyValue);
             return Success("重置密码成功。");
         }
+
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
@@ -82,6 +87,7 @@ namespace NFine.Web.Areas.SystemManage.Controllers
             userApp.UpdateForm(userEntity);
             return Success("账户禁用成功。");
         }
+
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]

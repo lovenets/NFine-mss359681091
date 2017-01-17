@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using NFine.Application.WebManage;
+using NFine.Domain.Entity.WebManage;
 
 namespace NFine.Web.Controllers
 {
@@ -27,6 +29,7 @@ namespace NFine.Web.Controllers
                 organize = this.GetOrganizeList(),
                 role = this.GetRoleList(),
                 duty = this.GetDutyList(),
+                node = this.GetNodeList(),//获取栏目列表
                 user = "",
                 authorizeMenu = this.GetMenuList(),
                 authorizeButton = this.GetMenuButtonList(),
@@ -130,6 +133,23 @@ namespace NFine.Web.Controllers
             {
                 var buttonList = data.Where(t => t.F_ModuleId.Equals(item.F_ModuleId));
                 dictionary.Add(item.F_ModuleId, buttonList);
+            }
+            return dictionary;
+        }
+
+        private object GetNodeList()
+        {
+            WebNodeApp nodeApp = new WebNodeApp();
+            var data = nodeApp.GetList();
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            foreach (WebNodeEntity item in data)
+            {
+                var fieldItem = new
+                {
+                    encode = item.F_EnCode,
+                    fullname = item.F_FullName
+                };
+                dictionary.Add(item.F_Id, fieldItem);
             }
             return dictionary;
         }

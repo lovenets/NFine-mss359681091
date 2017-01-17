@@ -32,7 +32,13 @@ namespace NFine.Application.WebManage
             return service.FindList(expression, pagination);
         }
 
-	    public WebNodeEntity GetForm(string keyValue)
+        public List<WebNodeEntity> GetList()
+        {
+            return service.IQueryable().OrderBy(t => t.F_CreatorTime).ToList();
+        }
+
+
+        public WebNodeEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);
         }
@@ -54,6 +60,11 @@ namespace NFine.Application.WebManage
                 entity.Create();
                 service.Insert(entity);
             }
+        }
+
+        public void UpdateForm(WebNodeEntity entity)
+        {
+            service.Update(entity);
         }
     }
 }
