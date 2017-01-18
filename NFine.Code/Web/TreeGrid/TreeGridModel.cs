@@ -16,5 +16,6 @@ namespace NFine.Code
         public bool expanded { get; set; }
         public bool loaded { get; set; }
         public string entityJson { get; set; }
+        public string param1 { get; set; }
     }
 }

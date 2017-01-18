@@ -14,27 +14,78 @@ namespace NFine.Web.Areas.WebManage.Controllers
         private WebNodeApp nodeApp = new WebNodeApp();
 
         [HttpGet]
-        [HandlerAuthorize]
-        public override ActionResult Form()
+        [HandlerAjaxOnly]
+        public ActionResult GetParentNodeJson()
         {
-            base.BindParentNode("", true);//绑定父栏目
-            return View();
+            var data = nodeApp.GetList();
+            List<object> list = new List<object>();
+            foreach (WebNodeEntity item in data)
+            {
+                list.Add(new { id = item.F_Id, text = item.F_FullName });
+            }
+            return Content(list.ToJson());
         }
-
 
         [HttpGet]
         [HandlerAjaxOnly]
-        public ActionResult GetGridJson(Pagination pagination, string keyword)
+        public ActionResult GetGridJson(Pagination pagination, string queryJson)
         {
             var data = new
             {
-                rows = nodeApp.GetList(pagination, keyword),
+                rows = nodeApp.GetList(pagination, queryJson),
                 total = pagination.total,
                 page = pagination.page,
                 records = pagination.records
             };
             return Content(data.ToJson());
         }
+
+        [HttpGet]
+        [HandlerAjaxOnly]
+        public ActionResult GetTreeGridJson(string keyword, string nodetype, string parentId)
+        {
+            var data = nodeApp.GetList();
+            //if (!string.IsNullOrEmpty(keyword))
+            //{
+            //    data = data.Where(d => d.F_FullName.Contains(keyword)).ToList();
+            //}
+            //if (!string.IsNullOrEmpty(nodetype))
+            //{
+            //    data = data.Where(d => d.F_NodeType.Equals(nodetype)).ToList();
+            //}
+            //if (!string.IsNullOrEmpty(parentId))
+            //{
+            //    data = data.Where(d => d.F_ParentId.Equals(parentId)).ToList();
+            //}
+            var treeList = new List<TreeGridModel>();
+            foreach (WebNodeEntity item in data)
+            {
+                TreeGridModel treeModel = new TreeGridModel();
+                bool hasChildren = data.Count(t => t.F_ParentId == item.F_Id) == 0 ? false : true;
+                treeModel.id = item.F_Id;
+                treeModel.text = item.F_FullName;
+                treeModel.isLeaf = hasChildren;
+                treeModel.parentId = item.F_ParentId;
+                treeModel.expanded = true;
+                treeModel.entityJson = item.ToJson();
+                treeModel.param1 = item.F_NodeType;
+                treeList.Add(treeModel);
+            }
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                treeList = treeList.TreeWhere(t => t.text.Contains(keyword), "id", "parentId");
+            }
+            if (!string.IsNullOrEmpty(parentId))
+            {
+                treeList = treeList.TreeWhere(t => t.parentId.Equals(parentId), "id", "parentId");
+            }
+            if (!string.IsNullOrEmpty(nodetype))
+            {
+                treeList = treeList.TreeWhere(t => t.param1.Equals(nodetype), "id", "parentId");
+            }
+            return Content(treeList.TreeGridJson());
+        }
+
 
         [HttpGet]
         [HandlerAjaxOnly]
@@ -47,9 +98,10 @@ namespace NFine.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(WebNodeEntity userEntity, string keyValue)
+        public ActionResult SubmitForm(WebNodeEntity nodeEntity, string keyValue)
         {
-            nodeApp.SubmitForm(userEntity, keyValue);
+
+            nodeApp.SubmitForm(nodeEntity, keyValue);
             return Success("操作成功");
         }
 

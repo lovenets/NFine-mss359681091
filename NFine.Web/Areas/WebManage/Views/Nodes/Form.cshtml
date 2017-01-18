@@ -2,9 +2,11 @@
     ViewBag.Title = "栏目编辑";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
+<script src="~/Content/js/layer/layer.js"></script>
 <script>
     var keyValue = $.request("keyValue");
     $(function () {
+        initControl();
         if (!!keyValue) {
             $.ajax({
                 url: "/WebManage/Nodes/GetFormJson",
@@ -16,14 +18,19 @@
                 }
             });
         }
-
-        $("#F_ParentId").change(function () {
-            fnChange();//生成栏目编号
-        });
     });
 
-    function fnChange() {
+    function initControl() {
+        //绑定父栏目
+        $("#F_ParentId").bindSelect({
+            url: "/WebManage/Nodes/GetParentNodeJson"
+        });
 
+        //绑定栏目类别
+        $("#F_NodeType").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "NoteType" }
+        });
     }
 
     function submitForm() {
@@ -38,8 +45,21 @@
             }
         })
     }
+
+    function btn_upload() {
+        layer.open({
+            title: "上传图片",
+            type: 2,
+            area: ['400px', '280px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: '/Home/Upload'
+        });
+    }
+
 </script>
-<form id="form1">
+@using (Html.BeginForm("Form", "Nodes", FormMethod.Post, new { id = "form1", enctype = "multipart/form-data" }))
+{
     <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">基本信息</a></li>
@@ -50,13 +70,13 @@
                 <tr>
                     <th class="formTitle">父栏目</th>
                     <td class="formValue">
-                        @*<input id="F_ParentId" name="F_ParentId" type="text" class="form-control required" placeholder="请输入父栏目" />*@
-
-                        @Html.DropDownList("F_ParentId", null, new { @class = "form-control" })
+                        <select id="F_ParentId" name="F_ParentId" class="form-control">
+                            <option value="0">==请选择==</option>
+                        </select>
                     </td>
-                    <th class="formTitle">栏目编码</th>
+                    <th class="formTitle">栏目类别</th>
                     <td class="formValue">
-                        <input id="F_EnCode" name="F_EnCode" type="text" class="form-control " placeholder="请输入栏目编码" disabled />
+                        <select id="F_NodeType" name="F_NodeType" class="form-control"></select>
                     </td>
                 </tr>
                 <tr>
@@ -64,31 +84,49 @@
                     <td class="formValue">
                         <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入栏目名称" />
                     </td>
-                    <th class="formTitle">栏目路径</th>
+                    <th class="formTitle">是否可用</th>
                     <td class="formValue">
-                        <input id="F_NodePath" name="F_NodePath" type="text" class="form-control " placeholder="请输入栏目路径" />
+                        <div class="ckbox">
+                            <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <th class="formTitle">栏目图片</th>
                     <td class="formValue">
-                        <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="请输入栏目图片" />
+                        @*<input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />*@
+                        @*<input id="F_ImageUrl" name="F_ImageUrl" type="file" class="form-control" />*@
+                        <a id="NF-upload" class="btn btn-primary dropdown-text" onclick="btn_upload()"><i style="margin-right:5px" class="fa fa-picture-o"></i>上传图片</a>
+
                     </td>
                     <th class="formTitle">排序号</th>
                     <td class="formValue">
-                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" placeholder="请输入排序号" />
+                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required digits" placeholder="请输入排序号" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">图片路径</th>
+                    <td class="formValue" colspan="3">
+                        <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="formTitle">栏目路径</th>
+                    <td class="formValue" colspan="3">
+                        <input id="F_NodePath" name="F_NodePath" type="text" class="form-control " placeholder="" />
                     </td>
                 </tr>
 
                 <tr>
                     <th class="formTitle" valign="top" style="padding-top: 5px;">
-                        描述
+                        栏目简介
                     </th>
                     <td class="formValue" colspan="3">
-                        <textarea id="F_Description" name="F_Description" class="form-control" style="height: 60px;"></textarea>
+                        <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
-</form>
+}

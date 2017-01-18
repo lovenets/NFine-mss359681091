@@ -136,7 +136,6 @@ namespace NFine.Web.Controllers
             }
             return dictionary;
         }
-
         private object GetNodeList()
         {
             WebNodeApp nodeApp = new WebNodeApp();
@@ -146,7 +145,7 @@ namespace NFine.Web.Controllers
             {
                 var fieldItem = new
                 {
-                    encode = item.F_EnCode,
+                    fid = item.F_Id,
                     fullname = item.F_FullName
                 };
                 dictionary.Add(item.F_Id, fieldItem);
@@ -155,3 +154,4 @@ namespace NFine.Web.Controllers
         }
     }
 }
+

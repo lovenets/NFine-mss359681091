@@ -18,16 +18,26 @@ namespace NFine.Application.WebManage
 {
     public class WebNodeApp
     {
-		private IWebNodeRepository service = new WebNodeRepository();
+        private IWebNodeRepository service = new WebNodeRepository();
 
-		public List<WebNodeEntity> GetList(Pagination pagination, string queryJson)
+        public List<WebNodeEntity> GetList(Pagination pagination, string queryJson)
         {
-		    var expression = ExtLinq.True<WebNodeEntity>();
+            var expression = ExtLinq.True<WebNodeEntity>();
             var queryParam = queryJson.ToJObject();
             if (!queryParam["keyword"].IsEmpty())
             {
                 string keyword = queryParam["keyword"].ToString();
                 expression = expression.And(t => t.F_FullName.Contains(keyword));
+            }
+            if (!queryParam["parentId"].IsEmpty())
+            {
+                string parentId = queryParam["parentId"].ToString();
+                expression = expression.And(t => t.F_ParentId.Equals(parentId));
+            }
+            if (!queryParam["nodeType"].IsEmpty())
+            {
+                string nodeType = queryParam["nodeType"].ToString();
+                expression = expression.And(t => t.F_NodeType.Equals(nodeType));
             }
             return service.FindList(expression, pagination);
         }
@@ -48,7 +58,7 @@ namespace NFine.Application.WebManage
             service.Delete(entity);
         }
 
-		public void SubmitForm(WebNodeEntity entity, string keyValue)
+        public void SubmitForm(WebNodeEntity entity, string keyValue)
         {
             if (!string.IsNullOrEmpty(keyValue))
             {

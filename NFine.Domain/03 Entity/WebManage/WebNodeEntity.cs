@@ -22,7 +22,7 @@ namespace NFine.Domain.Entity.WebManage
     {
         public String F_Id { get; set; }
         public String F_ParentId { get; set; }
-        public String F_EnCode { get; set; }
+        public String F_NodeType { get; set; }
         public String F_FullName { get; set; }
         public String F_NodePath { get; set; }
         public String F_ImageUrl { get; set; }
