@@ -25,8 +25,8 @@ namespace NFine.Repository.SystemManage
                                     INNER  JOIN Sys_Items i ON i.F_Id = d.F_ItemId
                             WHERE   1 = 1
                                     AND i.F_EnCode = @enCode
-                                    AND d.F_EnabledMark = 1
-                                    AND d.F_DeleteMark = 0
+                                    AND (d.F_EnabledMark = 1 or d.F_EnabledMark is null)
+                                    AND (d.F_DeleteMark = 0 or d.F_DeleteMark is null)
                             ORDER BY d.F_SortCode ASC");
             DbParameter[] parameter = 
             {

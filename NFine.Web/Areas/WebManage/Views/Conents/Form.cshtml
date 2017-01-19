@@ -1,7 +1,226 @@
 ﻿@{
     ViewBag.Title = "内容编辑";
-    Layout = "~/Views/Shared/_Index.cshtml";
-
+    Layout = "~/Views/Shared/_Form.cshtml";
 }
+<script src="~/Content/js/layer/layer.js"></script>
 
-<h2>内容编辑</h2>
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#a" data-toggle="tab">基本信息</a></li>
+            <li><a href="#b" data-toggle="tab">扩展信息</a></li>
+        </ul>
+        <div class="tab-content" style="padding-top: 5px;">
+            <div id="a" class="tab-pane active" style="padding: 15px;">
+                <table class="form">
+                    <tr>
+                        <th class="formTitle">所属栏目</th>
+                        <td class="formValue">
+                            <select id="F_NodeId" name="F_NodeId" class="form-control">
+                                <option value="">==请选择==</option>
+                            </select>
+                        </td>
+                        <th class="formTitle">所属专题</th>
+                        <td class="formValue">
+                            <select id="F_FeaturesId" name="F_FeaturesId" class="form-control">
+                                <option value="">==请选择==</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">标题</th>
+                        <td class="formValue" colspan="3">
+                            <input id="F_Title" name="F_Title" type="text" class="form-control required" placeholder="请输入标题" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">作者</th>
+                        <td class="formValue">
+                            <input id="F_Author" name="F_Author" type="text" class="form-control " placeholder="" />
+
+                        </td>
+                        <th class="formTitle">来源</th>
+                        <td class="formValue">
+                            <input id="F_Source" name="F_Source" type="text" class="form-control  " placeholder="" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th class="formTitle">是否置顶</th>
+                        <td class="formValue">
+                            <div class="ckbox">
+                                <input id="F_Top" name="F_Top" type="checkbox"><label for="F_Top">置顶</label>
+                            </div>
+
+                        </td>
+                        <th class="formTitle">是否推荐</th>
+                        <td class="formValue">
+                            <div class="ckbox">
+                                <input id="F_Recommend" name="F_Recommend" type="checkbox"><label for="F_Recommend">推荐</label>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th class="formTitle">封面图片</th>
+                        <td class="formValue" colspan="2">
+                            <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />
+                        </td>
+                        <td><a id="NF-upload" class="btn btn-primary dropdown-text" onclick="btn_upload()"><i style="margin-right:5px" class="fa fa-picture-o"></i>上传图片</a></td>
+                    </tr>
+
+                    <tr>
+                        <th class="formTitle">跳转路径</th>
+                        <td class="formValue" colspan="3">
+                            <input id="F_LinkUrl" name="F_LinkUrl" type="text" class="form-control " placeholder="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle" valign="top" style="padding-top: 5px;">
+                            正文内容
+                        </th>
+                        <td class="formValue" colspan="3">
+                            <textarea id="F_Contents" name="F_Contents" class="form-control" style="height: 120px;"></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="b" class="tab-pane" style="padding: 15px;">
+
+                <table class="form">
+                    <tr>
+                        <th class="formTitle">副标题</th>
+                        <td class="formValue" colspan="3">
+                            <input id="F_SubTitle" name="F_SubTitle" type="text" class="form-control " placeholder="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">标签</th>
+                        <td class="formValue">
+                            <input id="F_Tags" name="F_Tags" type="text" class="form-control " placeholder="" />
+
+                        </td>
+                        <th class="formTitle">排序号</th>
+                        <td class="formValue">
+                            <input id="F_SortCode" name="F_SortCode" type="text" class="form-control digits" placeholder="请输入排序号" value="0" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th class="formTitle">是否热门</th>
+                        <td class="formValue">
+                            <div class="ckbox">
+                                <input id="F_Hot" name="F_Hot" type="checkbox" ><label for="F_Hot">热门</label>
+                            </div>
+                        </td>
+
+                        <th class="formTitle">登录显示</th>
+                        <td class="formValue">
+                            <div class="ckbox">
+                                <input id="F_LoginFilter" name="F_LoginFilter" type="checkbox" ><label for="F_LoginFilter">登录显示</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th class="formTitle">创建时间</th>
+                        <td class="formValue">
+
+                            <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+
+                        </td>
+
+                        <th class="formTitle">创建人</th>
+                        <td class="formValue">
+
+                            <input id="F_CreatorUserId" name="F_CreatorUserId" type="text" class="form-control " placeholder="" style="display:none" />
+
+                            <span id="CreatorUserId"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">最后修改时间</th>
+                        <td class="formValue">
+
+                            <input id="F_LastModifyTime" name="F_LastModifyTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+
+                        </td>
+
+                        <th class="formTitle">最后修改人</th>
+                        <td class="formValue">
+                            <input id="F_LastModifyUserId" name="F_LastModifyUserId" type="text" class="form-control " placeholder="" style="display:none" />
+                            <span id="LastModifyUserId"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</form>
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/WebManage/Conents/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+
+
+                }
+            });
+        }
+
+        var username = getUserName($("#F_CreatorUserId").val());
+        var username1 = getUserName($("#F_LastModifyUserId").val());
+        $("#CreatorUserId").text(username);
+        $("#LastModifyUserId").text(username1);
+    });
+
+
+
+    function initControl() {
+        //绑定栏目
+        $("#F_NodeId").bindSelect({
+            url: "/WebManage/Nodes/GetParentNodeJson"
+        });
+
+        //绑定专题
+        $("#F_FeaturesId").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "Features" }
+        });
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/WebManage/Conents/SubmitForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+
+    function btn_upload() {
+        layer.open({
+            title: "上传图片",
+            type: 2,
+            area: ['400px', '280px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: '/Home/Upload'
+        });
+    }
+
+
+</script>

@@ -428,3 +428,20 @@ $.fn.dataGrid = function (options) {
     };
     $element.jqGrid(options);
 };
+
+function getUserName(fid) {
+    var result = "";
+    $.ajax({
+        url: "/SystemManage/User/GetUserName",
+        data: { fid: fid },
+        type: "post",
+        async: false,
+        dataType: "json",
+        success: function (data) {
+            if (data.state == "success") {
+                result = data.message;
+            }
+        }
+    });
+    return result;
+};

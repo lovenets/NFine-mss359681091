@@ -111,5 +111,19 @@ namespace NFine.Web.Areas.SystemManage.Controllers
             base.BindDutyId("");//绑定职责
             return View();
         }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        public ActionResult GetUserName(string fid)
+        {
+            string strUsername = string.Empty;
+            if (!string.IsNullOrEmpty(fid))
+            {
+                UserEntity ue = userApp.GetUserEntity(fid);
+                strUsername = ue.F_RealName == "" ? ue.F_NickName : ue.F_RealName;
+            }
+            return Success(strUsername);
+        }
+
     }
 }

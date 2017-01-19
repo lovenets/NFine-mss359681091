@@ -122,11 +122,15 @@ namespace NFine.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DisabledNode(string keyValue)
         {
-            WebNodeEntity nodeEntity = new WebNodeEntity();
-            nodeEntity.F_Id = keyValue;
-            nodeEntity.F_EnabledMark = false;
-            nodeApp.UpdateForm(nodeEntity);
-            return Success("栏目禁用成功");
+            if (!string.IsNullOrEmpty(keyValue))
+            {
+                WebNodeEntity nodeEntity = new WebNodeEntity();
+                nodeEntity.F_Id = keyValue;
+                nodeEntity.F_EnabledMark = false;
+                nodeApp.UpdateForm(nodeEntity);
+                return Success("禁用成功");
+            }
+            return Success("请选择禁用项");
         }
 
         [HttpPost]
@@ -135,11 +139,15 @@ namespace NFine.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EnabledNode(string keyValue)
         {
-            WebNodeEntity nodeEntity = new WebNodeEntity();
-            nodeEntity.F_Id = keyValue;
-            nodeEntity.F_EnabledMark = true;
-            nodeApp.UpdateForm(nodeEntity);
-            return Success("栏目启用成功");
+            if (!string.IsNullOrEmpty(keyValue))
+            {
+                WebNodeEntity nodeEntity = new WebNodeEntity();
+                nodeEntity.F_Id = keyValue;
+                nodeEntity.F_EnabledMark = true;
+                nodeApp.UpdateForm(nodeEntity);
+                return Success("栏目启用成功");
+            }
+            return Success("请选择启用项");
         }
 
     }

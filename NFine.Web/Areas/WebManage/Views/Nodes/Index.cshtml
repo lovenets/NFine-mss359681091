@@ -82,6 +82,10 @@
     }
     function btn_edit() {
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择编辑项", "warning");
+            return;
+        }
         $.modalOpen({
             id: "Form",
             title: "修改栏目",
@@ -94,9 +98,14 @@
         });
     }
     function btn_delete() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择删除项", "warning");
+            return;
+        }
         $.deleteForm({
             url: "/WebManage/Nodes/DeleteForm",
-            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            param: { keyValue: keyValue },
             success: function () {
                 $.currentWindow().$("#gridList").trigger("reloadGrid");
             }
@@ -104,6 +113,10 @@
     }
     function btn_details() {
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择查看项", "warning");
+            return;
+        }
         $.modalOpen({
             id: "Details",
             title: "查看栏目",
@@ -116,6 +129,11 @@
 
     function btn_disabled() {
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
+
+        if (keyValue == undefined) {
+            $.modalMsg("请选择禁用项", "warning");
+            return;
+        }
         $.modalConfirm("注：您确定要【禁用】该栏目吗？", function (r) {
             if (r) {
                 $.submitForm({
@@ -131,6 +149,10 @@
 
     function btn_enabled() {
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择启用项", "warning");
+            return;
+        }
         $.modalConfirm("注：您确定要【启用】该栏目吗？", function (r) {
             if (r) {
                 $.submitForm({

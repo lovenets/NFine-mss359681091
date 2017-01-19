@@ -30,6 +30,13 @@ namespace NFine.Application.SystemManage
             expression = expression.And(t => t.F_Account != "admin");
             return service.FindList(expression, pagination);
         }
+
+        public UserEntity GetUserEntity(string keyword)
+        {
+            return service.FindEntity(t => t.F_Id == keyword);
+
+        }
+
         public UserEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);

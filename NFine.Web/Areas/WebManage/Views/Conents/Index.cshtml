@@ -2,5 +2,217 @@
     ViewBag.Title = "内容管理";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+<script>
+    $(function () {
+        gridList();
+    })
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/WebManage/Conents/GetGridJson",
+            height: $(window).height() - 96,
+            colModel: [
+                { label: "主键", name: "F_Id", hidden: true, key: true },
+                { label: '标题', name: 'F_Title', width: 180, align: 'left' },
+                {
+                    label: '所属栏目', name: 'F_NodeId', width: 120, align: 'center',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return top.clients.node[cellvalue] == null ? "" : top.clients.node[cellvalue].fullname;
+                    }
+                },
+                {
+                    label: '所属专题', name: 'F_FeaturesId', width: 120, align: 'center',
+                    formatter: function (cellvalue) {
+                        return top.clients.dataItems.Features[cellvalue] == undefined ? "" : top.clients.dataItems.Features[cellvalue]
+                    }
+                },
+                { label: '来源', name: 'F_Source', width: 120, align: 'left' },
+                { label: '作者', name: 'F_Author', width: 60, align: 'center' },
 
-<h2>内容管理</h2>
+
+                {
+                    label: '创建时间', name: 'F_CreatorTime', width: 100, align: 'center',
+                    formatter: "date", formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' }
+                },
+
+
+                {
+                    label: "推荐", name: "F_Recommend", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
+                 {
+                     label: "置顶", name: "F_Top", width: 60, align: "center",
+                     formatter: function (cellvalue) {
+                         return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                     }
+                 },
+                     {
+                         label: "热门", name: "F_Hot", width: 60, align: "center",
+                         formatter: function (cellvalue) {
+                             return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                         }
+                     },
+                {
+                    label: "有效", name: "F_EnabledMark", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                }
+
+            ],
+            pager: "#gridPager",
+            sortname: 'F_CreatorTime desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+
+            var strjson = '';
+            strjson = '{ "keyword":"' + $("#txt_keyword").val() + '" }';
+            $gridList.jqGrid('setGridParam', {
+                postData: { keyword: $("#txt_keyword").val() },
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_add() {
+        $.modalOpen({
+            id: "Form",
+            title: "新增内容",
+            url: "/WebManage/Conents/Form",
+            width: "700px",
+            height: "570px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择编辑项", "warning");
+            return;
+        }
+        $.modalOpen({
+            id: "Form",
+            title: "修改内容",
+            url: "/WebManage/Conents/Form?keyValue=" + keyValue,
+            width: "700px",
+            height: "570px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_delete() {
+
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择删除项", "warning");
+            return;
+        }
+        $.deleteForm({
+            url: "/WebManage/Conents/DeleteForm",
+            param: { keyValue: keyValue },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择查看项", "warning");
+            return;
+        }
+        $.modalOpen({
+            id: "Details",
+            title: "查看内容",
+            url: "/WebManage/Conents/Details?keyValue=" + keyValue,
+            width: "550px",
+            height: "620px",
+            btn: null,
+        });
+    }
+
+    function btn_disabled() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue != undefined) {
+            $.modalConfirm("注：您确定要【禁用】该内容吗？", function (r) {
+                if (r) {
+                    $.submitForm({
+                        url: "/WebManage/Conents/DisabledConents",
+                        param: { keyValue: keyValue },
+                        success: function () {
+                            $.currentWindow().$("#gridList").trigger("reloadGrid");
+                        }
+                    })
+                }
+            });
+        }
+        else {
+            $.modalMsg("请选择禁用项", "warning");
+        }
+
+    }
+
+    function btn_enabled() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue != undefined) {
+            $.modalConfirm("注：您确定要【启用】该内容吗？", function (r) {
+                if (r) {
+                    $.submitForm({
+                        url: "/WebManage/Conents/EnabledConents",
+                        param: { keyValue: keyValue },
+                        success: function () {
+                            $.currentWindow().$("#gridList").trigger("reloadGrid");
+                        }
+                    })
+                }
+            });
+        } else {
+            $.modalMsg("请选择启用项", "warning");
+        }
+    }
+</script>
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新增内容</a>
+        </div>
+        <div class="operate">
+            <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改内容</a></li>
+                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除内容</a></li>
+                @*<li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看内容</a></li>*@
+                <li class="split"></li>
+                <li><a id="NF-disabled" authorize="yes" onclick="btn_disabled()"><i class="fa fa-stop-circle"></i>禁用</a></li>
+                <li><a id="NF-enabled" authorize="yes" onclick="btn_enabled()"><i class="fa fa-play-circle"></i>启用</a></li>
+            </ul>
+            <a href="javascript:;" class="close"></a>
+        </div>
+        @*<script>$('.toolbar').authorizeButton()</script>*@
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="内容标题" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+</div>
