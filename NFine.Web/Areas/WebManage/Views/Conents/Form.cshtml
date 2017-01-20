@@ -168,10 +168,9 @@
             <div id="c" class="tab-pane" style="padding: 15px;">
 
                 <table class="form">
+
                     <tr>
                         <td class="formValue">
-
-
                             <div class="gridPanel">
                                 <table id="gridList"></table>
                             </div>
@@ -180,14 +179,13 @@
                     </tr>
                     <tr>
 
-                        <td style="text-align:center">
-
-                            <a id="NF-add" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-cloud-upload" style="margin-right:5px"></i>上传附件</a>
-
-                            <a id="NF-del" class="btn btn-danger dropdown-text" onclick="btn_del()" style="margin-left:15px"><i class="fa fa-times" style="margin-right:5px"></i>删除附件</a>
+                        <td style="text-align:left;padding:15px 0 0 10px">
+                            <a id="NF-add" class="btn btn-primary dropdown-text" onclick="btn_uploadfile('1', '1', '2')"><i class="fa fa-cloud-upload"></i>上传附件</a>
+                            <a id="NF-del" class="btn btn-danger dropdown-text" onclick="btn_delete()" style="margin-left:15px"><i class="fa fa-times" style="margin-right:5px"></i>删除附件</a>
 
                         </td>
                     </tr>
+
                 </table>
             </div>
         </div>
@@ -262,59 +260,91 @@
         });
     }
 
+    //上传附件
+    function btn_uploadfile(param1, param2, param3) {
+       
+        if (keyValue == undefined||keyValue=="") {
+            $.modalMsg("请先保存内容", "warning");
+            return;
+        }
+
+        var params = '/Home/Upload?upload_multi=' + param1 + '&upload_type=' + param2 + '&upload_btnid=' + param3 + '&tablename=Web_Content&recordid=' + escape(keyValue);
+        params=encodeURI(params);
+        layer.open({
+            title: "上传文件",
+            type: 2,
+            area: ['100%', '100%'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: params
+        });
+    }
+
+
 </script>
 
 
 <script>
+
+ 
+
     $(function () {
         gridList();
     })
     function gridList() {
+
+        var strjson = '';
+        strjson = '{ "TableName":"Web_Content","TableRecordID":"' + keyValue + '" }';
+
         var $gridList = $("#gridList");
-
         $gridList.dataGrid({
-            url: "/WebManage/Conents/GetGridJson",
-
+            url: "/WebManage/Attachment/GetGridJson",
+            //height: $(window).height() - 96,
             colModel: [
                 { label: "主键", name: "F_Id", hidden: true, key: true },
-                { label: '标题', name: 'F_Title', width: 180, align: 'left' },
-                {
-                    label: '所属栏目', name: 'F_NodeId', width: 120, align: 'center',
-                    formatter: function (cellvalue, options, rowObject) {
-                        return top.clients.node[cellvalue] == null ? "" : top.clients.node[cellvalue].fullname;
-                    }
-                },
-                {
-                    label: '所属专题', name: 'F_FeaturesId', width: 120, align: 'center',
-                    formatter: function (cellvalue) {
-                        return top.clients.dataItems.Features[cellvalue] == undefined ? "" : top.clients.dataItems.Features[cellvalue]
-                    }
-                },
-                { label: '来源', name: 'F_Source', width: 120, align: 'left' },
-                { label: '作者', name: 'F_Author', width: 60, align: 'center' },
+                { label: '附件名称', name: 'F_FullName', width: 120, align: 'left' },
 
 
+                { label: '附件路径', name: 'F_FilePath', width: 200, align: 'left' },
+                { label: '附件类型', name: 'F_FileType', width: 80, align: 'center' },
+                { label: '附件大小', name: 'F_FileSize', width: 80, align: 'center' },
                 {
                     label: '创建时间', name: 'F_CreatorTime', width: 100, align: 'center',
                     formatter: "date", formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' }
                 },
                 {
-                    label: "推荐", name: "F_Recommend", width: 60, align: "center",
+                    label: "有效", name: "F_EnabledMark", width: 60, align: "center",
                     formatter: function (cellvalue) {
                         return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
                     }
                 }
 
             ],
+            postData: { queryJson: strjson },
             pager: "#gridPager",
             sortname: 'F_CreatorTime desc',
             viewrecords: true
         });
 
+
     }
 
-</script>
+    function btn_delete() {
 
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择删除项", "warning");
+            return;
+        }
+        $.deleteForm({
+            url: "/WebManage/Attachment/DeleteForm",
+            param: { keyValue: keyValue },
+            success: function () {
+                $("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
 
 
 

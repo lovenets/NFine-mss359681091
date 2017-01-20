@@ -53,9 +53,11 @@
         });
     }
     function btn_add() {
+
         var itemId = $("#itemTree").getCurrentNode().id;
         var itemName = $("#itemTree").getCurrentNode().text;
         if (!itemId) {
+            $.modalMsg("请选择字典父项", "warning");
             return false;
         }
         $.modalOpen({

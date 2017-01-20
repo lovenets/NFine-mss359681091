@@ -59,6 +59,7 @@
     <Compile Include="SystemSecurity\DbBackupApp.cs" />
     <Compile Include="SystemSecurity\FilterIPApp.cs" />
     <Compile Include="SystemSecurity\LogApp.cs" />
+    <Compile Include="WebManage\WebAttachmentApp.cs" />
     <Compile Include="WebManage\WebContentApp.cs" />
     <Compile Include="WebManage\WebNodeApp.cs" />
   </ItemGroup>

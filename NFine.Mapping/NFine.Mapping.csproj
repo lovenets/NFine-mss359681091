@@ -62,6 +62,7 @@
     <Compile Include="SystemSecurity\DbBackupMap.cs" />
     <Compile Include="SystemSecurity\FilterIPMap.cs" />
     <Compile Include="SystemSecurity\LogMap.cs" />
+    <Compile Include="WebManage\WebAttachmentMap.cs" />
     <Compile Include="WebManage\WebContentMap.cs" />
     <Compile Include="WebManage\WebNodeMap.cs" />
   </ItemGroup>

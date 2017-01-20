@@ -6,18 +6,29 @@
 <script src="~/Content/js/uploadify/jquery.uploadify.min.js"></script>
 <script src="~/Content/js/layer/layer.js"></script>
 <script>
+
+
+    var request = {
+        QueryString: function (val) {
+            var uri = window.location.search;
+            var re = new RegExp("" + val + "\=([^\&\?]*)", "ig");
+            return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+        }
+    }
+
     $(function () {
         var isMulti = false;
         var type = "*.jpg;*.png;";
-        var param1 = String(@Request.QueryString["upload_multi"]);
-        var param2 = String(@Request.QueryString["upload_type"]);
+        var param1 = request.QueryString("upload_multi");
+        var param2 = request.QueryString("upload_type");
+        var param3 = request.QueryString("upload_btnid");
+        var param4 = request.QueryString("tablename");
+        var param5 = request.QueryString("recordid");
         if (param1.length > 0) {
             isMulti = true;
         }
         if (param2.length > 0) {
-
             type = "*.jpg;*.png;*.zip;*.pdf;*.txt;*.doc;*.docx;*.xls;*.xlsx;*.ppt;*.pptx;*.mdf;*.avi;*.mp3;*.mp4;*.rar";
-
         }
 
         $('#btn_upload').uploadify({
@@ -32,7 +43,19 @@
             formData: { "imgType": "normal" }, //提交给服务器端的参数
             onUploadSuccess: function (file, data, response) {   //一个文件上传成功后的响应事件处理
                 var data = $.parseJSON(data);
-                parent.$("#F_ImageUrl").val(data.imgpath);
+                if (param3.length > 0) {
+                    if (param3 == "1") {
+                        parent.$("#F_FilePath").val(data.imgpath);
+                    }
+                    else if (param3 == "2") {
+                        parent.$("#gridList").trigger("reloadGrid");
+                    }
+
+                }
+                else {
+                    parent.$("#F_ImageUrl").val(data.imgpath);
+                }
+
             }
         });
     });
