@@ -2,9 +2,26 @@
     ViewBag.Title = "内容管理";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+<link href="~/Content/js/select2/select2.min.css" rel="stylesheet" />
+<script src="~/Content/js/select2/select2.min.js"></script>
 <script>
     $(function () {
         gridList();
+
+        //绑定栏目
+        $("#F_NodeId").bindSelect({
+            url: "/WebManage/Nodes/GetParentNodeJson"
+        });
+
+        //绑定专题
+        $("#F_FeaturesId").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "Features" }
+        });
+
+        $("#F_NodeId,#F_FeaturesId").change(function () {
+            $("#btn_search").click();
+        });
     })
     function gridList() {
         var $gridList = $("#gridList");
@@ -66,12 +83,12 @@
             sortname: 'F_CreatorTime desc',
             viewrecords: true
         });
-        $("#btn_search").click(function () {
 
+        $("#btn_search").click(function () {
             var strjson = '';
-            strjson = '{ "keyword":"' + $("#txt_keyword").val() + '" }';
+            strjson = '{ "keyword":"' + $("#txt_keyword").val() + '","F_NodeId":"' + $("#F_NodeId").val() + '","F_FeaturesId":"' + $("#F_FeaturesId").val() + '" }';
             $gridList.jqGrid('setGridParam', {
-                postData: { keyword: $("#txt_keyword").val() },
+                postData: { queryJson: strjson },
             }).trigger('reloadGrid');
         });
     }
@@ -80,8 +97,8 @@
             id: "Form",
             title: "新增内容",
             url: "/WebManage/Conents/Form",
-            width: "700px",
-            height: "570px",
+            width: "980px",
+            height: "640px",
             callBack: function (iframeId) {
                 top.frames[iframeId].submitForm();
             }
@@ -97,8 +114,8 @@
             id: "Form",
             title: "修改内容",
             url: "/WebManage/Conents/Form?keyValue=" + keyValue,
-            width: "700px",
-            height: "570px",
+            width: "980px",
+            height: "640px",
             callBack: function (iframeId) {
                 top.frames[iframeId].submitForm();
             }
@@ -203,11 +220,32 @@
             <tr>
                 <td>
                     <div class="input-group">
-                        <input id="txt_keyword" type="text" class="form-control" placeholder="内容标题" style="width: 200px;">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入关键词" style="width: 200px;">
                         <span class="input-group-btn">
                             <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
                         </span>
                     </div>
+                </td>
+
+                <td style="padding-left:15px; font-weight:600">
+                    所属栏目：
+                </td>
+                <td style="width:150px">
+                    <select id="F_NodeId" name="F_NodeId" class="form-control">
+                        <option value="">==请选择==</option>
+                    </select>
+
+                </td>
+
+
+                <td style="padding-left:15px; font-weight:600">
+                    所属专题：
+                </td>
+                <td style="width:150px">
+                    <select id="F_FeaturesId" name="F_FeaturesId" class="form-control">
+                        <option value="">==请选择==</option>
+                    </select>
+
                 </td>
             </tr>
         </table>

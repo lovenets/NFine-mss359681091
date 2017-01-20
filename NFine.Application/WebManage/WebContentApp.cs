@@ -27,7 +27,17 @@ namespace NFine.Application.WebManage
             if (!queryParam["keyword"].IsEmpty())
             {
                 string keyword = queryParam["keyword"].ToString();
-                expression = expression.And(t => t.F_Title.Contains(keyword));
+                expression = expression.And(t => (t.F_Title.Contains(keyword) || t.F_Author.Contains(keyword) || t.F_Source.Contains(keyword)));
+            }
+            if (!queryParam["F_NodeId"].IsEmpty())
+            {
+                string F_NodeId = queryParam["F_NodeId"].ToString();
+                expression = expression.And(t => (t.F_NodeId.Equals(F_NodeId)));
+            }
+            if (!queryParam["F_FeaturesId"].IsEmpty())
+            {
+                string F_FeaturesId = queryParam["F_FeaturesId"].ToString();
+                expression = expression.And(t => (t.F_FeaturesId.Equals(F_FeaturesId)));
             }
             return service.FindList(expression, pagination);
         }

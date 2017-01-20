@@ -3,6 +3,7 @@ using NFine.Code;
 using NFine.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -31,8 +32,10 @@ namespace NFine.Web.Areas.WebManage.Controllers
             var data = contentApp.GetForm(keyValue);
             return Content(data.ToJson());
         }
+
         [HttpPost]
         [HandlerAjaxOnly]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(WebContentEntity contentEntity, string keyValue)
         {
@@ -82,5 +85,8 @@ namespace NFine.Web.Areas.WebManage.Controllers
             }
             return Success("请选择启用项");
         }
+
+
+
     }
 }

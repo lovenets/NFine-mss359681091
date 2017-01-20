@@ -3,12 +3,20 @@
     Layout = "~/Views/Shared/_Form.cshtml";
 }
 <script src="~/Content/js/layer/layer.js"></script>
+<script src="~/Content/js/ueditor/ueditor.config.js"></script>
+<script src="~/Content/js/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/Content/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<script src="~/Content/js/jqgrid/jqgrid.min.js"></script>
+<link href="~/Content/js/jqgrid/jqgrid.css" rel="stylesheet" />
+<script src="~/Content/js/jqgrid/grid.locale-cn.js"></script>
 
 <form id="form1">
-    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px; padding:10px">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#a" data-toggle="tab">基本信息</a></li>
             <li><a href="#b" data-toggle="tab">扩展信息</a></li>
+            <li><a href="#c" data-toggle="tab">附件信息</a></li>
         </ul>
         <div class="tab-content" style="padding-top: 5px;">
             <div id="a" class="tab-pane active" style="padding: 15px;">
@@ -81,7 +89,9 @@
                             正文内容
                         </th>
                         <td class="formValue" colspan="3">
-                            <textarea id="F_Contents" name="F_Contents" class="form-control" style="height: 120px;"></textarea>
+                            <textarea id="F_Contents" name="F_Contents" class="form-control" style="display:none"></textarea>
+                            <script id="editor" type="text/plain" style="width:795px;height:500px;">
+                            </script>
                         </td>
                     </tr>
                 </table>
@@ -111,14 +121,14 @@
                         <th class="formTitle">是否热门</th>
                         <td class="formValue">
                             <div class="ckbox">
-                                <input id="F_Hot" name="F_Hot" type="checkbox" ><label for="F_Hot">热门</label>
+                                <input id="F_Hot" name="F_Hot" type="checkbox"><label for="F_Hot">热门</label>
                             </div>
                         </td>
 
                         <th class="formTitle">登录显示</th>
                         <td class="formValue">
                             <div class="ckbox">
-                                <input id="F_LoginFilter" name="F_LoginFilter" type="checkbox" ><label for="F_LoginFilter">登录显示</label>
+                                <input id="F_LoginFilter" name="F_LoginFilter" type="checkbox"><label for="F_LoginFilter">登录显示</label>
                             </div>
                         </td>
                     </tr>
@@ -155,11 +165,39 @@
                     </tr>
                 </table>
             </div>
-        </div>
+            <div id="c" class="tab-pane" style="padding: 15px;">
 
+                <table class="form">
+                    <tr>
+                        <td class="formValue">
+
+
+                            <div class="gridPanel">
+                                <table id="gridList"></table>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td style="text-align:center">
+
+                            <a id="NF-add" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-cloud-upload" style="margin-right:5px"></i>上传附件</a>
+
+                            <a id="NF-del" class="btn btn-danger dropdown-text" onclick="btn_del()" style="margin-left:15px"><i class="fa fa-times" style="margin-right:5px"></i>删除附件</a>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </form>
-<script>
+
+
+<script type="text/javascript">
+
+    var ue = UE.getEditor('editor');
     var keyValue = $.request("keyValue");
     $(function () {
         initControl();
@@ -171,8 +209,6 @@
                 async: false,
                 success: function (data) {
                     $("#form1").formSerialize(data);
-
-
                 }
             });
         }
@@ -181,10 +217,12 @@
         var username1 = getUserName($("#F_LastModifyUserId").val());
         $("#CreatorUserId").text(username);
         $("#LastModifyUserId").text(username1);
+
+        ue.ready(function () {//编辑器初始化完成再赋值
+            ue.setContent($("#F_Contents").val());  //赋值给UEditor
+        });
     });
-
-
-
+    //初始化
     function initControl() {
         //绑定栏目
         $("#F_NodeId").bindSelect({
@@ -202,6 +240,7 @@
         if (!$('#form1').formValid()) {
             return false;
         }
+        $("#F_Contents").val(ue.getContent());//把文本编辑器赋值到隐藏控件
         $.submitForm({
             url: "/WebManage/Conents/SubmitForm?keyValue=" + keyValue,
             param: $("#form1").formSerialize(),
@@ -211,6 +250,7 @@
         })
     }
 
+    //上传封面
     function btn_upload() {
         layer.open({
             title: "上传图片",
@@ -222,5 +262,62 @@
         });
     }
 
+</script>
+
+
+<script>
+    $(function () {
+        gridList();
+    })
+    function gridList() {
+        var $gridList = $("#gridList");
+
+        $gridList.dataGrid({
+            url: "/WebManage/Conents/GetGridJson",
+
+            colModel: [
+                { label: "主键", name: "F_Id", hidden: true, key: true },
+                { label: '标题', name: 'F_Title', width: 180, align: 'left' },
+                {
+                    label: '所属栏目', name: 'F_NodeId', width: 120, align: 'center',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return top.clients.node[cellvalue] == null ? "" : top.clients.node[cellvalue].fullname;
+                    }
+                },
+                {
+                    label: '所属专题', name: 'F_FeaturesId', width: 120, align: 'center',
+                    formatter: function (cellvalue) {
+                        return top.clients.dataItems.Features[cellvalue] == undefined ? "" : top.clients.dataItems.Features[cellvalue]
+                    }
+                },
+                { label: '来源', name: 'F_Source', width: 120, align: 'left' },
+                { label: '作者', name: 'F_Author', width: 60, align: 'center' },
+
+
+                {
+                    label: '创建时间', name: 'F_CreatorTime', width: 100, align: 'center',
+                    formatter: "date", formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' }
+                },
+                {
+                    label: "推荐", name: "F_Recommend", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                }
+
+            ],
+            pager: "#gridPager",
+            sortname: 'F_CreatorTime desc',
+            viewrecords: true
+        });
+
+    }
 
 </script>
+
+
+
+
+
+
+
