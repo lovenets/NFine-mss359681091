@@ -1,8 +1,8 @@
 ﻿/*******************************************************************************
  * Copyright © 2016 NFine.Framework 版权所有
- * Author: NFine
+ * Author: Lss
  * Description: NFine快速开发平台
- * Website：http://www.nfine.cn
+ * Website：http://blog.csdn.net/mss359681091
 *********************************************************************************/
 using NFine.Application.SystemManage;
 using NFine.Code;

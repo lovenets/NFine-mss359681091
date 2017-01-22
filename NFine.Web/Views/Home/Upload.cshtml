@@ -17,20 +17,29 @@
     }
 
     $(function () {
-        var isMulti = false;
-        var type = "*.jpg;*.png;";
+      
         var param1 = request.QueryString("upload_multi");
         var param2 = request.QueryString("upload_type");
         var param3 = request.QueryString("upload_btnid");
         var param4 = request.QueryString("tablename");
         var param5 = request.QueryString("recordid");
-        if (param1.length > 0) {
+
+        var isMulti = false;
+        var type = "*.jpg;*.png;";
+
+        if (param1!=null) {
             isMulti = true;
         }
-        if (param2.length > 0) {
+        if (param2 != null) {
             type = "*.jpg;*.png;*.zip;*.pdf;*.txt;*.doc;*.docx;*.xls;*.xlsx;*.ppt;*.pptx;*.mdf;*.avi;*.mp3;*.mp4;*.rar";
         }
-
+        if (param4 == null)
+        {
+            param4 = "";
+        }
+        if (param5 == null) {
+            param5 = "";
+        }
         $('#btn_upload').uploadify({
             'multi': isMulti,
             uploader: '/Home/Upload',            // 服务器处理地址
@@ -40,15 +49,16 @@
             width: 82,                              //按钮宽度
             fileTypeExts: type,           //允许的文件类型
             fileTypeDesc: "请选择图片文件",           //文件说明
-            formData: { "imgType": "normal" }, //提交给服务器端的参数
+            formData: { "imgType": "normal", "tablename": param4, "recordid": param5 }, //提交给服务器端的参数
             onUploadSuccess: function (file, data, response) {   //一个文件上传成功后的响应事件处理
                 var data = $.parseJSON(data);
-                if (param3.length > 0) {
+                if (param3!=null) {
                     if (param3 == "1") {
                         parent.$("#F_FilePath").val(data.imgpath);
                     }
                     else if (param3 == "2") {
                         parent.$("#gridList").trigger("reloadGrid");
+                       
                     }
 
                 }
@@ -56,6 +66,10 @@
                     parent.$("#F_ImageUrl").val(data.imgpath);
                 }
 
+            },
+            onQueueComplete: function () {
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭
             }
         });
     });

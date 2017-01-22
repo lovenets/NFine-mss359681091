@@ -28,7 +28,7 @@
                 { label: "主键", name: "F_Id", hidden: true, key: true },
                 { label: '附件名称', name: 'F_FullName', width: 120, align: 'left' },
                 {
-                    label: '所属表名', name: 'F_TableName', width: 120, align: 'left',
+                    label: '所属表名', name: 'F_TableName', width: 80, align: 'center',
                     formatter: function (cellvalue) {
                         return top.clients.dataItems.TableName[cellvalue] == undefined ? "" : top.clients.dataItems.TableName[cellvalue]
                     }
@@ -132,6 +132,7 @@
                         param: { keyValue: keyValue },
                         success: function () {
                             $.currentWindow().$("#gridList").trigger("reloadGrid");
+
                         }
                     })
                 }
@@ -161,6 +162,15 @@
             $.modalMsg("请选择启用项", "warning");
         }
     }
+
+    function btn_download() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择下载项", "warning");
+            return;
+        }
+        $.download("/WebManage/Attachment/DownloadBackup", "keyValue=" + keyValue, 'post');
+    }
 </script>
 
 <div class="topPanel">
@@ -176,7 +186,7 @@
                 <li class="first">已选中<span>1</span>项</li>
                 <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改附件</a></li>
                 <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除附件</a></li>
-                @*<li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看内容</a></li>*@
+                <li><a id="NF-download" authorize="yes" onclick="btn_download()"><i class="fa fa-cloud-download"></i>下载附件</a></li>
                 <li class="split"></li>
                 <li><a id="NF-disabled" authorize="yes" onclick="btn_disabled()"><i class="fa fa-stop-circle"></i>禁用</a></li>
                 <li><a id="NF-enabled" authorize="yes" onclick="btn_enabled()"><i class="fa fa-play-circle"></i>启用</a></li>
@@ -208,11 +218,11 @@
 
 
                 @*<td style="padding-left:15px; font-weight:600">
-                    记录ID：
-                </td>
-                <td style="width:150px">
-                    <input id="txt_RecordID" type="text" class="form-control" placeholder="请输入记录ID" style="width: 150px; height:unset">
-                </td>*@
+                        记录ID：
+                    </td>
+                    <td style="width:150px">
+                        <input id="txt_RecordID" type="text" class="form-control" placeholder="请输入记录ID" style="width: 150px; height:unset">
+                    </td>*@
             </tr>
         </table>
     </div>

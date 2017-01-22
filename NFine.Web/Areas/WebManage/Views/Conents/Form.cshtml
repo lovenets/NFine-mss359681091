@@ -180,8 +180,10 @@
                     <tr>
 
                         <td style="text-align:left;padding:15px 0 0 10px">
-                            <a id="NF-add" class="btn btn-primary dropdown-text" onclick="btn_uploadfile('1', '1', '2')"><i class="fa fa-cloud-upload"></i>上传附件</a>
+                            <a id="NF-upload" class="btn btn-primary dropdown-text" onclick="btn_uploadfile('1', '1', '2')"><i class="fa fa-cloud-upload" style="margin-right:5px"></i>上传附件</a>
+                            <a id="NF-download" class="btn btn-success dropdown-text" onclick="btn_download()"  style="margin-left:15px"><i class="fa fa-cloud-download" style="margin-right:5px"></i>下载附件</a>
                             <a id="NF-del" class="btn btn-danger dropdown-text" onclick="btn_delete()" style="margin-left:15px"><i class="fa fa-times" style="margin-right:5px"></i>删除附件</a>
+                           
 
                         </td>
                     </tr>
@@ -253,7 +255,7 @@
         layer.open({
             title: "上传图片",
             type: 2,
-            area: ['400px', '280px'],
+            area: ['100%', '100%'],
             fixed: false, //不固定
             maxmin: true,
             content: '/Home/Upload'
@@ -262,14 +264,14 @@
 
     //上传附件
     function btn_uploadfile(param1, param2, param3) {
-       
-        if (keyValue == undefined||keyValue=="") {
+
+        if (keyValue == undefined || keyValue == "") {
             $.modalMsg("请先保存内容", "warning");
             return;
         }
 
         var params = '/Home/Upload?upload_multi=' + param1 + '&upload_type=' + param2 + '&upload_btnid=' + param3 + '&tablename=Web_Content&recordid=' + escape(keyValue);
-        params=encodeURI(params);
+        params = encodeURI(params);
         layer.open({
             title: "上传文件",
             type: 2,
@@ -285,9 +287,6 @@
 
 
 <script>
-
- 
-
     $(function () {
         gridList();
     })
@@ -299,13 +298,13 @@
         var $gridList = $("#gridList");
         $gridList.dataGrid({
             url: "/WebManage/Attachment/GetGridJson",
-            //height: $(window).height() - 96,
+            height: 260,
             colModel: [
                 { label: "主键", name: "F_Id", hidden: true, key: true },
-                { label: '附件名称', name: 'F_FullName', width: 120, align: 'left' },
+                { label: '附件名称', name: 'F_FullName', width: 180, align: 'left' },
 
 
-                { label: '附件路径', name: 'F_FilePath', width: 200, align: 'left' },
+                { label: '附件路径', name: 'F_FilePath', width: 300, align: 'left' },
                 { label: '附件类型', name: 'F_FileType', width: 80, align: 'center' },
                 { label: '附件大小', name: 'F_FileSize', width: 80, align: 'center' },
                 {
@@ -343,6 +342,15 @@
                 $("#gridList").trigger("reloadGrid");
             }
         })
+    }
+
+    function btn_download() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择下载项", "warning");
+            return;
+        }
+        $.download("/WebManage/Attachment/DownloadBackup", "keyValue=" + keyValue, 'post');
     }
 </script>
 

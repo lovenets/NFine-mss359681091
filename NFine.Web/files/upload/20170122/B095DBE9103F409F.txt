@@ -1,0 +1,55 @@
+1、SVN账号密码
+账号：lss	
+密码：lss123t
+
+2、西湖卡     603367574010180182,密码li******
+   中国银行卡 6216611400005587869
+
+3、企业邮箱
+帐号：lisaisai@chengrui.cc
+密码：lss123456
+
+4、公司地址：浙江省宁波市南部商务区日丽路777号19层（成瑞科技总部）
+
+5、数据库链接地址
+CODESERVER\SQL2K8
+帐号:sa
+密码:cr!@#123
+
+6、热血江湖 mss359681091——6 	mss13966103580 2013\05\03
+
+7、禅道
+http://192.168.1.110:88/zentao/bug-browse-44-assignToMe-0.html
+帐号:lss
+密码:123
+
+
+110服务器
+192.168.1.110\SQL2K8
+sa
+cr!@#123
+chengrui&UJJI(
+
+110服务器ftp
+演示环境
+demo
+chengrui&UJN
+测试环境
+epi
+chengruitgy
+
+
+支付宝手势： 159
+
+teamView.tex
+ID: 776 716 813  密码:chengrui!@#  桐庐服务器
+ID: 209 757 778  密码:139661 笔记本
+ID: 197 632 133  密码:139661 我的电脑 
+
+
+山东一师一优课
+远程：administrator    asr@123
+
+124.128.82.148：53520  用户名：administrator   密码 asr@123
+
+MashiMaro 2015-12-10 20:40:56

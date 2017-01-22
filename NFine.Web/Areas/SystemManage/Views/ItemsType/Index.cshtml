@@ -42,6 +42,10 @@
     }
     function btn_edit() {
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择编辑项", "warning");
+            return;
+        }
         $.modalOpen({
             id: "Form",
             title: "修改分类",
@@ -54,9 +58,14 @@
         });
     }
     function btn_delete() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择删除项", "warning");
+            return;
+        }
         $.deleteForm({
             url: "/SystemManage/ItemsType/DeleteForm",
-            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            param: { keyValue: keyValue },
             success: function () {
                 $("#gridList").resetSelection();
                 $("#gridList").trigger("reloadGrid");

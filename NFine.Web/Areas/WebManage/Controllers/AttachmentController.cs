@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -45,7 +47,7 @@ namespace NFine.Web.Areas.WebManage.Controllers
                 var path = Server.MapPath(attachmentEntity.F_FilePath);
                 if (FileHelper.IsExistFile(path))
                 {
-                    attachmentEntity.F_FileSize =FileHelper.ToFileSize(FileHelper.GetFileSize(path));
+                    attachmentEntity.F_FileSize = FileHelper.ToFileSize(FileHelper.GetFileSize(path));
                     attachmentEntity.F_FileType = FileHelper.GetExtension(path);
                     if (string.IsNullOrEmpty(attachmentEntity.F_FullName))
                     {
@@ -63,9 +65,28 @@ namespace NFine.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
+
+            WebAttachmentEntity watt = attachmentApp.GetForm(keyValue);
+            if (watt.F_FilePath.Length > 0)
+            {
+                string fullFileName = Server.MapPath(watt.F_FilePath);
+                Thread t2 = new Thread(new ParameterizedThreadStart(DeleteFile));
+                t2.Start(fullFileName);
+            }
             attachmentApp.DeleteForm(keyValue);
+
             return Success("删除成功。");
         }
+
+        /// <summary>
+        /// 删除物理文件
+        /// </summary>
+        /// <param name="fullFileName"></param>
+        private static void DeleteFile(object fullFileName)
+        {
+            FileHelper.DeleteFile(fullFileName.ToString());
+        }
+
 
         [HttpPost]
         [HandlerAjaxOnly]
@@ -99,6 +120,19 @@ namespace NFine.Web.Areas.WebManage.Controllers
                 return Success("启用成功");
             }
             return Success("请选择启用项");
+        }
+
+        [HttpPost]
+        [HandlerAuthorize]
+        public void DownloadBackup(string keyValue)
+        {
+            var data = attachmentApp.GetForm(keyValue);
+            string filename = Server.UrlDecode(data.F_FullName);
+            string filepath = Server.MapPath(data.F_FilePath);
+            if (FileDownHelper.FileExists(filepath))
+            {
+                FileDownHelper.DownLoadold(filepath, filename);
+            }
         }
     }
 }

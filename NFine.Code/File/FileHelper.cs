@@ -1,8 +1,8 @@
 ﻿/*******************************************************************************
  * Copyright © 2016 NFine.Framework 版权所有
- * Author: NFine
+ * Author: Lss
  * Description: NFine快速开发平台
- * Website：http://www.nfine.cn
+ * Website：http://blog.csdn.net/mss359681091
 *********************************************************************************/
 using System;
 using System.Data;
@@ -234,12 +234,12 @@ namespace NFine.Code
         /// <summary>
         /// 删除文件
         /// </summary>
-        /// <param name="file">要删除的文件路径和名称</param>
+        /// <param name="file">要删除的文件物理路径</param>
         public static void DeleteFile(string file)
         {
-            if (File.Exists(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file))
+            if (File.Exists(file))
             {
-                File.Delete(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file);
+                File.Delete(file);
             }
         }
         #endregion

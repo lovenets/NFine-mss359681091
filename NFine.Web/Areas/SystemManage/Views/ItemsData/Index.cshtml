@@ -74,6 +74,10 @@
     function btn_edit() {
         var itemName = $("#itemTree").getCurrentNode().text;
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择编辑项", "warning");
+            return;
+        }
         $.modalOpen({
             id: "Form",
             title: itemName + " 》修改字典",
@@ -86,9 +90,14 @@
         });
     }
     function btn_delete() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择删除项", "warning");
+            return;
+        }
         $.deleteForm({
             url: "/SystemManage/ItemsData/DeleteForm",
-            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            param: { keyValue: keyValue },
             success: function () {
                 $("#gridList").resetSelection();
                 $("#gridList").trigger("reloadGrid");

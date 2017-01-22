@@ -1,19 +1,22 @@
 ﻿/*******************************************************************************
  * Copyright © 2016 NFine.Framework 版权所有
- * Author: NFine
+ * Author: Lss
  * Description: NFine快速开发平台
- * Website：http://www.nfine.cn
+ * Website：http://blog.csdn.net/mss359681091
 *********************************************************************************/
 using NFine.Application.SystemManage;
+using NFine.Application.WebManage;
 using NFine.Code;
 using NFine.Code.Excel;
 using NFine.Domain.Entity.SystemManage;
+using NFine.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
@@ -308,6 +311,8 @@ namespace NFine.Web.Controllers
             string uploadDate = DateTime.Now.ToString("yyyyMMdd");
 
             string imgType = Request["imgType"];
+            string tablename = Request["tablename"];//表名
+            string recordid = Request["recordid"];//记录ID
             string virtualPath = "/";
             if (imgType == "normal")
             {
@@ -325,13 +330,34 @@ namespace NFine.Web.Controllers
             if (!System.IO.File.Exists(fullFileName))
             {
                 Filedata.SaveAs(fullFileName);
+                if (tablename != null && recordid != null)
+                {
+                    //保存附件记录
+                    WebAttachmentEntity attachmentEntity = new WebAttachmentEntity();
+                    attachmentEntity.F_TableName = tablename;
+                    attachmentEntity.F_TableRecordID = recordid;
+                    attachmentEntity.F_FileSize = FileHelper.ToFileSize(FileHelper.GetFileSize(fullFileName));
+                    attachmentEntity.F_FileType = FileHelper.GetExtension(fullFileName);
+                    attachmentEntity.F_FullName = FileHelper.GetFileName(fullFileName);
+                    attachmentEntity.F_FilePath = virtualPath;
+                    attachmentEntity.F_EnabledMark = true;
+                    //开线程池保存数据
+                    //ThreadPool.QueueUserWorkItem(SaveAttachment, attachmentEntity);
+                    SaveAttachment(attachmentEntity);
+                }
             }
-
             var data = new { imgtype = imgType, imgpath = virtualPath.Remove(0, 1) };
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-      
+        /// <summary>
+        /// 保存附件记录
+        /// </summary>
+        private static void SaveAttachment(WebAttachmentEntity attachmentEntity)
+        {
+            new WebAttachmentApp().SubmitForm(attachmentEntity, "");
+        }
+
         public ActionResult SavePic()
         {
             HttpPostedFileBase Filedata = Request.Files["fileDataFileName"];
