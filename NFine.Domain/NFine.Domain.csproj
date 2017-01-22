@@ -56,6 +56,7 @@
     <Compile Include="01 Infrastructure\02 ViewModel\AuthorizeActionModel.cs" />
     <Compile Include="03 Entity\WebManage\WebAttachmentEntity.cs" />
     <Compile Include="03 Entity\WebManage\WebContentEntity.cs" />
+    <Compile Include="03 Entity\WebManage\WebFriendLinksEntity.cs" />
     <Compile Include="03 Entity\WebManage\WebNodeEntity.cs" />
     <Compile Include="04 IRepository\SystemManage\IAreaRepository.cs" />
     <Compile Include="04 IRepository\SystemManage\IItemsDetailRepository.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="04 IRepository\SystemSecurity\ILogRepository.cs" />
     <Compile Include="04 IRepository\WebManage\IWebAttachmentRepository.cs" />
     <Compile Include="04 IRepository\WebManage\IWebContentRepository.cs" />
+    <Compile Include="04 IRepository\WebManage\IWebFriendLinksRepository.cs" />
     <Compile Include="04 IRepository\WebManage\IWebNodeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

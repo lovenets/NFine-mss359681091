@@ -50,7 +50,7 @@
         layer.open({
             title: "上传图片",
             type: 2,
-            area: ['400px', '280px'],
+            area: ['100%', '100%'],
             fixed: false, //不固定
             maxmin: true,
             content: '/Home/Upload'
@@ -91,23 +91,16 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <th class="formTitle">栏目图片</th>
-                    <td class="formValue">
-                        @*<input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />*@
-                        @*<input id="F_ImageUrl" name="F_ImageUrl" type="file" class="form-control" />*@
-                        <a id="NF-upload" class="btn btn-primary dropdown-text" onclick="btn_upload()"><i style="margin-right:5px" class="fa fa-picture-o"></i>上传图片</a>
 
-                    </td>
-                    <th class="formTitle">排序号</th>
-                    <td class="formValue">
-                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required digits" placeholder="请输入排序号" />
-                    </td>
-                </tr>
                 <tr>
                     <th class="formTitle">图片路径</th>
                     <td class="formValue" colspan="3">
-                        <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />
+                        <div class="input-group" style="width:100%">
+                            <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />
+                            <span class="input-group-btn">
+                                <a class="btn  btn-primary" onclick="btn_upload()"><i class="fa fa-ellipsis-h"></i></a>
+                            </span>
+                        </div>
                     </td>
                 </tr>
 
@@ -117,7 +110,17 @@
                         <input id="F_NodePath" name="F_NodePath" type="text" class="form-control " placeholder="" />
                     </td>
                 </tr>
+                <tr>
+                    <th class="formTitle">创建日期</th>
+                    <td class="formValue">
+                        <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
 
+                    </td>
+                    <th class="formTitle">排序号</th>
+                    <td class="formValue">
+                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required digits" placeholder="请输入排序号" value="0" />
+                    </td>
+                </tr>
                 <tr>
                     <th class="formTitle" valign="top" style="padding-top: 5px;">
                         栏目简介

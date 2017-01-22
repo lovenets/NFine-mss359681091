@@ -125,7 +125,7 @@
     function btn_disabled() {
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
         if (keyValue != undefined) {
-            $.modalConfirm("注：您确定要【禁用】该内容吗？", function (r) {
+            $.modalConfirm("注：您确定要【禁用】该链接吗？", function (r) {
                 if (r) {
                     $.submitForm({
                         url: "/WebManage/Attachment/DisabledConents",
@@ -147,7 +147,7 @@
     function btn_enabled() {
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
         if (keyValue != undefined) {
-            $.modalConfirm("注：您确定要【启用】该内容吗？", function (r) {
+            $.modalConfirm("注：您确定要【启用】该链接吗？", function (r) {
                 if (r) {
                     $.submitForm({
                         url: "/WebManage/Attachment/EnabledConents",

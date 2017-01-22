@@ -2,5 +2,142 @@
     ViewBag.Title = "友情链接编辑";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
+<script src="~/Content/js/layer/layer.js"></script>
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/WebManage/FriendLink/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
 
-<h2>友情链接编辑</h2>
+    function initControl() {
+
+        //绑定栏目
+        $("#F_NodeID").bindSelect({
+            url: "/WebManage/Nodes/GetParentNodeJson"
+        });
+
+        //绑定链接类别
+        $("#F_LinkType").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "LinkType" }
+        });
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/WebManage/FriendLink/SubmitForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+
+    function btn_upload() {
+        layer.open({
+            title: "上传图片",
+            type: 2,
+            area: ['100%', '100%'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: '/Home/Upload'
+        });
+    }
+
+</script>
+@using (Html.BeginForm("Form", "FriendLink", FormMethod.Post, new { id = "form1", enctype = "multipart/form-data" }))
+{
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">基本信息</a></li>
+           
+        </ul>
+        <div style="padding-top: 20px; margin-right: 30px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">所属栏目</th>
+                    <td class="formValue">
+                        <select id="F_NodeID" name="F_NodeID" class="form-control">
+                            <option value="0">==请选择==</option>
+                        </select>
+                    </td>
+                    <th class="formTitle">链接类别</th>
+                    <td class="formValue">
+                        <select id="F_LinkType" name="F_LinkType" class="form-control"><option value="0">==请选择==</option></select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">链接名称</th>
+                    <td class="formValue">
+                        <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入链接名称" />
+                    </td>
+                    <th class="formTitle">是否可用</th>
+                    <td class="formValue">
+                        <div class="ckbox">
+                            <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">所属页面</th>
+                    <td class="formValue" colspan="3">
+                        <input id="F_Page" name="F_Page" type="text" class="form-control " placeholder="" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">创建日期</th>
+                    <td class="formValue">
+                        <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+
+                    </td>
+                    <th class="formTitle">排序号</th>
+                    <td class="formValue">
+                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required digits" placeholder="请输入排序号" value="0" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">链接图片</th>
+                    <td class="formValue" colspan="3">
+                        @*<input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />*@
+                        <div class="input-group" style="width:100%">
+                            <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />
+                            <span class="input-group-btn">
+                                <a class="btn  btn-primary" onclick="btn_upload()" ><i class="fa fa-ellipsis-h"></i></a>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="formTitle">链接路径</th>
+                    <td class="formValue" colspan="3">
+                        <input id="F_LinkPath" name="F_LinkPath" type="text" class="form-control " placeholder="" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 5px;">
+                        链接简介
+                    </th>
+                    <td class="formValue" colspan="3">
+                        <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}

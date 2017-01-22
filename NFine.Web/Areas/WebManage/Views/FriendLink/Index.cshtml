@@ -2,5 +2,231 @@
     ViewBag.Title = "友情链接管理";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+<link href="~/Content/js/select2/select2.min.css" rel="stylesheet" />
+<script src="~/Content/js/select2/select2.min.js"></script>
 
-<h2>友情链接管理</h2>
+<script>
+    $(function () {
+        gridList();
+
+        //绑定栏目
+        $("#F_NodeID").bindSelect({
+            url: "/WebManage/Nodes/GetParentNodeJson"
+        });
+
+        //绑定链接类别
+        $("#F_LinkType").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "LinkType" }
+        });
+
+        $("#F_LinkType,#F_NodeID").change(function () {
+            $("#btn_search").click();
+        });
+    })
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/WebManage/FriendLink/GetGridJson",
+            height: $(window).height() - 96,
+            colModel: [
+                { label: "主键", name: "F_Id", hidden: true, key: true },
+                { label: '链接名称', name: 'F_FullName', width: 120, align: 'left' },
+                {
+                    label: '链接类别', name: 'F_LinkType', width: 80, align: 'center',
+                    formatter: function (cellvalue) {
+                        return top.clients.dataItems.LinkType[cellvalue] == undefined ? "" : top.clients.dataItems.LinkType[cellvalue]
+                    }
+                },
+                { label: '链接路径', name: 'F_LinkPath', width: 280, align: 'left' },
+                { label: '图片路径', name: 'F_ImageUrl', width: 300, align: 'left' },
+                { label: '排序号', name: 'F_SortCode', width: 80, align: 'center' },
+                {
+                    label: '创建时间', name: 'F_CreatorTime', width: 100, align: 'center',
+                    formatter: "date", formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' }
+                },
+                {
+                    label: "有效", name: "F_EnabledMark", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                }
+
+            ],
+            pager: "#gridPager",
+            sortname: 'F_CreatorTime desc',
+            viewrecords: true
+        });
+
+        $("#btn_search").click(function () {
+            var strjson = '';
+            strjson = '{ "keyword":"' + $("#txt_keyword").val() + '","nodeid":"' + $("#F_NodeID").val() + '","linktype":"' + $("#F_LinkType").val() + '" }';
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: strjson },
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_add() {
+        $.modalOpen({
+            id: "Form",
+            title: "新增链接",
+            url: "/WebManage/FriendLink/Form",
+            width: "700px",
+            height: "510px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择编辑项", "warning");
+            return;
+        }
+        $.modalOpen({
+            id: "Form",
+            title: "修改链接",
+            url: "/WebManage/FriendLink/Form?keyValue=" + keyValue,
+            width: "700px",
+            height: "510px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_delete() {
+
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择删除项", "warning");
+            return;
+        }
+        $.deleteForm({
+            url: "/WebManage/FriendLink/DeleteForm",
+            param: { keyValue: keyValue },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue == undefined) {
+            $.modalMsg("请选择查看项", "warning");
+            return;
+        }
+        $.modalOpen({
+            id: "Details",
+            title: "查看链接",
+            url: "/WebManage/FriendLink/Details?keyValue=" + keyValue,
+            width: "550px",
+            height: "620px",
+            btn: null,
+        });
+    }
+
+    function btn_disabled() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue != undefined) {
+            $.modalConfirm("注：您确定要【禁用】该链接吗？", function (r) {
+                if (r) {
+                    $.submitForm({
+                        url: "/WebManage/FriendLink/DisabledConents",
+                        param: { keyValue: keyValue },
+                        success: function () {
+                            $.currentWindow().$("#gridList").trigger("reloadGrid");
+
+                        }
+                    })
+                }
+            });
+        }
+        else {
+            $.modalMsg("请选择禁用项", "warning");
+        }
+
+    }
+
+    function btn_enabled() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (keyValue != undefined) {
+            $.modalConfirm("注：您确定要【启用】该链接吗？", function (r) {
+                if (r) {
+                    $.submitForm({
+                        url: "/WebManage/FriendLink/EnabledConents",
+                        param: { keyValue: keyValue },
+                        success: function () {
+                            $.currentWindow().$("#gridList").trigger("reloadGrid");
+                        }
+                    })
+                }
+            });
+        } else {
+            $.modalMsg("请选择启用项", "warning");
+        }
+    }
+
+
+</script>
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新增链接</a>
+        </div>
+        <div class="operate">
+            <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改链接</a></li>
+                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除链接</a></li>
+                <li class="split"></li>
+                <li><a id="NF-disabled" authorize="yes" onclick="btn_disabled()"><i class="fa fa-stop-circle"></i>禁用</a></li>
+                <li><a id="NF-enabled" authorize="yes" onclick="btn_enabled()"><i class="fa fa-play-circle"></i>启用</a></li>
+            </ul>
+            <a href="javascript:;" class="close"></a>
+        </div>
+        @*<script>$('.toolbar').authorizeButton()</script>*@
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入关键词" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+
+                <td style="padding-left:15px; font-weight:600">
+                    所属栏目：
+                </td>
+                <td style="width:150px">
+                    <select id="F_NodeID" name="F_NodeID" class="form-control">
+                        <option value="">==请选择==</option>
+                    </select>
+                </td>
+
+
+                <td style="padding-left:15px; font-weight:600">
+                    链接类型：
+                </td>
+                <td style="width:150px">
+                    <select id="F_LinkType" name="F_LinkType" class="form-control">
+                        <option value="">==请选择==</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+</div>

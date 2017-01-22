@@ -64,6 +64,7 @@
     <Compile Include="SystemSecurity\LogMap.cs" />
     <Compile Include="WebManage\WebAttachmentMap.cs" />
     <Compile Include="WebManage\WebContentMap.cs" />
+    <Compile Include="WebManage\WebFriendLinksMap.cs" />
     <Compile Include="WebManage\WebNodeMap.cs" />
   </ItemGroup>
   <ItemGroup>

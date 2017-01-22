@@ -162,7 +162,7 @@
     <Compile Include="Areas\SystemSecurity\SystemSecurityAreaRegistration.cs" />
     <Compile Include="Areas\WebManage\Controllers\AttachmentController.cs" />
     <Compile Include="Areas\WebManage\Controllers\ConentsController.cs" />
-    <Compile Include="Areas\WebManage\Controllers\FeaturesController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\AdController.cs" />
     <Compile Include="Areas\WebManage\Controllers\FeedBackController.cs" />
     <Compile Include="Areas\WebManage\Controllers\FriendLinkController.cs" />
     <Compile Include="Areas\WebManage\Controllers\NodesController.cs" />
@@ -939,8 +939,8 @@
     <Content Include="Areas\WebManage\Views\Web.config" />
     <Content Include="Areas\WebManage\Views\Nodes\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Nodes\Form.cshtml" />
-    <Content Include="Areas\WebManage\Views\Features\Index.cshtml" />
-    <Content Include="Areas\WebManage\Views\Features\Form.cshtml" />
+    <Content Include="Areas\WebManage\Views\Ad\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\Ad\Form.cshtml" />
     <Content Include="Areas\WebManage\Views\Attachment\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Attachment\Form.cshtml" />
     <Content Include="Areas\WebManage\Views\FriendLink\Index.cshtml" />

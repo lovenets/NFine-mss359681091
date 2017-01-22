@@ -72,10 +72,15 @@
 
                     <tr>
                         <th class="formTitle">封面图片</th>
-                        <td class="formValue" colspan="2">
-                            <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />
+                        <td class="formValue" colspan="3">
+                            <div class="input-group" style="width:100%">
+                                <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" style="width:740px" />
+                                <span class="input-group-btn">
+                                    <a class="btn  btn-primary" onclick="btn_upload()" style="height:22px"><i class="fa fa-ellipsis-h"></i></a>
+                                </span>
+                            </div>
                         </td>
-                        <td><a id="NF-upload" class="btn btn-primary dropdown-text" onclick="btn_upload()"><i style="margin-right:5px" class="fa fa-picture-o"></i>上传图片</a></td>
+
                     </tr>
 
                     <tr>
@@ -181,9 +186,9 @@
 
                         <td style="text-align:left;padding:15px 0 0 10px">
                             <a id="NF-upload" class="btn btn-primary dropdown-text" onclick="btn_uploadfile('1', '1', '2')"><i class="fa fa-cloud-upload" style="margin-right:5px"></i>上传附件</a>
-                            <a id="NF-download" class="btn btn-success dropdown-text" onclick="btn_download()"  style="margin-left:15px"><i class="fa fa-cloud-download" style="margin-right:5px"></i>下载附件</a>
+                            <a id="NF-download" class="btn btn-success dropdown-text" onclick="btn_download()" style="margin-left:15px"><i class="fa fa-cloud-download" style="margin-right:5px"></i>下载附件</a>
                             <a id="NF-del" class="btn btn-danger dropdown-text" onclick="btn_delete()" style="margin-left:15px"><i class="fa fa-times" style="margin-right:5px"></i>删除附件</a>
-                           
+
 
                         </td>
                     </tr>

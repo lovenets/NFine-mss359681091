@@ -6,10 +6,10 @@ using System.Web.Mvc;
 
 namespace NFine.Web.Areas.WebManage.Controllers
 {
-    public class FeaturesController : ControllerBase
+    public class AdController : ControllerBase
     {
         //
-        // GET: /WebManage/Features/
+        // GET: /WebManage/Ad/
 
     }
 }
