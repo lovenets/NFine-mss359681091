@@ -1,6 +1,105 @@
 ﻿@{
-    ViewBag.Title = "反馈回复";
+    ViewBag.Title = "反馈编辑";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
+<script src="~/Content/js/layer/layer.js"></script>
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/WebManage/FeedBack/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
 
-<h2>反馈回复</h2>
+    function initControl() {
+
+
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/WebManage/FeedBack/SubmitForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+
+    function btn_upload() {
+        layer.open({
+            title: "上传图片",
+            type: 2,
+            area: ['100%', '100%'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: '/Home/Upload'
+        });
+    }
+
+</script>
+@using (Html.BeginForm("Form", "FeedBack", FormMethod.Post, new { id = "form1", enctype = "multipart/form-data" }))
+{
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">基本信息</a></li>
+        </ul>
+        <div style="padding-top: 20px; margin-right: 30px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">姓名</th>
+                    <td class="formValue">
+                        <input id="F_Realname" name="F_Realname" type="text" class="form-control " placeholder="" />
+                    </td>
+
+                    <th class="formTitle">联系电话</th>
+                    <td class="formValue">
+                        <input id="F_Mobile" name="F_Mobile" type="text" class="form-control digits" placeholder="" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">邮箱</th>
+                    <td class="formValue">
+                        <input id="F_Email" name="F_Email" type="text" class="form-control  email" placeholder="" />
+                    </td>
+
+                    <th class="formTitle">公司名称</th>
+                    <td class="formValue">
+                        <input id="F_Company" name="F_Company" type="text" class="form-control " placeholder="" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">创建日期</th>
+                    <td class="formValue">
+                        <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+
+                    </td>
+                    <th class="formTitle">排序号</th>
+                    <td class="formValue">
+                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required digits" placeholder="请输入排序号" value="0" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 5px;">
+                        反馈内容
+                    </th>
+                    <td class="formValue" colspan="3">
+                        <textarea id="F_Contents" name="F_Contents" class="form-control" style="height:160px;"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}

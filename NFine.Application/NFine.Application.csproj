@@ -61,6 +61,7 @@
     <Compile Include="SystemSecurity\LogApp.cs" />
     <Compile Include="WebManage\WebAttachmentApp.cs" />
     <Compile Include="WebManage\WebContentApp.cs" />
+    <Compile Include="WebManage\WebFeedbackApp.cs" />
     <Compile Include="WebManage\WebFriendLinksApp.cs" />
     <Compile Include="WebManage\WebNodeApp.cs" />
   </ItemGroup>

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------
-// <copyright file=" WebFriendLinks.cs" company="NFine">
+// <copyright file=" WebFeedback.cs" company="NFine">
 // * Copyright (C) NFine.Framework  All Rights Reserved
 // * version : 1.0
 // * author  : NFine.Framework
-// * FileName: WebFriendLinks.cs
-// * history : Created by T4 01/22/2017 15:59:00 
+// * FileName: WebFeedback.cs
+// * history : Created by T4 01/23/2017 10:13:23 
 // </copyright>
 //-----------------------------------------------------------------------
 using NFine.Domain.Entity.WebManage;
@@ -16,42 +16,40 @@ using System.Collections.Generic;
 using System.Linq;
 namespace NFine.Application.WebManage
 {
-    public class WebFriendLinksApp
+    public class WebFeedbackApp
     {
-        private IWebFriendLinksRepository service = new WebFriendLinksRepository();
+		private IWebFeedbackRepository service = new WebFeedbackRepository();
 
-        public List<WebFriendLinksEntity> GetList(Pagination pagination, string queryJson)
+		public List<WebFeedbackEntity> GetList(Pagination pagination, string queryJson)
         {
-            var expression = ExtLinq.True<WebFriendLinksEntity>();
+		    var expression = ExtLinq.True<WebFeedbackEntity>();
             var queryParam = queryJson.ToJObject();
             expression = FilterParams(expression, queryParam);
             return service.FindList(expression, pagination);
         }
 
-        public List<WebFriendLinksEntity> GetList(string queryJson)
+        public List<WebFeedbackEntity> GetList(string queryJson)
         {
-            var expression = ExtLinq.True<WebFriendLinksEntity>();
+            var expression = ExtLinq.True<WebFeedbackEntity>();
             var queryParam = queryJson.ToJObject();
             expression = FilterParams(expression, queryParam);
             return service.IQueryable(expression).OrderBy(t => t.F_CreatorTime).ToList();
         }
 
-        private static System.Linq.Expressions.Expression<Func<WebFriendLinksEntity, bool>> FilterParams(System.Linq.Expressions.Expression<Func<WebFriendLinksEntity, bool>> expression, Newtonsoft.Json.Linq.JObject queryParam)
+        public int GetAllCount(string queryJson)
+        {
+            var expression = ExtLinq.True<WebFeedbackEntity>();
+            var queryParam = queryJson.ToJObject();
+            expression = FilterParams(expression, queryParam);
+            return service.IQueryable(expression).Count();
+        }
+
+        private static System.Linq.Expressions.Expression<Func<WebFeedbackEntity, bool>> FilterParams(System.Linq.Expressions.Expression<Func<WebFeedbackEntity, bool>> expression, Newtonsoft.Json.Linq.JObject queryParam)
         {
             if (!queryParam["keyword"].IsEmpty())
             {
                 string keyword = queryParam["keyword"].ToString();
-                expression = expression.And(t => t.F_FullName.Contains(keyword));
-            }
-            if (!queryParam["nodeid"].IsEmpty())
-            {
-                string keyword = queryParam["nodeid"].ToString();
-                expression = expression.And(t => t.F_NodeID.Equals(keyword));
-            }
-            if (!queryParam["linktype"].IsEmpty())
-            {
-                string keyword = queryParam["linktype"].ToString();
-                expression = expression.And(t => t.F_LinkType.Equals(keyword));
+                expression = expression.And(t => t.F_Realname.Contains(keyword) || t.F_Mobile.Equals(keyword));
             }
             if (!queryParam["F_DeleteMark"].IsEmpty())
             {
@@ -67,22 +65,22 @@ namespace NFine.Application.WebManage
         }
 
 
-        public WebFriendLinksEntity GetForm(string keyValue)
+        public WebFeedbackEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);
         }
 
-        public void Delete(WebFriendLinksEntity entity)
+        public void Delete(WebFeedbackEntity entity)
         {
             service.Delete(entity);
         }
 
-        public void DeleteForm(string keyValue)
+	    public void DeleteForm(string keyValue)
         {
             service.Delete(t => t.F_Id == keyValue);
         }
 
-        public void SubmitForm(WebFriendLinksEntity entity, string keyValue)
+		public void SubmitForm(WebFeedbackEntity entity, string keyValue)
         {
             if (!string.IsNullOrEmpty(keyValue))
             {
@@ -95,7 +93,8 @@ namespace NFine.Application.WebManage
                 service.Insert(entity);
             }
         }
-        public void UpdateForm(WebFriendLinksEntity entity)
+
+	    public void UpdateForm(WebFeedbackEntity entity)
         {
             service.Update(entity);
         }

@@ -24,6 +24,28 @@ namespace NFine.Application.WebManage
         {
             var expression = ExtLinq.True<WebContentEntity>();
             var queryParam = queryJson.ToJObject();
+            expression = FilterParams(expression, queryParam);
+            return service.FindList(expression, pagination);
+        }
+
+        public List<WebContentEntity> GetList(string queryJson)
+        {
+            var expression = ExtLinq.True<WebContentEntity>();
+            var queryParam = queryJson.ToJObject();
+            expression = FilterParams(expression, queryParam);
+            return service.IQueryable(expression).OrderBy(t => t.F_CreatorTime).ToList();
+        }
+
+        public int GetAllCount(string queryJson)
+        {
+            var expression = ExtLinq.True<WebContentEntity>();
+            var queryParam = queryJson.ToJObject();
+            expression = FilterParams(expression, queryParam);
+            return service.IQueryable(expression).Count();
+        }
+
+        private static System.Linq.Expressions.Expression<Func<WebContentEntity, bool>> FilterParams(System.Linq.Expressions.Expression<Func<WebContentEntity, bool>> expression, Newtonsoft.Json.Linq.JObject queryParam)
+        {
             if (!queryParam["keyword"].IsEmpty())
             {
                 string keyword = queryParam["keyword"].ToString();
@@ -39,10 +61,20 @@ namespace NFine.Application.WebManage
                 string F_FeaturesId = queryParam["F_FeaturesId"].ToString();
                 expression = expression.And(t => (t.F_FeaturesId.Equals(F_FeaturesId)));
             }
-            return service.FindList(expression, pagination);
+
+            if (!queryParam["F_DeleteMark"].IsEmpty())
+            {
+                string F_DeleteMark = queryParam["F_DeleteMark"].ToString();
+                expression = expression.And(t => (t.F_DeleteMark.Equals(F_DeleteMark)));
+            }
+            if (!queryParam["F_EnabledMark"].IsEmpty())
+            {
+                string F_EnabledMark = queryParam["F_EnabledMark"].ToString();
+                expression = expression.And(t => (t.F_EnabledMark.Equals(F_EnabledMark)));
+            }
+
+            return expression;
         }
-
-
 
         public WebContentEntity GetForm(string keyValue)
         {
@@ -58,6 +90,7 @@ namespace NFine.Application.WebManage
         {
             service.Delete(t => t.F_Id == keyValue);
         }
+
         public void SubmitForm(WebContentEntity entity, string keyValue)
         {
             if (!string.IsNullOrEmpty(keyValue))

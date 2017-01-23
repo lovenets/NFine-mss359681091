@@ -55,6 +55,7 @@
     <Compile Include="SystemSecurity\LogRepository.cs" />
     <Compile Include="WebManage\WebAttachmentRepository.cs" />
     <Compile Include="WebManage\WebContentRepository.cs" />
+    <Compile Include="WebManage\WebFeedbackRepository.cs" />
     <Compile Include="WebManage\WebFriendLinksRepository.cs" />
     <Compile Include="WebManage\WebNodeRepository.cs" />
   </ItemGroup>

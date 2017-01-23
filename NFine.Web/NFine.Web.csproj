@@ -178,6 +178,7 @@
     <Compile Include="Controllers\ClientsDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SiteController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -335,6 +336,8 @@
     <Content Include="Content\js\layer\skin\default\loading-1.gif" />
     <Content Include="Content\js\layer\skin\default\loading-2.gif" />
     <Content Include="Content\js\layout\jquery.layout.js" />
+    <Content Include="Content\js\laypage\laypage.js" />
+    <Content Include="Content\js\laypage\skin\laypage.css" />
     <Content Include="Content\js\loading\pace.min.js" />
     <Content Include="Content\js\md5\jquery.md5.js" />
     <Content Include="Content\js\qrcode\jquery.qrcode.js" />
@@ -958,8 +961,9 @@
     <Content Include="Content\js\ueditor\third-party\video-js\font\vjs.ttf" />
     <Content Include="Content\js\ueditor\third-party\video-js\font\vjs.woff" />
     <None Include="Properties\PublishProfiles\NFine.Framework.Release.pubxml" />
-    <Content Include="Views\Home\View1.cshtml" />
     <Content Include="Views\Home\Upload.cshtml" />
+    <Content Include="Views\Site\Index.cshtml" />
+    <Content Include="Views\Site\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -47,7 +47,6 @@ namespace NFine.Application.WebManage
             return service.IQueryable().OrderBy(t => t.F_CreatorTime).ToList();
         }
 
-
         public WebNodeEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);

@@ -24,6 +24,28 @@ namespace NFine.Application.WebManage
         {
             var expression = ExtLinq.True<WebAttachmentEntity>();
             var queryParam = queryJson.ToJObject();
+            expression = FilterParams(expression, queryParam);
+            return service.FindList(expression, pagination);
+        }
+
+        public List<WebAttachmentEntity> GetList(string queryJson)
+        {
+            var expression = ExtLinq.True<WebAttachmentEntity>();
+            var queryParam = queryJson.ToJObject();
+            expression = FilterParams(expression, queryParam);
+            return service.IQueryable(expression).OrderBy(t => t.F_CreatorTime).ToList();
+        }
+
+        public int GetAllCount(string queryJson)
+        {
+            var expression = ExtLinq.True<WebAttachmentEntity>();
+            var queryParam = queryJson.ToJObject();
+            expression = FilterParams(expression, queryParam);
+            return service.IQueryable(expression).Count();
+        }
+
+        private static System.Linq.Expressions.Expression<Func<WebAttachmentEntity, bool>> FilterParams(System.Linq.Expressions.Expression<Func<WebAttachmentEntity, bool>> expression, Newtonsoft.Json.Linq.JObject queryParam)
+        {
             if (!queryParam["keyword"].IsEmpty())
             {
                 string keyword = queryParam["keyword"].ToString();
@@ -40,7 +62,18 @@ namespace NFine.Application.WebManage
                 expression = expression.And(t => t.F_TableRecordID.Equals(TableRecordID));
             }
 
-            return service.FindList(expression, pagination);
+            if (!queryParam["F_DeleteMark"].IsEmpty())
+            {
+                string F_DeleteMark = queryParam["F_DeleteMark"].ToString();
+                expression = expression.And(t => (t.F_DeleteMark.Equals(F_DeleteMark)));
+            }
+            if (!queryParam["F_EnabledMark"].IsEmpty())
+            {
+                string F_EnabledMark = queryParam["F_EnabledMark"].ToString();
+                expression = expression.And(t => (t.F_EnabledMark.Equals(F_EnabledMark)));
+            }
+
+            return expression;
         }
 
         public WebAttachmentEntity GetForm(string keyValue)

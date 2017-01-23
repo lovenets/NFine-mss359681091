@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "列表页";
+}
+<script src="~/Content/js/jquery/jquery-2.1.1.min.js"></script>
+<script src="~/Content/js/laypage/laypage.js"></script>
+<div style="min-height:150px">
+    <ul id="biuuu_city_list"></ul>
+</div>
+
+<div id="page" style="display:none"></div>
+
+<script>
+    var strjson = '';
+    var page = 1;  //默认第一页
+    var nums = 10; //每页出现的数量
+
+    $(document).ready(function () {
+        strjson = '{ "keyword":"","F_NodeId":"","F_FeaturesId":"","F_DeleteMark":"0","F_EnabledMark":"1" }';
+        fnGetList(page, nums);
+        fnBindPage();
+    });
+    //加载分页控件
+    function fnBindPage() {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/Site/GetAllCount",
+            data: strjson,
+            async: false,
+            success: function (result) {
+                if (result.length > 0) {
+                    $("#page").show();
+                    //开始执行分页
+                    var all = parseInt(result);
+                    var pages = Math.ceil(all / nums); //得到总页数
+
+                    laypage({
+                        cont: $('#page'), //容器。值支持id名、原生dom对象，jquery对象,
+                        pages: pages, //总页数
+                        skip: true, //是否开启跳页
+                        skin: '#F60',
+                        groups: 5, //连续显示分页数
+                        jump: function (obj) {
+                            fnGetList(obj.curr, nums);
+                        }
+                    });
+                }
+                else {
+                    $("#page").hide();
+                }
+            }
+        });
+    }
+    //加载内容列表，page:当前页 rows:每页显示条数
+    function fnGetList(page, rows) {
+        strjson = '{ "keyword":"","F_NodeId":"","F_FeaturesId":"","F_DeleteMark":"0","F_EnabledMark":"1","page":"' + page + '","rows":"' + rows + '" }';
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/Site/GetGridJson",
+            async: true,
+            data: strjson,
+            dataType: 'json',
+            success: function (result) {
+
+                if (result != null) {
+                    var str = "";
+                    $.each(result, function (i, item) {
+                        str += '<li>' + item.F_Title + '</li>';
+                    });
+                    document.getElementById('biuuu_city_list').innerHTML = str;
+                }
+            }
+        });
+    }
+</script>

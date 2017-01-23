@@ -51,6 +51,7 @@ namespace NFine.Web
             return Content(new AjaxResult { state = ResultType.error.ToString(), message = message }.ToJson());
         }
 
+        #region 绑定下拉菜单
         /// <summary>
         /// 绑定公司
         /// </summary>
@@ -150,6 +151,6 @@ namespace NFine.Web
             }
             ViewBag.F_ParentId = new SelectList(list, "Value", "Text", Value);
         }
-
+        #endregion
     }
 }
