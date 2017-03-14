@@ -14,18 +14,21 @@ using NFine.Code;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+
 namespace NFine.Application.WebManage
 {
     public class WebContentApp
     {
         private IWebContentRepository service = new WebContentRepository();
 
-        public List<WebContentEntity> GetList(Pagination pagination, string queryJson)
+        public List<WebContentDto> GetList(Pagination pagination, string queryJson)
         {
             var expression = ExtLinq.True<WebContentEntity>();
             var queryParam = queryJson.ToJObject();
             expression = FilterParams(expression, queryParam);
-            return service.FindList(expression, pagination);
+            var lst = service.FindList(expression, pagination).ToList();
+            return Mapper.Map<List<WebContentEntity>, List<WebContentDto>>(lst);//Dto”≥…‰
         }
 
         public List<WebContentEntity> GetList(string queryJson)

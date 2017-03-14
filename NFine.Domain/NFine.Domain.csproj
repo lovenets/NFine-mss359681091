@@ -53,8 +53,9 @@
     <Compile Include="03 Entity\SystemSecurity\DbBackupEntity.cs" />
     <Compile Include="03 Entity\SystemSecurity\FilterIPEntity.cs" />
     <Compile Include="03 Entity\SystemSecurity\LogEntity.cs" />
-    <Compile Include="01 Infrastructure\02 ViewModel\AuthorizeActionModel.cs" />
+    <Compile Include="02 ViewModel\AuthorizeActionModel.cs" />
     <Compile Include="03 Entity\WebManage\WebAttachmentEntity.cs" />
+    <Compile Include="02 ViewModel\WebContentDto.cs" />
     <Compile Include="03 Entity\WebManage\WebContentEntity.cs" />
     <Compile Include="03 Entity\WebManage\WebFeedbackEntity.cs" />
     <Compile Include="03 Entity\WebManage\WebFriendLinksEntity.cs" />
