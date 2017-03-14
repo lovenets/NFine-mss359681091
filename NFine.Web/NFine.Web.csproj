@@ -130,11 +130,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\01 Handler\HandlerAjaxOnlyAttribute.cs" />
-    <Compile Include="App_Start\01 Handler\HandlerAuthorizeAttribute.cs" />
-    <Compile Include="App_Start\01 Handler\HandlerErrorAttribute.cs" />
-    <Compile Include="App_Start\01 Handler\HandlerLoginAttribute.cs" />
-    <Compile Include="App_Start\01 Handler\ControllerBase.cs" />
+    <Compile Include="App_Start\Handler\HandlerAjaxOnlyAttribute.cs" />
+    <Compile Include="App_Start\Handler\HandlerAuthorizeAttribute.cs" />
+    <Compile Include="App_Start\Handler\HandlerErrorAttribute.cs" />
+    <Compile Include="App_Start\Handler\HandlerLoginAttribute.cs" />
+    <Compile Include="App_Start\Handler\ControllerBase.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\BarCodeController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\PrintController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\SendMailController.cs" />
