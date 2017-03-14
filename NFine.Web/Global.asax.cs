@@ -11,7 +11,7 @@ namespace NFine.Web
         /// </summary>
         protected void Application_Start()
         {
-            NFine.Application.Configuration.Configure();//注册DTO映射(AutoMapper)
+            NFine.Application.AutoMapper.Configuration.Configure();//注册DTO映射(AutoMapper)
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

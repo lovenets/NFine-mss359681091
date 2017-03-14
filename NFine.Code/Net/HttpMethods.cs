@@ -139,8 +139,7 @@ namespace NFine.Code
             }
             catch (WebException e)
             {
-                //LogResult(e.Message);
-                return "";
+                return e.Message;
             }
             finally
             {
@@ -441,7 +440,7 @@ namespace NFine.Code
                     wresp.Close();
                     wresp = null;
                 }
-                throw;
+                throw ex;
             }
             return responseStr;
         }
@@ -507,7 +506,7 @@ namespace NFine.Code
                     wresp.Close();
                     wresp = null;
                 }
-                throw;
+                throw ex;
             }
             return responseStr;
         }

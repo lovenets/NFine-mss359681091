@@ -11,7 +11,6 @@ using NFine.Code;
 using NFine.Domain.Entity.WebManage;
 using NFine.Domain.IRepository.WebManage;
 using NFine.Repository.WebManage;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace NFine.Application.WebManage
@@ -39,6 +38,7 @@ namespace NFine.Application.WebManage
                 string nodeType = queryParam["nodeType"].ToString();
                 expression = expression.And(t => t.F_NodeType.Equals(nodeType));
             }
+
             return service.FindList(expression, pagination);
         }
 

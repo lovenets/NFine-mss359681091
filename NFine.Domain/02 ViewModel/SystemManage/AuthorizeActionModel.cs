@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NFine.Domain.ViewModel
+namespace NFine.Domain
 {
     public class AuthorizeActionModel
     {

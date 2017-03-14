@@ -7,11 +7,11 @@
 using NFine.Code;
 using NFine.Domain.Entity.SystemManage;
 using NFine.Domain.IRepository.SystemManage;
-using NFine.Domain.ViewModel;
 using NFine.Repository.SystemManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NFine.Domain;
 
 namespace NFine.Application.SystemManage
 {

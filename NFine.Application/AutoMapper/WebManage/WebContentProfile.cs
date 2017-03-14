@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using NFine.Domain.ViewModel;
 using NFine.Domain.Entity.WebManage;
 
-namespace NFine.Application
+namespace NFine.Application.AutoMapper
 {
     class WebContentProfile : Profile
     {

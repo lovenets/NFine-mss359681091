@@ -68,9 +68,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapper\WebManage\WebAttachmentProfile.cs" />
+    <Compile Include="AutoMapper\WebManage\WebFeedbackProfile.cs" />
     <Compile Include="Infrastructure\DbLogType.cs" />
     <Compile Include="AutoMapper\Configuration.cs" />
-    <Compile Include="AutoMapper\WebContentProfile.cs" />
+    <Compile Include="AutoMapper\WebManage\WebContentProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemManage\ItemsApp.cs" />
     <Compile Include="SystemManage\ItemsDetailApp.cs" />

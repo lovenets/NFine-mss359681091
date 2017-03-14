@@ -7,25 +7,31 @@
 // * history : Created by T4 01/23/2017 10:13:23 
 // </copyright>
 //-----------------------------------------------------------------------
+using AutoMapper;
+using NFine.Code;
 using NFine.Domain.Entity.WebManage;
 using NFine.Domain.IRepository.WebManage;
+using NFine.Domain.ViewModel;
 using NFine.Repository.WebManage;
-using NFine.Code;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace NFine.Application.WebManage
 {
     public class WebFeedbackApp
     {
-		private IWebFeedbackRepository service = new WebFeedbackRepository();
+        private IWebFeedbackRepository service = new WebFeedbackRepository();
 
-		public List<WebFeedbackEntity> GetList(Pagination pagination, string queryJson)
+        public List<WebFeedbackDto> GetList(Pagination pagination, string queryJson)
         {
-		    var expression = ExtLinq.True<WebFeedbackEntity>();
+            var expression = ExtLinq.True<WebFeedbackEntity>();
             var queryParam = queryJson.ToJObject();
             expression = FilterParams(expression, queryParam);
-            return service.FindList(expression, pagination);
+
+            var lst = service.FindList(expression, pagination);
+            return Mapper.Map<List<WebFeedbackEntity>, List<WebFeedbackDto>>(lst);//Dto”≥…‰
+
         }
 
         public List<WebFeedbackEntity> GetList(string queryJson)
@@ -75,12 +81,12 @@ namespace NFine.Application.WebManage
             service.Delete(entity);
         }
 
-	    public void DeleteForm(string keyValue)
+        public void DeleteForm(string keyValue)
         {
             service.Delete(t => t.F_Id == keyValue);
         }
 
-		public void SubmitForm(WebFeedbackEntity entity, string keyValue)
+        public void SubmitForm(WebFeedbackEntity entity, string keyValue)
         {
             if (!string.IsNullOrEmpty(keyValue))
             {
@@ -94,7 +100,7 @@ namespace NFine.Application.WebManage
             }
         }
 
-	    public void UpdateForm(WebFeedbackEntity entity)
+        public void UpdateForm(WebFeedbackEntity entity)
         {
             service.Update(entity);
         }

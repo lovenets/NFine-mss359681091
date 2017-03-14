@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 
-namespace NFine.Application
+ namespace NFine.Application.AutoMapper
 {
     public class Configuration
     {
@@ -13,6 +13,8 @@ namespace NFine.Application
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<WebContentProfile>();
+                cfg.AddProfile<WebAttachmentProfile>();
+                cfg.AddProfile<WebFeedbackProfile>();
             });
         }
     }
