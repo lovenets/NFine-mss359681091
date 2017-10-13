@@ -21,6 +21,8 @@ namespace NFine.Application.WebManage
 {
     public class WebAttachmentApp
     {
+        public string cacheKey = "webAttachmentCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
         private IWebAttachmentRepository service = new WebAttachmentRepository();
 
         public List<WebAttachmentDto> GetList(Pagination pagination, string queryJson)
@@ -34,10 +36,18 @@ namespace NFine.Application.WebManage
 
         public List<WebAttachmentEntity> GetList(string queryJson)
         {
-            var expression = ExtLinq.True<WebAttachmentEntity>();
-            var queryParam = queryJson.ToJObject();
-            expression = FilterParams(expression, queryParam);
-            return service.IQueryable(expression).OrderBy(t => t.F_CreatorTime).ToList();
+            cacheKey = cacheKey + "0_" + queryJson ;//拼接有参key值
+            var cacheList = cache.GetCache<List<WebAttachmentEntity>>(cacheKey);
+            if (cacheList == null)
+            {
+                var expression = ExtLinq.True<WebAttachmentEntity>();
+                var queryParam = queryJson.ToJObject();
+                expression = FilterParams(expression, queryParam);
+
+                cacheList = service.IQueryable(expression).OrderBy(t => t.F_CreatorTime).ToList();
+                cache.WriteCache<List<WebAttachmentEntity>>(cacheList, cacheKey, "UserCacheDependency", "Web_Attachment");
+            }
+            return cacheList;
         }
 
         public int GetAllCount(string queryJson)
@@ -94,6 +104,7 @@ namespace NFine.Application.WebManage
         {
             service.Delete(t => t.F_Id == keyValue);
         }
+
         public void SubmitForm(WebAttachmentEntity entity, string keyValue)
         {
 

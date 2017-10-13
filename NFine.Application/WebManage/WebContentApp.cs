@@ -21,6 +21,8 @@ namespace NFine.Application.WebManage
 {
     public class WebContentApp
     {
+        public string cacheKey = "webContentCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
         private IWebContentRepository service = new WebContentRepository();
 
         public List<WebContentDto> GetList(Pagination pagination, string queryJson)
@@ -34,10 +36,17 @@ namespace NFine.Application.WebManage
 
         public List<WebContentEntity> GetList(string queryJson)
         {
-            var expression = ExtLinq.True<WebContentEntity>();
-            var queryParam = queryJson.ToJObject();
-            expression = FilterParams(expression, queryParam);
-            return service.IQueryable(expression).OrderBy(t => t.F_CreatorTime).ToList();
+            cacheKey = cacheKey + "0_" + queryJson;//拼接有参key值
+            var cacheList = cache.GetCache<List<WebContentEntity>>(cacheKey);
+            if (cacheList == null)
+            {
+                var expression = ExtLinq.True<WebContentEntity>();
+                var queryParam = queryJson.ToJObject();
+                expression = FilterParams(expression, queryParam);
+                cacheList = service.IQueryable(expression).OrderBy(t => t.F_CreatorTime).ToList();
+                cache.WriteCache<List<WebContentEntity>>(cacheList, cacheKey, "UserCacheDependency", "Web_Content");
+            }
+            return cacheList;
         }
 
         public int GetAllCount(string queryJson)
@@ -82,7 +91,14 @@ namespace NFine.Application.WebManage
 
         public WebContentEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
+            var cacheEntity = cache.GetCache<WebContentEntity>(cacheKey);
+            if (cacheEntity == null)
+            {
+                cacheEntity = service.FindEntity(keyValue);
+                cache.WriteCache<WebContentEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Web_Content");
+            }
+            return cacheEntity;
         }
 
         public void Delete(WebContentEntity entity)

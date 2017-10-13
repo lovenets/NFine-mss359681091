@@ -15,6 +15,8 @@ namespace NFine.Application.SystemManage
 {
     public class UserApp
     {
+        public string cacheKey = "userCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
         private IUserRepository service = new UserRepository();
         private UserLogOnApp userLogOnApp = new UserLogOnApp();
 
@@ -33,8 +35,14 @@ namespace NFine.Application.SystemManage
 
         public UserEntity GetUserEntity(string keyword)
         {
-            return service.FindEntity(t => t.F_Id == keyword);
-
+            cacheKey = cacheKey + "2_" + keyword;//拼接有参key值
+            var cacheEntity = cache.GetCache<UserEntity>(cacheKey);
+            if (cacheEntity == null)
+            {
+                cacheEntity = service.FindEntity(t => t.F_Id == keyword);
+                cache.WriteCache<UserEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_User");
+            }
+            return cacheEntity;
         }
 
         public UserEntity GetForm(string keyValue)

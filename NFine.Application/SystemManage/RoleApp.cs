@@ -15,24 +15,41 @@ namespace NFine.Application.SystemManage
 {
     public class RoleApp
     {
+        public string cacheKey = "roleCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
+
         private IRoleRepository service = new RoleRepository();
         private ModuleApp moduleApp = new ModuleApp();
         private ModuleButtonApp moduleButtonApp = new ModuleButtonApp();
 
         public List<RoleEntity> GetList(string keyword = "")
         {
-            var expression = ExtLinq.True<RoleEntity>();
-            if (!string.IsNullOrEmpty(keyword))
+            cacheKey = cacheKey + "0_" + keyword;//拼接有参key值
+            var cacheList = cache.GetCache<List<RoleEntity>>(cacheKey);
+            if (cacheList == null)
             {
-                expression = expression.And(t => t.F_FullName.Contains(keyword));
-                expression = expression.Or(t => t.F_EnCode.Contains(keyword));
+                var expression = ExtLinq.True<RoleEntity>();
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    expression = expression.And(t => t.F_FullName.Contains(keyword));
+                    expression = expression.Or(t => t.F_EnCode.Contains(keyword));
+                }
+                expression = expression.And(t => t.F_Category == 1);
+                cacheList = service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
+                cache.WriteCache<List<RoleEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_Role");
             }
-            expression = expression.And(t => t.F_Category == 1);
-            return service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
+            return cacheList;
         }
         public RoleEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
+            var cacheEntity = cache.GetCache<RoleEntity>(cacheKey);
+            if (cacheEntity == null)
+            {
+                cacheEntity = service.FindEntity(keyValue);
+                cache.WriteCache<RoleEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_Role");
+            }
+            return cacheEntity;
         }
         public void DeleteForm(string keyValue)
         {

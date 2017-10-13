@@ -38,6 +38,7 @@ namespace NFine.Web.Controllers
         }
         private object GetDataItemList()
         {
+           
             var itemdata = new ItemsDetailApp().GetList();
             Dictionary<string, object> dictionaryItem = new Dictionary<string, object>();
             foreach (var item in new ItemsApp().GetList())

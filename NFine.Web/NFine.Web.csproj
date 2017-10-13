@@ -195,6 +195,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\fonts\weathericons-regular-webfont.svg" />
+    <Content Include="Content\img\404_r1_c2.png" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\alipay.jpg" />
     <Content Include="Content\img\alipayimg.png" />
@@ -516,8 +517,6 @@
     <Content Include="Content\js\ueditor\lang\zh-cn\images\upload.png" />
     <Content Include="Content\js\ueditor\lang\zh-cn\zh-cn.js" />
     <Content Include="Content\js\ueditor\net\Bin\Newtonsoft.Json.dll" />
-    <Content Include="Content\js\ueditor\net\Bin\Newtonsoft.Json.pdb" />
-    <Content Include="Content\js\ueditor\net\Bin\Newtonsoft.Json.xml" />
     <Content Include="Content\js\ueditor\net\net.sln" />
     <Content Include="Content\js\ueditor\themes\default\css\ueditor.css" />
     <Content Include="Content\js\ueditor\themes\default\css\ueditor.min.css" />
@@ -704,7 +703,9 @@
     <Content Include="Content\js\zsign\signet.gif" />
     <Content Include="Global.asax" />
     <Content Include="Index.htm" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -741,7 +742,9 @@
     <Content Include="Configs\system.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Configs\database.config" />
+    <Content Include="Configs\database.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NFine.Application\NFine.Application.csproj">
@@ -960,6 +963,7 @@
     <Content Include="Content\js\ueditor\third-party\video-js\font\vjs.eot" />
     <Content Include="Content\js\ueditor\third-party\video-js\font\vjs.ttf" />
     <Content Include="Content\js\ueditor\third-party\video-js\font\vjs.woff" />
+    <Content Include="ErrorPath404.html" />
     <None Include="Properties\PublishProfiles\NFine.Framework.Release.pubxml" />
     <Content Include="Views\Home\Upload.cshtml" />
     <Content Include="Views\Site\Index.cshtml" />

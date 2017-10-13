@@ -15,34 +15,61 @@ namespace NFine.Application.SystemManage
 {
     public class ItemsDetailApp
     {
-        private IItemsDetailRepository service = new ItemsDetailRepository();
+        public string cacheKey = "dataItemCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
+        private IItemsDetailRepository service = new ItemsDetailRepository();   
 
         public List<ItemsDetailEntity> GetList(string itemId = "", string keyword = "")
         {
-            var expression = ExtLinq.True<ItemsDetailEntity>();
-            if (!string.IsNullOrEmpty(itemId))
+            cacheKey = cacheKey + "0_" + itemId + "_" + keyword;//拼接有参key值
+            var cacheList = cache.GetCache<List<ItemsDetailEntity>>(cacheKey);
+            if (cacheList == null)
             {
-                expression = expression.And(t => t.F_ItemId == itemId);
+                var expression = ExtLinq.True<ItemsDetailEntity>();
+                if (!string.IsNullOrEmpty(itemId))
+                {
+                    expression = expression.And(t => t.F_ItemId == itemId);
+                }
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    expression = expression.And(t => t.F_ItemName.Contains(keyword));
+                    expression = expression.Or(t => t.F_ItemCode.Contains(keyword));
+                }
+                cacheList = service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
+                cache.WriteCache<List<ItemsDetailEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
             }
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                expression = expression.And(t => t.F_ItemName.Contains(keyword));
-                expression = expression.Or(t => t.F_ItemCode.Contains(keyword));
-            }
-            return service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
+            return cacheList;
         }
+
         public List<ItemsDetailEntity> GetItemList(string enCode)
         {
-            return service.GetItemList(enCode);
+            cacheKey = cacheKey + "1_" + enCode;//拼接有参key值
+            var cacheList = cache.GetCache<List<ItemsDetailEntity>>(cacheKey);
+            if (cacheList == null)
+            {
+                cacheList = service.GetItemList(enCode);
+                cache.WriteCache<List<ItemsDetailEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
+            }
+            return cacheList;
         }
+
         public ItemsDetailEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
+            var cacheEntity = cache.GetCache<ItemsDetailEntity>(cacheKey);
+            if (cacheEntity == null)
+            {
+                cacheEntity = service.FindEntity(keyValue);
+                cache.WriteCache<ItemsDetailEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
+            }
+            return cacheEntity;
         }
+
         public void DeleteForm(string keyValue)
         {
             service.Delete(t => t.F_Id == keyValue);
         }
+
         public void SubmitForm(ItemsDetailEntity itemsDetailEntity, string keyValue)
         {
             if (!string.IsNullOrEmpty(keyValue))

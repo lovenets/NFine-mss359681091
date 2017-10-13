@@ -70,7 +70,6 @@ namespace NFine.Application.WebManage
             return expression;
         }
 
-
         public WebFeedbackEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);

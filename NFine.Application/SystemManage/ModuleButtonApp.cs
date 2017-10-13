@@ -16,20 +16,36 @@ namespace NFine.Application.SystemManage
 {
     public class ModuleButtonApp
     {
+        public string cacheKey = "moduleButtonCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
         private IModuleButtonRepository service = new ModuleButtonRepository();
 
         public List<ModuleButtonEntity> GetList(string moduleId = "")
         {
-            var expression = ExtLinq.True<ModuleButtonEntity>();
-            if (!string.IsNullOrEmpty(moduleId))
+            cacheKey = cacheKey + "0_" + moduleId ;//拼接有参key值
+            var cacheList = cache.GetCache<List<ModuleButtonEntity>>(cacheKey);
+            if (cacheList == null)
             {
-                expression = expression.And(t => t.F_ModuleId == moduleId);
+                var expression = ExtLinq.True<ModuleButtonEntity>();
+                if (!string.IsNullOrEmpty(moduleId))
+                {
+                    expression = expression.And(t => t.F_ModuleId == moduleId);
+                }
+                cacheList = service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
+                cache.WriteCache<List<ModuleButtonEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_ModuleButton");
             }
-            return service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
+            return cacheList;
         }
         public ModuleButtonEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
+            var cacheEntity = cache.GetCache<ModuleButtonEntity>(cacheKey);
+            if (cacheEntity == null)
+            {
+                cacheEntity = service.FindEntity(keyValue);
+                cache.WriteCache<ModuleButtonEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_ModuleButton");
+            }
+            return cacheEntity;
         }
         public void DeleteForm(string keyValue)
         {

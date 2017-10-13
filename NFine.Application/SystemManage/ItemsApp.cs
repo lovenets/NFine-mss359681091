@@ -4,6 +4,7 @@
  * Description: NFine快速开发平台
  * Website：http://blog.csdn.net/mss359681091
 *********************************************************************************/
+using NFine.Code;
 using NFine.Domain.Entity.SystemManage;
 using NFine.Domain.IRepository.SystemManage;
 using NFine.Repository.SystemManage;
@@ -15,15 +16,30 @@ namespace NFine.Application.SystemManage
 {
     public class ItemsApp
     {
+        public string cacheKey = "itemsCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
         private IItemsRepository service = new ItemsRepository();
 
         public List<ItemsEntity> GetList()
         {
-            return service.IQueryable().ToList();
+            var cacheList = cache.GetCache<List<ItemsEntity>>(cacheKey);
+            if (cacheList == null)
+            {
+                cacheList = service.IQueryable().ToList();
+                cache.WriteCache<List<ItemsEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_Items");
+            }
+            return cacheList;
         }
         public ItemsEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
+            var cacheEntity = cache.GetCache<ItemsEntity>(cacheKey);
+            if (cacheEntity == null)
+            {
+                cacheEntity = service.FindEntity(keyValue);
+                cache.WriteCache<ItemsEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_Items");
+            }
+            return cacheEntity;
         }
         public void DeleteForm(string keyValue)
         {

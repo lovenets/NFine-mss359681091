@@ -34,7 +34,7 @@ namespace NFine.Web.Areas.WebManage.Controllers
             return Content(data.ToJson());
         }
 
-        [OutputCache(CacheProfile = "SqlDependencyCache")]
+        //[OutputCache(CacheProfile = "SqlDependencyCache")]
         [HttpGet]
         [HandlerAuthorize]
         public override ActionResult Index()

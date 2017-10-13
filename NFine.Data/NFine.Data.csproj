@@ -39,7 +39,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\NFine.Web\bin\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\dal\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

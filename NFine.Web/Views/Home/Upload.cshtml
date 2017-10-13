@@ -17,7 +17,7 @@
     }
 
     $(function () {
-      
+
         var param1 = request.QueryString("upload_multi");
         var param2 = request.QueryString("upload_type");
         var param3 = request.QueryString("upload_btnid");
@@ -27,14 +27,13 @@
         var isMulti = false;
         var type = "*.jpg;*.png;";
 
-        if (param1!=null) {
+        if (param1 != null) {
             isMulti = true;
         }
         if (param2 != null) {
             type = "*.jpg;*.png;*.zip;*.pdf;*.txt;*.doc;*.docx;*.xls;*.xlsx;*.ppt;*.pptx;*.mdf;*.avi;*.mp3;*.mp4;*.rar";
         }
-        if (param4 == null)
-        {
+        if (param4 == null) {
             param4 = "";
         }
         if (param5 == null) {
@@ -43,7 +42,7 @@
         $('#btn_upload').uploadify({
             'multi': isMulti,
             uploader: '/Home/Upload',            // 服务器处理地址
-            swf: '/Content/js/uploadify/uploadify.swf',
+            swf: '/Content/js/uploadify/uploadify.swf?ver=' + Math.random(),
             buttonText: "选择文件",                  //按钮文字
             height: 34,                             //按钮高度
             width: 82,                              //按钮宽度
@@ -52,13 +51,13 @@
             formData: { "imgType": "normal", "tablename": param4, "recordid": param5 }, //提交给服务器端的参数
             onUploadSuccess: function (file, data, response) {   //一个文件上传成功后的响应事件处理
                 var data = $.parseJSON(data);
-                if (param3!=null) {
+                if (param3 != null) {
                     if (param3 == "1") {
                         parent.$("#F_FilePath").val(data.imgpath);
                     }
                     else if (param3 == "2") {
                         parent.$("#gridList").trigger("reloadGrid");
-                       
+
                     }
 
                 }

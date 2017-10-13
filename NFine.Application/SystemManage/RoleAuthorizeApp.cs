@@ -17,13 +17,22 @@ namespace NFine.Application.SystemManage
 {
     public class RoleAuthorizeApp
     {
+        public string cacheKey = "roleAuthorizeCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
         private IRoleAuthorizeRepository service = new RoleAuthorizeRepository();
         private ModuleApp moduleApp = new ModuleApp();
         private ModuleButtonApp moduleButtonApp = new ModuleButtonApp();
 
         public List<RoleAuthorizeEntity> GetList(string ObjectId)
         {
-            return service.IQueryable(t => t.F_ObjectId == ObjectId).ToList();
+            cacheKey = cacheKey + "0_" + ObjectId;//拼接有参key值
+            var cacheList = cache.GetCache<List<RoleAuthorizeEntity>>(cacheKey);
+            if (cacheList == null)
+            {
+                cacheList = service.IQueryable(t => t.F_ObjectId == ObjectId).ToList();
+                cache.WriteCache<List<RoleAuthorizeEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_RoleAuthorize");
+            }
+            return cacheList;
         }
         public List<ModuleEntity> GetMenuList(string roleId)
         {

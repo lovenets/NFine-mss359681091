@@ -4,6 +4,7 @@
  * Description: NFine快速开发平台
  * Website：http://blog.csdn.net/mss359681091
 *********************************************************************************/
+using NFine.Code;
 using NFine.Domain.Entity.SystemManage;
 using NFine.Domain.IRepository.SystemManage;
 using NFine.Repository.SystemManage;
@@ -15,15 +16,30 @@ namespace NFine.Application.SystemManage
 {
     public class OrganizeApp
     {
+        public string cacheKey = "organizeCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
         private IOrganizeRepository service = new OrganizeRepository();
 
         public List<OrganizeEntity> GetList()
         {
-            return service.IQueryable().OrderBy(t => t.F_CreatorTime).ToList();
+            var cacheList = cache.GetCache<List<OrganizeEntity>>(cacheKey);
+            if (cacheList == null)
+            {
+                cacheList = service.IQueryable().OrderBy(t => t.F_CreatorTime).ToList();
+                cache.WriteCache<List<OrganizeEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_Organize");
+            }
+            return cacheList;
         }
         public OrganizeEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
+            var cacheEntity = cache.GetCache<OrganizeEntity>(cacheKey);
+            if (cacheEntity == null)
+            {
+                cacheEntity = service.FindEntity(keyValue);
+                cache.WriteCache<OrganizeEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_Organize");
+            }
+            return cacheEntity;
         }
         public void DeleteForm(string keyValue)
         {

@@ -16,15 +16,30 @@ namespace NFine.Application.SystemManage
 {
     public class ModuleApp
     {
+        public string cacheKey = "moduleCache";//缓存键值
+        ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
         private IModuleRepository service = new ModuleRepository();
 
         public List<ModuleEntity> GetList()
         {
-            return service.IQueryable().OrderBy(t => t.F_SortCode).ToList();
+            var cacheList = cache.GetCache<List<ModuleEntity>>(cacheKey);
+            if (cacheList == null)
+            {
+                cacheList = service.IQueryable().OrderBy(t => t.F_SortCode).ToList();
+                cache.WriteCache<List<ModuleEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_Module");
+            }
+            return cacheList;
         }
         public ModuleEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
+            var cacheEntity = cache.GetCache<ModuleEntity>(cacheKey);
+            if (cacheEntity == null)
+            {
+                cacheEntity = service.FindEntity(keyValue);
+                cache.WriteCache<ModuleEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_Module");
+            }
+            return cacheEntity;
         }
         public void DeleteForm(string keyValue)
         {

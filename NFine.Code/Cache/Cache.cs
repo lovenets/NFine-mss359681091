@@ -7,7 +7,7 @@
 using System;
 using System.Collections;
 using System.Web;
-
+using System.Web.Caching;
 
 namespace NFine.Code
 {
@@ -42,6 +42,25 @@ namespace NFine.Code
             {
                 cache.Remove(CacheEnum.Key.ToString());
             }
+        }
+
+        /// <summary>
+        /// 数据库缓存依赖
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">存储值</param>
+        /// <param name="cacheKey">缓存键</param>
+        /// <param name="database">数据库名称</param>
+        /// <param name="table">表名称</param>
+        public void WriteCache<T>(T value, string cacheKey, string database, string table) where T : class
+        {
+            //制定缓存策略
+            SqlCacheDependency scd = new SqlCacheDependency(database, table);
+
+            //插入缓存
+            cache.Insert(cacheKey, value, scd);
+
+            //cache.Insert(cacheKey, value, new System.Web.Caching.SqlCacheDependency(database, table));
         }
     }
 }
