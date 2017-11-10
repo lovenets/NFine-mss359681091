@@ -8,7 +8,9 @@ namespace NFine.Application.AutoMapper
     {
         protected override void Configure()
         {
-            CreateMap<WebContentEntity, WebContentDto>();
+            //CreateMap<WebContentEntity, WebContentDto>();
+
+            CreateMap <WebContentEntity, WebContentDto>().ForMember(dest => dest.F_Author, opt => opt.MapFrom(src => src.F_Author));
         }
     }
 }

@@ -11,6 +11,7 @@
 <link href="~/Content/js/jqgrid/jqgrid.css" rel="stylesheet" />
 <script src="~/Content/js/jqgrid/grid.locale-cn.js"></script>
 
+
 <form id="form1">
     <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px; padding:10px">
         <ul class="nav nav-tabs">
@@ -28,7 +29,7 @@
                                 <option value="">==请选择==</option>
                             </select>
                         </td>
-                        <th class="formTitle">所属专题</th>
+                        <th class="formTitle">内容分类</th>
                         <td class="formValue">
                             <select id="F_FeaturesId" name="F_FeaturesId" class="form-control">
                                 <option value="">==请选择==</option>
@@ -113,8 +114,11 @@
                     <tr>
                         <th class="formTitle">标签</th>
                         <td class="formValue">
-                            <input id="F_Tags" name="F_Tags" type="text" class="form-control " placeholder="" />
-
+                            @*<input id="F_Tags" name="F_Tags" type="text" class="form-control " placeholder="" />*@
+                            @Html.Hidden("F_Tags")
+                            <select id="F_Labels" name="F_Labels" multiple="multiple" class="form-control chosen-select">
+                                <option value="">==请选择==</option>
+                            </select>
                         </td>
                         <th class="formTitle">排序号</th>
                         <td class="formValue">
@@ -226,6 +230,10 @@
         ue.ready(function () {//编辑器初始化完成再赋值
             ue.setContent($("#F_Contents").val());  //赋值给UEditor
         });
+        //多选标签处理
+        var str = "[" + $("#F_Tags").val() + "]";
+        var json = eval('(' + str + ')');
+        $("#F_Labels").val(json).trigger('change')
     });
     //初始化
     function initControl() {
@@ -234,17 +242,32 @@
             url: "/WebManage/Nodes/GetParentNodeJson"
         });
 
-        //绑定专题
+        //绑定内容类别
         $("#F_FeaturesId").bindSelect({
             url: "/SystemManage/ItemsData/GetSelectJson",
             param: { enCode: "Features" }
         });
+
+        //绑定标签
+        $("#F_Labels").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "Label" }
+        });
+
+
+      
+        $("#F_Labels").select2({
+            multiple: true
+        });
+       
     }
 
     function submitForm() {
         if (!$('#form1').formValid()) {
             return false;
         }
+        $("#F_Tags").val($("#F_Labels").val());
+
         $("#F_Contents").val(ue.getContent());//把文本编辑器赋值到隐藏控件
         $.submitForm({
             url: "/WebManage/Conents/SubmitForm?keyValue=" + keyValue,

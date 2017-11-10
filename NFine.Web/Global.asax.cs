@@ -19,7 +19,7 @@ namespace NFine.Web
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NFineDbContext"].ToString();
             //启动数据库的数据缓存依赖功能    
             SqlCacheDependencyAdmin.EnableNotifications(connectionString);
-            string[] tables = { "Web_Attachment", "Web_Content", "Web_Node", "Web_FriendLinks", "Sys_Items", "Sys_ItemsDetail", "Sys_Module", "Sys_ModuleButton", "Sys_ModuleForm", "Sys_Role", "Sys_RoleAuthorize", "Sys_User", "Sys_UserLogOn", "Sys_Area", "Sys_Log", "Sys_Organize" };//【数组】
+            string[] tables = { "Web_Attachment", "Web_Content", "Web_Node", "Web_FriendLinks", "Sys_Items", "Sys_ItemsDetail", "Sys_Module", "Sys_ModuleButton", "Sys_ModuleForm", "Sys_Role", "Sys_RoleAuthorize", "Sys_User", "Sys_UserLogOn", "Sys_Area", "Sys_Log", "Sys_Organize" };
             //启用数据表缓存
             SqlCacheDependencyAdmin.EnableTableForNotifications(connectionString, tables);
 
