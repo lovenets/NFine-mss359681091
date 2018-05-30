@@ -17,52 +17,52 @@ namespace NFine.Application.SystemManage
     {
         public string cacheKey = "dataItemCache";//缓存键值
         ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
-        private IItemsDetailRepository service = new ItemsDetailRepository();   
+        private IItemsDetailRepository service = new ItemsDetailRepository();
 
         public List<ItemsDetailEntity> GetList(string itemId = "", string keyword = "")
         {
-            cacheKey = cacheKey + "0_" + itemId + "_" + keyword;//拼接有参key值
-            var cacheList = cache.GetCache<List<ItemsDetailEntity>>(cacheKey);
-            if (cacheList == null)
+            //cacheKey = cacheKey + "0_" + itemId + "_" + keyword;//拼接有参key值
+            //var cacheList = cache.GetCache<List<ItemsDetailEntity>>(cacheKey);
+            //if (cacheList == null)
+            //{
+            var expression = ExtLinq.True<ItemsDetailEntity>();
+            if (!string.IsNullOrEmpty(itemId))
             {
-                var expression = ExtLinq.True<ItemsDetailEntity>();
-                if (!string.IsNullOrEmpty(itemId))
-                {
-                    expression = expression.And(t => t.F_ItemId == itemId);
-                }
-                if (!string.IsNullOrEmpty(keyword))
-                {
-                    expression = expression.And(t => t.F_ItemName.Contains(keyword));
-                    expression = expression.Or(t => t.F_ItemCode.Contains(keyword));
-                }
-                cacheList = service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
-                cache.WriteCache<List<ItemsDetailEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
+                expression = expression.And(t => t.F_ItemId == itemId);
             }
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.F_ItemName.Contains(keyword));
+                expression = expression.Or(t => t.F_ItemCode.Contains(keyword));
+            }
+            var cacheList = service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
+            //    cache.WriteCache<List<ItemsDetailEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
+            //}
             return cacheList;
         }
 
         public List<ItemsDetailEntity> GetItemList(string enCode)
         {
-            cacheKey = cacheKey + "1_" + enCode;//拼接有参key值
-            var cacheList = cache.GetCache<List<ItemsDetailEntity>>(cacheKey);
-            if (cacheList == null)
-            {
-                cacheList = service.GetItemList(enCode);
-                cache.WriteCache<List<ItemsDetailEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
-            }
-            return cacheList;
+            //cacheKey = cacheKey + "1_" + enCode;//拼接有参key值
+            //var cacheList = cache.GetCache<List<ItemsDetailEntity>>(cacheKey);
+            //if (cacheList == null)
+            //{
+            //    cacheList = service.GetItemList(enCode);
+            //    cache.WriteCache<List<ItemsDetailEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
+            //}
+            return service.GetItemList(enCode);
         }
 
         public ItemsDetailEntity GetForm(string keyValue)
         {
-            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
-            var cacheEntity = cache.GetCache<ItemsDetailEntity>(cacheKey);
-            if (cacheEntity == null)
-            {
-                cacheEntity = service.FindEntity(keyValue);
-                cache.WriteCache<ItemsDetailEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
-            }
-            return cacheEntity;
+            //cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
+            //var cacheEntity = cache.GetCache<ItemsDetailEntity>(cacheKey);
+            //if (cacheEntity == null)
+            //{
+            //    cacheEntity = service.FindEntity(keyValue);
+            //    cache.WriteCache<ItemsDetailEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_ItemsDetail");
+            //}
+            return service.FindEntity(keyValue);
         }
 
         public void DeleteForm(string keyValue)

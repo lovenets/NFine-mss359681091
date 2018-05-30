@@ -37,6 +37,10 @@ namespace NFine.Web
             var roleId = operatorProvider.RoleId;
             var moduleId = WebHelper.GetCookie("nfine_currentmoduleid");
             var action = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
+            if (action == "/Home/Index")
+            {
+                return true;
+            }
             return new RoleAuthorizeApp().ActionValidate(roleId, moduleId, action);
         }
     }

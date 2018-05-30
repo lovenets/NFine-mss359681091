@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "选择目录";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script src="~/Content/js/layer/layer.js"></script>
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        if (!!keyValue) {
+            $("#chkdsk").val(keyValue + "盘");//
+        }
+    });
+
+    function submitForm() {
+        $.currentWindow().$("#currentFolder").text("路径");//反写当前选择文件夹
+        $.modalClose();
+    }
+
+    function browseFolder(path) {
+        try {
+            var Message = "\u8bf7\u9009\u62e9\u6587\u4ef6\u5939"; //选择框提示信息
+            var Shell = new ActiveXObject("Shell.Application");
+            var Folder = Shell.BrowseForFolder(0, Message, 64, 17); //起始目录为：我的电脑
+            //var Folder = Shell.BrowseForFolder(0, Message, 0); //起始目录为：桌面
+            if (Folder != null) {
+                Folder = Folder.items(); // 返回 FolderItems 对象
+                Folder = Folder.item(); // 返回 Folderitem 对象
+                Folder = Folder.Path; // 返回路径
+                if (Folder.charAt(Folder.length - 1) != "\\") {
+                    Folder = Folder + "\\";
+                }
+                document.getElementById(path).value = Folder;
+                return Folder;
+            }
+        }
+        catch (e) {
+            alert(e.message);
+        }
+    }
+
+    function openfile()
+    {
+        document.getElementById("open").click();
+    }
+</script>
+@using (Html.BeginForm("Form", "PicHourse", FormMethod.Post, new { id = "form1", enctype = "multipart/form-data" }))
+{
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">操作区域</a></li>
+        </ul>
+        <div style="padding-top: 20px; margin-right: 30px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">当前盘符</th>
+                    <td class="formValue" colspan="3">
+                        <input id="chkdsk" name="chkdsk" type="text" class="form-control " placeholder="" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="formTitle">文件夹路径</th>
+                    <td class="formValue" colspan="3">
+                        <div class="input-group" style="width:100%">
+                            <input id="F_ImageUrl" name="F_ImageUrl" type="text" class="form-control " placeholder="" />
+                            <input type="file"name="filename" id="open" style="display:none" />
+                            <span class="input-group-btn">
+                                <a class="btn  btn-primary" onclick="openfile()"><i class="fa fa-ellipsis-h"></i></a>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+}

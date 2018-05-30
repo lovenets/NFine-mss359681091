@@ -67,6 +67,7 @@
     <Compile Include="WebManage\WebFeedbackMap.cs" />
     <Compile Include="WebManage\WebFriendLinksMap.cs" />
     <Compile Include="WebManage\WebNodeMap.cs" />
+    <Compile Include="WebManage\WebPictureMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NFine.Domain\NFine.Domain.csproj">

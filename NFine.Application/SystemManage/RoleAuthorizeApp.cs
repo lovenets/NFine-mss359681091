@@ -112,7 +112,7 @@ namespace NFine.Application.SystemManage
                 if (!string.IsNullOrEmpty(item.F_UrlAddress))
                 {
                     string[] url = item.F_UrlAddress.Split('?');
-                    if (item.F_Id == moduleId && url[0] == action)
+                    if (item.F_Id.Trim() == moduleId.Trim() && url[0].ToUpper().Trim() == action.ToUpper().Trim())
                     {
                         return true;
                     }

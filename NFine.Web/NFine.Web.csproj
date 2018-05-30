@@ -69,6 +69,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Management.Instrumentation" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -135,6 +137,8 @@
     <Compile Include="App_Start\Handler\HandlerErrorAttribute.cs" />
     <Compile Include="App_Start\Handler\HandlerLoginAttribute.cs" />
     <Compile Include="App_Start\Handler\ControllerBase.cs" />
+    <Compile Include="Areas\Canchong\CanchongAreaRegistration.cs" />
+    <Compile Include="Areas\Canchong\Controllers\PicHourseController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\BarCodeController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\PrintController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\SendMailController.cs" />
@@ -228,6 +232,25 @@
     <Content Include="Content\img\wechat.jpg" />
     <Content Include="Content\img\weipayimg.png" />
     <Content Include="Content\img\weixin_nfine.png" />
+    <Content Include="Content\js\baguetteBox\css\baguetteBox.min.css" />
+    <Content Include="Content\js\baguetteBox\css\fluid-gallery.css" />
+    <Content Include="Content\js\baguetteBox\css\gallery-clean.css" />
+    <Content Include="Content\js\baguetteBox\css\gallery-grid.css" />
+    <Content Include="Content\js\baguetteBox\css\thumbnail-gallery.css" />
+    <Content Include="Content\js\baguetteBox\images\benches.jpg" />
+    <Content Include="Content\js\baguetteBox\images\bridge.jpg" />
+    <Content Include="Content\js\baguetteBox\images\coast.jpg" />
+    <Content Include="Content\js\baguetteBox\images\park.jpg" />
+    <Content Include="Content\js\baguetteBox\images\rails.jpg" />
+    <Content Include="Content\js\baguetteBox\images\rocks.jpg" />
+    <Content Include="Content\js\baguetteBox\images\sky.jpg" />
+    <Content Include="Content\js\baguetteBox\images\traffic.jpg" />
+    <Content Include="Content\js\baguetteBox\images\tunnel.jpg" />
+    <Content Include="Content\js\baguetteBox\index.html" />
+    <Content Include="Content\js\baguetteBox\index2.html" />
+    <Content Include="Content\js\baguetteBox\index3.html" />
+    <Content Include="Content\js\baguetteBox\index4.html" />
+    <Content Include="Content\js\baguetteBox\js\baguetteBox.min.js" />
     <Content Include="Content\js\bootstrap\bootstrap.js" />
     <Content Include="Content\js\bootstrap\bootstrap.min.css" />
     <Content Include="Content\js\charts\Chart.js" />
@@ -273,6 +296,7 @@
     <Content Include="Content\js\echarts\echarts.js" />
     <Content Include="Content\js\echarts\echarts.min.js" />
     <Content Include="Content\js\echarts\infographic.js" />
+    <Content Include="Content\js\common.js" />
     <Content Include="Content\js\highcharts\adapters\mootools-adapter.js" />
     <Content Include="Content\js\highcharts\adapters\mootools-adapter.src.js" />
     <Content Include="Content\js\highcharts\adapters\prototype-adapter.js" />
@@ -887,6 +911,8 @@
     <Content Include="Areas\ReportManage\Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Canchong\Models\" />
+    <Folder Include="Areas\Canchong\Views\Shared\" />
     <Folder Include="Areas\ReportManage\Views\Echarts\" />
     <Folder Include="Areas\WebManage\Views\Shared\" />
   </ItemGroup>
@@ -964,6 +990,9 @@
     <Content Include="Content\js\ueditor\third-party\video-js\font\vjs.ttf" />
     <Content Include="Content\js\ueditor\third-party\video-js\font\vjs.woff" />
     <Content Include="ErrorPath404.html" />
+    <Content Include="Areas\Canchong\Views\Web.config" />
+    <Content Include="Areas\Canchong\Views\PicHourse\Index.cshtml" />
+    <Content Include="Areas\Canchong\Views\PicHourse\Form.cshtml" />
     <None Include="Properties\PublishProfiles\NFine.Framework.Release.pubxml" />
     <Content Include="Views\Home\Upload.cshtml" />
     <Content Include="Views\Site\Index.cshtml" />

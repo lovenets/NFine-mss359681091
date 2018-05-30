@@ -25,7 +25,8 @@ namespace NFine.Application.SystemManage
             var cacheList = cache.GetCache<List<ItemsEntity>>(cacheKey);
             if (cacheList == null)
             {
-                cacheList = service.IQueryable().ToList();
+                var expression = ExtLinq.True<ItemsEntity>();
+                cacheList = service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();//排序
                 cache.WriteCache<List<ItemsEntity>>(cacheList, cacheKey, "UserCacheDependency", "Sys_Items");
             }
             return cacheList;
@@ -50,6 +51,7 @@ namespace NFine.Application.SystemManage
             else
             {
                 service.Delete(t => t.F_Id == keyValue);
+                cache.RemoveCache(cacheKey);
             }
         }
         public void SubmitForm(ItemsEntity itemsEntity, string keyValue)
@@ -64,6 +66,7 @@ namespace NFine.Application.SystemManage
                 itemsEntity.Create();
                 service.Insert(itemsEntity);
             }
+            cache.RemoveCache(cacheKey);
         }
     }
 }

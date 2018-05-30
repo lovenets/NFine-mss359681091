@@ -93,6 +93,7 @@
     <Compile Include="WebManage\WebFeedbackApp.cs" />
     <Compile Include="WebManage\WebFriendLinksApp.cs" />
     <Compile Include="WebManage\WebNodeApp.cs" />
+    <Compile Include="WebManage\WebPictureApp.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NFine.Code\NFine.Code.csproj">

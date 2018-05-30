@@ -308,6 +308,16 @@ namespace NFine.Code
                 File.Copy(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir1, System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir2, true);
             }
         }
+
+        public static void CopyFilePhysical(string dir1, string dir2)
+        {
+            //dir1 = dir1.Replace("/", "\\");
+            //dir2 = dir2.Replace("/", "\\");
+            if (File.Exists(dir1))
+            {
+                File.Copy(dir1, dir2, true);
+            }
+        }
         #endregion
 
         #region 根据时间得到目录名 / 格式:yyyyMMdd 或者 HHmmssff
