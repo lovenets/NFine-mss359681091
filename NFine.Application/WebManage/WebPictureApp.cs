@@ -18,21 +18,46 @@ namespace NFine.Application.WebManage
 {
     public class WebPictureApp
     {
-		private IWebPictureRepository service = new WebPictureRepository();
+        private IWebPictureRepository service = new WebPictureRepository();
 
-		public List<WebPictureEntity> GetList(Pagination pagination, string queryJson)
+        public List<WebPictureEntity> GetList(Pagination pagination, string queryJson)
         {
-		    var expression = ExtLinq.True<WebPictureEntity>();
+            var expression = ExtLinq.True<WebPictureEntity>();
             var queryParam = queryJson.ToJObject();
-            if (!queryParam["keyword"].IsEmpty())
-            {
-                string keyword = queryParam["keyword"].ToString();
-                expression = expression.And(t => t.F_FullName.Contains(keyword));
-            }
+            expression = FilterParams(expression, queryParam);
             return service.FindList(expression, pagination);
         }
 
-	    public WebPictureEntity GetForm(string keyValue)
+        private static System.Linq.Expressions.Expression<Func<WebPictureEntity, bool>> FilterParams(System.Linq.Expressions.Expression<Func<WebPictureEntity, bool>> expression, Newtonsoft.Json.Linq.JObject queryParam)
+        {
+            if (!queryParam["keyword"].IsEmpty())
+            {
+                string keyword = queryParam["keyword"].ToString();
+                expression = expression.And(t => (t.F_FullName.Contains(keyword) || t.F_Nick.Contains(keyword) || t.F_FileType.Contains(keyword)));
+            }
+            if (!queryParam["F_Category"].IsEmpty())
+            {
+                string F_Category = queryParam["F_Category"].ToString();
+                expression = expression.And(t => (t.F_Category.Equals(F_Category)));
+            }
+            if (!queryParam["F_Synchro"].IsEmpty())
+            {
+                string F_Synchro = queryParam["F_Synchro"].ToString();
+                if (F_Synchro == "False")
+                {
+                    expression = expression.And(t => (t.F_Synchro.ToString().Equals(F_Synchro) || t.F_Synchro.ToString() == ""));
+                }
+                else
+                {
+                    expression = expression.And(t => (t.F_Synchro.ToString().Equals(F_Synchro)));
+                }
+
+            }
+            return expression;
+        }
+
+
+        public WebPictureEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);
         }
@@ -42,12 +67,12 @@ namespace NFine.Application.WebManage
             service.Delete(entity);
         }
 
-	    public void DeleteForm(string keyValue)
+        public void DeleteForm(string keyValue)
         {
             service.Delete(t => t.F_Id == keyValue);
         }
 
-		public void SubmitForm(WebPictureEntity entity, string keyValue)
+        public void SubmitForm(WebPictureEntity entity, string keyValue)
         {
             if (!string.IsNullOrEmpty(keyValue))
             {
@@ -60,7 +85,7 @@ namespace NFine.Application.WebManage
                 service.Insert(entity);
             }
         }
-	    public void UpdateForm(WebPictureEntity entity)
+        public void UpdateForm(WebPictureEntity entity)
         {
             service.Update(entity);
         }

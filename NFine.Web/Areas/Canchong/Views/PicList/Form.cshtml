@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "图片编辑";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script src="~/Content/js/layer/layer.js"></script>
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/Canchong/PicList/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+
+
+        var username = getUserName($("#F_CreatorUserId").val());
+        $("#CreatorUserId").text(username);
+
+    });
+
+    function initControl() {
+        //类别绑定
+        $("#F_Category").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "Category" }
+        });
+
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/Canchong/PicList/SubmitForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_upload() {
+        var cvalue = $("#F_Category").find("option:selected").text();//类别名称
+        layer.open({
+            title: "上传图片",
+            type: 2,
+            area: ['100%', '100%'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: '/Canchong/PicList/Upload?category=' + encodeURI(cvalue)
+        });
+    }
+
+
+</script>
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">基本信息</a></li>
+        </ul>
+        <div style="padding-top: 20px; margin-right: 30px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">图片类别</th>
+                    <td class="formValue">
+                        <select id="F_Category" name="F_Category" class="form-control"></select>
+                    </td>
+                    <th class="formTitle">图片昵称</th>
+                    <td class="formValue">
+                        <input id="F_Nick" name="F_Nick" type="text" class="form-control " placeholder="" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">图片路径</th>
+                    <td class="formValue" colspan="3">
+                        <div class="input-group" style="width:100%">
+                            <input id="F_FilePath" name="F_FilePath" type="text" class="form-control " placeholder="" />
+                            <span class="input-group-btn">
+                                <a class="btn  btn-primary" onclick="btn_upload()"><i class="fa fa-ellipsis-h"></i></a>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="formTitle">图片名称</th>
+                    <td class="formValue">
+                        <input id="F_FullName" name="F_FullName" type="text" class="form-control " placeholder="" />
+                    </td>
+                    <th class="formTitle">图片大小</th>
+                    <td class="formValue">
+                        <input id="F_FileSize" name="F_FileSize" type="text" class="form-control " placeholder="" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">缩略图</th>
+                    <td class="formValue" colspan="3">
+                        <div class="input-group" style="width:100%">
+                            <input id="F_ThumbnailPath" name="F_ThumbnailPath" type="text" class="form-control " placeholder="" disabled="disabled" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">是否可用</th>
+                    <td class="formValue">
+                        <div class="ckbox">
+                            <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                        </div>
+                    </td>
+                    <th class="formTitle">排序号</th>
+                    <td class="formValue">
+                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control  digits" placeholder="请输入排序号" value="0" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">是否同步</th>
+                    <td class="formValue">
+                        <div class="ckbox">
+                            <input id="F_Synchro" name="F_Synchro" type="checkbox" checked="checked"><label for="F_Synchro">同步</label>
+                        </div>
+                    </td>
+                    <th class="formTitle"> </th>
+                    <td class="formValue"></td>
+                </tr>
+                <tr>
+                    <th class="formTitle">创建时间</th>
+                    <td class="formValue">
+
+                        <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+
+                    </td>
+
+                    <th class="formTitle">创建人</th>
+                    <td class="formValue">
+
+                        <input id="F_CreatorUserId" name="F_CreatorUserId" type="text" class="form-control " placeholder="" style="display:none" />
+
+                        <span id="CreatorUserId"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 5px;">
+                        图片简介
+                    </th>
+                    <td class="formValue" colspan="3">
+                        <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</form>
+

@@ -17,7 +17,9 @@
     <script src="~/Content/js/select2/select2.min.js"></script>
 
     <script src="~/Content/js/common.js"></script>
+    <link href="~/Content/js/iCheck/skins/all.css" rel="stylesheet" />
 
+    <script src="~/Content/js/iCheck/icheck.min.js"></script>
 </head>
 <body>
     <div id="areascontent">
@@ -86,17 +88,22 @@
                         <div class="panel-heading">
                             <i class="fa fa-picture-o fa-lg" style="padding-right: 5px;"></i>图片列表
                             <div style="float: right">
-                                <div class="checkbox">
-                                    <label style="font-size:14px;color:green">
-                                        <input type="checkbox" id="chkall">全选
-                                    </label>
-                                </div>
+
+                                <input tabindex="5" type="checkbox" id="chkall">
+                                <label for="chkall"> 全选</label>
+
+
+                                @*<div class="checkbox">
+                                        <label style="font-size:14px;color:green">
+                                            <input type="checkbox" id="chkall">全选
+                                        </label>
+                                    </div>*@
                                 @*<span style="font-weight: 500;"><i class="fa fa-square" style="color: #dcdcdc; font-size: 20px; padding-right: 5px; vertical-align: middle; margin-top: -3px;"></i>JPG</span>
                                     <span style="margin-left: 10px; font-weight: 500;"><i class="fa fa-square" style="color: #97bbcd; font-size: 20px; padding-right: 5px; vertical-align: middle; margin-top: -3px;"></i>PNG</span>
                                     <span style="font-weight: 500;"><i class="fa fa-square" style="color: #FDB45C; font-size: 20px; padding-right: 5px; vertical-align: middle; margin-top: -3px;"></i>GIF</span>*@
                             </div>
                         </div>
-                        <div class="panel-body" style="padding-bottom: 0px;">
+                        <div class="panel-body">
 
                             <div class="htmleaf-container">
                                 <div class="container gallery-container">
@@ -104,191 +111,191 @@
 
                                         <div id="imglst" class="row">
 
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/park.jpg">
-                                                        <img src="/Content/js/baguetteBox/images/park.jpg" alt="Park">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <p>
+                                            @*<div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/park.jpg">
+                                                            <img src="/Content/js/baguetteBox/images/park.jpg" alt="Park">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <p>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox">选择
+                                                                    </label>
+                                                                </div>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/bridge.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/bridge.jpg" alt="Bridge">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
                                                             <div class="checkbox">
                                                                 <label>
                                                                     <input type="checkbox">选择
                                                                 </label>
                                                             </div>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/bridge.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/bridge.jpg" alt="Bridge">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/tunnel.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/tunnel.jpg" alt="Tunnel">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/tunnel.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/tunnel.jpg" alt="Tunnel">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox">选择
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/coast.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/coast.jpg" alt="Coast">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/coast.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/coast.jpg" alt="Coast">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox">选择
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/rails.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/rails.jpg" alt="Rails">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/rails.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/rails.jpg" alt="Rails">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox">选择
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/traffic.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/traffic.jpg" alt="Traffic">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/traffic.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/traffic.jpg" alt="Traffic">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox">选择
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/park.jpg">
-                                                        <img src="/Content/js/baguetteBox/images/park.jpg" alt="Park">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <p>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/park.jpg">
+                                                            <img src="/Content/js/baguetteBox/images/park.jpg" alt="Park">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <p>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox">选择
+                                                                    </label>
+                                                                </div>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/bridge.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/bridge.jpg" alt="Bridge">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
                                                             <div class="checkbox">
                                                                 <label>
                                                                     <input type="checkbox">选择
                                                                 </label>
                                                             </div>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/bridge.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/bridge.jpg" alt="Bridge">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/tunnel.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/tunnel.jpg" alt="Tunnel">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/tunnel.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/tunnel.jpg" alt="Tunnel">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox">选择
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/coast.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/coast.jpg" alt="Coast">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/coast.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/coast.jpg" alt="Coast">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox">选择
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/rails.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/rails.jpg" alt="Rails">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/rails.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/rails.jpg" alt="Rails">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox">选择
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-2">
-                                                <div class="thumbnail">
-                                                    <a class="lightbox" href="/Content/js/baguetteBox/images/traffic.jpg">
-                                                        <img src="~/Content/js/baguetteBox/images/traffic.jpg" alt="Traffic">
-                                                    </a>
-                                                    <div class="caption">
-                                                        <h3>Thumbnail label</h3>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox">选择
-                                                            </label>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="thumbnail">
+                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/traffic.jpg">
+                                                            <img src="~/Content/js/baguetteBox/images/traffic.jpg" alt="Traffic">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h3>Thumbnail label</h3>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox">选择
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
+                                                </div>*@
 
 
                                             <div style="clear:both ">
@@ -305,40 +312,45 @@
                 </div>
             </div>
             <div style="float: right; width: 20%;">
-                <div style="height: 350px; border: 1px solid #e6e6e6; background-color: #fff;">
+                <div style="height: 380px; border: 1px solid #e6e6e6; background-color: #fff; padding-bottom:10px">
                     <div class="panel panel-default">
                         <div class="panel-heading"><i class="fa fa-pie-chart fa-lg" style="padding-right: 5px;"></i>图片类别</div>
                         <div class="panel-body" style="padding-top: 20px;">
                             <div class="biaoqian" style="text-align: center; padding-top: 20px;">
 
-                                <a class="btn btn-info btn-xs" href="#" role="button" data-id="1">东北菜</a>
-                                <a class="btn btn-primary btn-xs" href="#" role="button" data-id="2">宁波菜</a>
-                                <a class="btn btn-success btn-xs" href="#" role="button" data-id="3">川湘菜</a>
-                                <a class="btn btn-info btn-xs" href="#" role="button" data-id="4">广东粤菜</a>
-                                <a class="btn btn-warning btn-xs" href="#" role="button" data-id="5">海鲜</a>
-                                <a class="btn btn-danger btn-xs" href="#" role="button" data-id="6">火锅</a>
+                                @*<a class="btn btn-info btn-xs" href="#" role="button" data-id="1">东北菜</a>
+                                    <a class="btn btn-primary btn-xs" href="#" role="button" data-id="2">宁波菜</a>
+                                    <a class="btn btn-success btn-xs" href="#" role="button" data-id="3">川湘菜</a>
+                                    <a class="btn btn-info btn-xs" href="#" role="button" data-id="4">广东粤菜</a>
+                                    <a class="btn btn-warning btn-xs" href="#" role="button" data-id="5">海鲜</a>
+                                    <a class="btn btn-danger btn-xs" href="#" role="button" data-id="6">火锅</a>
 
-                                <a class="btn btn-info btn-xs" href="#" role="button" data-id="7">串串香</a>
-                                <a class="btn btn-primary btn-xs" href="#" role="button" data-id="8">徽菜</a>
-                                <a class="btn btn-success btn-xs" href="#" role="button" data-id="9">面点</a>
-                                <a class="btn btn-warning btn-xs" href="#" role="button" data-id="10">野味</a>
+                                    <a class="btn btn-info btn-xs" href="#" role="button" data-id="7">串串香</a>
+                                    <a class="btn btn-primary btn-xs" href="#" role="button" data-id="8">徽菜</a>
+                                    <a class="btn btn-success btn-xs" href="#" role="button" data-id="9">面点</a>
+                                    <a class="btn btn-warning btn-xs" href="#" role="button" data-id="10">野味</a>*@
 
                             </div>
 
                             <div style="margin-top: 20px; padding-top: 18px; height: 60px; border-top: 1px solid #e6e6e6;">
-                                <select id="selCategory" class="select2">
-                                    <option value="" selected="selected">请选择类别</option>
-                                    <option value="1">东北菜</option>
-                                    <option value="2">宁波菜</option>
-                                    <option value="3">川湘菜</option>
-                                    <option value="4">广东粤菜</option>
-                                    <option value="5">海鲜</option>
-                                    <option value="6">火锅</option>
-                                    <option value="7">串串香</option>
-                                    <option value="8">徽菜</option>
-                                    <option value="9">面点</option>
-                                    <option value="10">野味</option>
+                                <select id="selCategory" name="selCategory" class="select2 form-control">
+                                    <option value="">==请选择类别==</option>
+                                    @*<option value="" selected="selected">请选择类别</option>
+                                        <option value="1">东北菜</option>
+                                        <option value="2">宁波菜</option>
+                                        <option value="3">川湘菜</option>
+                                        <option value="4">广东粤菜</option>
+                                        <option value="5">海鲜</option>
+                                        <option value="6">火锅</option>
+                                        <option value="7">串串香</option>
+                                        <option value="8">徽菜</option>
+                                        <option value="9">面点</option>
+                                        <option value="10">野味</option>*@
                                 </select>
+                                <div style="margin-top:10px">
+                                    <input tabindex="5" type="checkbox" id="chksynchro">
+                                    <label for="chksynchro"> 是否同步</label>
+                                </div>
 
                                 <button type="button" id="btnOK" class="btn btn-info" style="width:100%;margin-top:20px">归类</button>
                             </div>
@@ -419,8 +431,7 @@
             }
 
             .panel-default > .panel-body {
-                padding: 10px;
-                padding-bottom: 0px;
+                padding: 10px 10px 15px 10px;
             }
 
                 .panel-default > .panel-body ul {
@@ -461,45 +472,80 @@
             margin-top: 0px;
             margin-bottom: 0px;
         }
+
+        .tz-gallery .caption h3 {
+            padding-left: 17px;
+        }
+
+        .caption {
+            cursor: pointer;
+        }
     </style>
 
     <script type="text/javascript">
 
         var currpage = 1;//默认当前第一页
 
+        var arrcolor1 = ["#fc8675", "#6bafbd", "#f3ce85", "#949FB1", "#65cea7"];
+        var arrcolor2 = ["info", "primary", "success", "danger", "warning"];
+
         $(function () {
+
+            //类别绑定
+            $("#selCategory").bindSelect({
+                url: "/SystemManage/ItemsData/GetSelectJson",
+                param: { enCode: "Category" }
+            });
+
             //初始化select2控件
             $("#selCategory").select2();
-            //全选/全不选
-            $("#chkall").change(function () {
-                $(".tz-gallery  :checkbox").prop('checked', $(this).is(':checked') ? true : false);
-            });
+
             //加载本机盘符
             loadDist();
+
+            //加载标签
+            loadBiaoqian();
+
             //绑定标签点击事件
             $(".biaoqian a").bind("click", function () {
                 var id = $(this).data("id");
                 $("#selCategory").val(id).trigger("change");
                 areaObj.change();
             });
+
             //绑定归类点击事件
             $("#btnOK").bind("click", function () {
                 var dash = $("#currentFolder").text();//获取当前盘符
                 var category = $("#selCategory").val();//图片分类
                 var cvalue = $("#selCategory").find("option:selected").text();
+                var count = $("#imglst :checkbox:checked").length;
+                var synchro = "";
+                if ($("#chksynchro").is(':checked')) {
+                    synchro = 'True';
+                }
 
+                if ($.trim(category) == "") {
+                    $.modalMsg('请选择图片类别', 'warning');
+                    return;
+                }
+                if ($("#imglst :checkbox:checked").length <= 0) {
+                    $.modalMsg('请选择图片', 'warning');
+                    return;
+                }
                 //获取选中集合转成json
                 var selectedData = [];
                 $("#imglst :checkbox:checked").each(function () {
-                    var name = $(this).parents(".caption").children("h3").attr("title");//文件名称
-                    var type = $(this).parents(".caption").children("h3").data("type");//文件类型
-                    selectedData.push({ filename: name, filetype: type });//加入数组
+                    var $this = $(this).parents(".caption").children("h3");
+                    var name = $this.attr("title");//文件名称
+                    var type = $this.data("type");//文件类型
+                    var size = $this.data("size");//文件大小
+                    selectedData.push({ filename: name, filetype: type, filesize: size });//加入数组
                 });
                 var dat = JSON.stringify(selectedData);
 
                 $.ajax({
                     url: "/Canchong/PicHourse/FnFile",
-                    data: { dash: dash, category: category, dat: dat, cvalue: cvalue },
+                    data: { dash: dash, category: category, dat: dat, cvalue: cvalue, synchro: synchro },
                     dataType: "json",
                     async: false,
                     success: function (data) {
@@ -518,7 +564,6 @@
                 getImgLst(false);//加载更多图片
             });
 
-
             //绑定盘符点击事件
             $(".dashboard-stats").bind("click", function () {
                 var current = $(this).find(".m-top-none").text();
@@ -527,8 +572,47 @@
                 getImgLst(true);//加载该盘符下所有图片
             });
 
-            baguetteBox.run('.tz-gallery');
+            //二次加载的js
+            loadAgain();
+
+            //初始化iCheck
+            $('#chkall,#chksynchro').iCheck({
+                handle: 'checkbox',
+                checkboxClass: 'icheckbox_minimal-green',
+                radioClass: 'iradio_minimal-green'
+            });
+            $('#chkall').on('ifChanged', function (event) {
+                var flag = 'uncheck';
+                if ($(this).is(':checked')) {//就是这么简单
+                    flag = 'check';
+                }
+                $('#imglst input[type="checkbox"]').iCheck(flag);
+            });
         });
+
+        //需要二次加载的js
+        function loadAgain() {
+            baguetteBox.run('.tz-gallery');
+
+            //初始化iCheck
+            $('#imglst input[type="checkbox"]').iCheck({
+                handle: 'checkbox',
+                checkboxClass: 'icheckbox_minimal-green',
+                radioClass: 'iradio_minimal-green'
+            });
+            $("#imglst .icheckbox_minimal-green").css({ "margin": "-43px 0px 0px -2px", "float": "left" });
+            $(".caption").unbind("click");
+            //空白区域添加点击事件
+            $(".caption").bind("click", function () {
+                var $this = $(this).find('input');
+                if ($this.is(':checked')) {
+                    $this.iCheck('uncheck');
+                }
+                else {
+                    $this.iCheck('check');
+                }
+            });
+        }
 
         //加载本机盘符及大小
         function loadDist() {
@@ -541,9 +625,10 @@
                 success: function (data) {
 
                     $.each(data, function (idx, obj) {
+                        var color = getColor(idx, 0);
                         if (idx < 5) {
                             strhtm += '<div class="dashboard-stats">';
-                            strhtm += '<div class="dashboard-stats-item" style="background-color: ' + getColor(idx) + ';">';
+                            strhtm += '<div class="dashboard-stats-item" style="background-color: ' + color + ';">';
                             strhtm += '<h4 class="m-top-none">' + obj.Item1 + '</h4>';
                             strhtm += '<h5>磁盘空间：' + obj.Item2 + '</h5>';
                             strhtm += '<div class="stat-icon"> ';
@@ -558,27 +643,44 @@
                 }
             });
         }
+
         //分配磁盘背景色
-        function getColor(idx) {
+        function getColor(idx, type) {
             var color = '';
             switch (idx) {
                 case 0:
-                    color = '#fc8675';
+                    (type == 0) ? color = '#fc8675' : color = "info";
                     break;
                 case 1:
-                    color = '#6bafbd';
+                    (type == 0) ? color = '#6bafbd' : color = "primary";
                     break;
                 case 2:
-                    color = '#f3ce85';
+                    (type == 0) ? color = '#f3ce85' : color = "warning";
+
                     break;
                 case 3:
-                    color = '#949FB1';
+                    (type == 0) ? color = '#949FB1' : color = "danger";
                     break;
                 case 4:
-                    color = '#65cea7';
+                    (type == 0) ? color = '#65cea7' : color = "success";
                     break;
-
+                case 6:
+                    (type == 0) ? color = '#fc8675' : color = "info";
+                    break;
+                case 7:
+                    (type == 0) ? color = '#6bafbd' : color = "primary";
+                    break;
+                case 8:
+                    (type == 0) ? color = '#f3ce85' : color = "warning";
+                    break;
+                case 9:
+                    (type == 0) ? color = '#949FB1' : color = "danger";
+                    break;
+                case 10:
+                    (type == 0) ? color = '#65cea7' : color = "success";
+                    break;
                 default:
+                    (type == 0) ? color = '#65cea7' : color = "info";
                     break;
             }
             return color;
@@ -620,15 +722,9 @@
                         strhtm += '<img src="' + obj.Item3 + '" alt="" style="height: 180px;">';
                         strhtm += '</a>';
                         strhtm += '<div class="caption">';
-                        strhtm += '<h3 data-type="' + obj.Item5 + '" title="' + obj.Item2 + '">' + subString1(obj.Item2, 16) + '</h3>';
-                        strhtm += '<h3>文件大小：(' + obj.Item4 + 'KB)</h3>';
-                        strhtm += '<p>';
-                        strhtm += '<div class="checkbox">';
-                        strhtm += '<label>';
-                        strhtm += '<input type="checkbox">选择';
-                        strhtm += '</label>';
-                        strhtm += '</div>';
-                        strhtm += '</p>';
+                        strhtm += '<h3 data-size="' + obj.Item4 + '" data-type="' + obj.Item5 + '" title="' + obj.Item2 + '">' + subString1(obj.Item2, 14) + '</h3>';
+                        strhtm += '<p>文件大小：' + obj.Item4 + '</p>';
+                        strhtm += '<input type="checkbox">';
                         strhtm += '</div>';
                         strhtm += '</div>';
                         strhtm += '</div>';
@@ -648,12 +744,30 @@
                         $("#imglst").append(strhtm);
 
                     }
-                    baguetteBox.run('.tz-gallery');
+                    loadAgain();//二次加载
                 }
             });
         }
 
+        //加载标签
+        function loadBiaoqian() {
+            var html = '';
+            $.ajax({
+                url: "/SystemManage/ItemsData/GetSelectJson",
+                data: { enCode: "Category" },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $.each(data, function (i) {
+                        var index = Math.floor((Math.random() * arrcolor2.length));
+                        var color = arrcolor2[index];
+                        html += ' <a class="btn btn-' + color + ' btn-xs" href="javascript:void(0)" role="button" data-id="' + data[i]["id"] + '">' + data[i]["text"] + '</a> ';
+                    });
+                }
+            });
 
+            $(".biaoqian").empty().append(html);
+        }
 
     </script>
 </body>

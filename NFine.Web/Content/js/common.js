@@ -162,6 +162,44 @@ $.submitForm = function (options) {
     }, 500);
 }
 
+$.fn.bindSelect = function (options) {
+    var defaults = {
+        id: "id",
+        text: "text",
+        search: false,
+        url: "",
+        param: [],
+        change: null
+    };
+    var options = $.extend(defaults, options);
+    var $element = $(this);
+    if (options.url != "") {
+        $.ajax({
+            url: options.url,
+            data: options.param,
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $.each(data, function (i) {
+                    $element.append($("<option></option>").val(data[i][options.id]).html(data[i][options.text]));
+                });
+                $element.select2({
+                    minimumResultsForSearch: options.search == true ? 0 : -1
+                });
+                $element.on("change", function (e) {
+                    if (options.change != null) {
+                        options.change(data[$(this).find("option:selected").index()]);
+                    }
+                    $("#select2-" + $element.attr('id') + "-container").html($(this).find("option:selected").text().replace(/　　/g, ''));
+                });
+            }
+        });
+    } else {
+        $element.select2({
+            minimumResultsForSearch: -1
+        });
+    }
+}
 
 
 

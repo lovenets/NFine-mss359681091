@@ -81,7 +81,7 @@ namespace NFine.Web.Areas.Canchong.Controllers
                     foreach (FileInfo item in files)
                     {
                         count++;
-                        var length = System.Math.Ceiling(item.Length / 1024.0);//获取图片大小
+                        var length = FileHelper.ToFileSize(item.Length);//获取图片大小
                         imgLst.Add(new Tuple<int, string, string, string, string>(count, item.Name, item.FullName, length.ToString(), item.Extension));
                     }
                     cache.WriteCache<List<Tuple<int, string, string, string, string>>>(imgLst, dash);//写入缓存
@@ -127,8 +127,10 @@ namespace NFine.Web.Areas.Canchong.Controllers
         /// <param name="dash">所在盘符</param>
         /// <param name="category">类别</param>
         /// <param name="dat">所选图片集json</param>
+        /// <param name="cvalue">类别名称</param>
+        /// <param name="synchro">是否同步</param>
         /// <returns></returns>
-        public ActionResult FnFile(string dash, string category, string dat, string cvalue)
+        public ActionResult FnFile(string dash, string category, string dat, string cvalue, string synchro)
         {
             List<ToJsonMy> my = NFine.Code.Json.ToObject<List<ToJsonMy>>(dat);
             string originalPath = dash + Configs.GetValue("ImgFolder");//获取源文件坐在盘符
@@ -147,24 +149,40 @@ namespace NFine.Web.Areas.Canchong.Controllers
                 {
                     var filename = my[i].filename;//文件名称
                     var filetype = my[i].filetype;//文件扩展名
+                    var filesize = my[i].filesize;//文件大小
+                    var filenick = my[i].filenick;//文件昵称
+
                     //第二步：将文件剪切至类别文件夹
                     FileHelper.MoveFile("/Temp/" + filename, categoryFolder + filename); //移动文件，将文件从临时文件夹转移至归档文件
 
                     //第三步：生成缩略图
                     NFine.Code.Common.MakeThumbnail(Server.MapPath(categoryFolder + filename), Server.MapPath(thumbnailFolder + filename), 600, 350, "W", "jpg");
+                    if (string.IsNullOrEmpty(filenick))
+                    {
+                        filenick = Path.GetFileNameWithoutExtension(Server.MapPath(categoryFolder + filename));//获取昵称
+                    }
 
                     //第四步：入数据库形成记录
                     WebPictureEntity model = new WebPictureEntity();
                     model.F_FullName = filename;//图片全称
+                    model.F_Nick = filenick;//图片昵称
                     model.F_FilePath = categoryFolder + filename;//图片路径
                     model.F_ThumbnailPath = thumbnailFolder + filename;//图片缩略图
                     model.F_FileType = filetype;//文件类型
                     model.F_Category = category;//所属类别
+                    model.F_FileSize = filesize;//文件大小
+                    if (synchro == "True")
+                    {
+                        model.F_Synchro = true;
+                    }
                     string keyValue = string.Empty;
                     picApp.SubmitForm(model, keyValue);//入库
 
                     //第五步：同步至外网，调用webservice服务
-
+                    if (synchro == "True")
+                    {
+                        //同步到外网
+                    }
                     //第六步：删除原始文件（备：此源文件不是归档文件）
                     FileHelper.DeleteFile(originalPath + "/" + filename);//删除源文件
                     cache.RemoveCache(cacheKey);//根据键值移除该类别数据集缓存
@@ -179,6 +197,8 @@ namespace NFine.Web.Areas.Canchong.Controllers
         {
             public string filename { get; set; }
             public string filetype { get; set; }
+            public string filesize { get; set; }
+            public string filenick { get; set; }
         }
 
     }
