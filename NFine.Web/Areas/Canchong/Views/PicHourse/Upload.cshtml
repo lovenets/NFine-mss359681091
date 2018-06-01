@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Upload";
+}
+<link href="~/Content/js/uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Content/js/jquery/jquery-2.1.1.min.js"></script>
+<script src="~/Content/js/uploadify/jquery.uploadify.min.js"></script>
+<script src="~/Content/js/layer/layer.js"></script>
+<script>
+
+    var request = {
+        QueryString: function (val) {
+            var uri = window.location.search;
+            var re = new RegExp("" + val + "\=([^\&\?]*)", "ig");
+            return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+        }
+    }
+
+    $(function () {
+        var param1 = request.QueryString("dash");
+        var param2 = request.QueryString("dashid");//获取盘符id,回调加载使用
+        var isMulti = true;
+        var type = "*.jpg;*.png;*gif;";
+
+        $('#btn_upload').uploadify({
+            'multi': isMulti,
+            uploader: '/Canchong/PicHourse/Upload',            // 服务器处理地址
+            swf: '/Content/js/uploadify/uploadify.swf?ver=' + Math.random(),
+            buttonText: "选择文件",                  //按钮文字
+            height: 34,                             //按钮高度
+            width: 82,                              //按钮宽度
+            fileTypeExts: type,           //允许的文件类型
+            fileTypeDesc: "请选择图片文件",           //文件说明
+            formData: { "dash": param1 }, //提交给服务器端的参数
+            onUploadSuccess: function (file, data, response) {   //一个文件上传成功后的响应事件处理
+                //var data = $.parseJSON(data);
+            },
+            onQueueComplete: function (event, ID, fileObj, response, data) {
+                var iframeId = top.$(".NFine_iframe:visible").attr("id");
+                top.frames[iframeId].$("#" + param2).click();
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭
+            }
+        });
+    });
+
+</script>
+
+<span id="btn_upload"></span>
+
+
+
+

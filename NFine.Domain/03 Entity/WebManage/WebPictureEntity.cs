@@ -39,5 +39,6 @@ namespace NFine.Domain.Entity.WebManage
         public String F_Category { get; set; }
         public String F_Nick { get; set; }
         public Boolean? F_Synchro { get; set; }
+        public String F_Alias { get; set; }
     }
 }

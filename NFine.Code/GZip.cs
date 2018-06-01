@@ -104,6 +104,7 @@ namespace NFine.Code
                 }
             }
         }
+
         /// <summary>
         /// 流转换为字节流
         /// </summary>

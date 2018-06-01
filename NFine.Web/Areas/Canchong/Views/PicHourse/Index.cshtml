@@ -20,6 +20,8 @@
     <link href="~/Content/js/iCheck/skins/all.css" rel="stylesheet" />
 
     <script src="~/Content/js/iCheck/icheck.min.js"></script>
+
+    <script src="~/Content/js/layer/layer.js"></script>
 </head>
 <body>
     <div id="areascontent">
@@ -28,7 +30,7 @@
                 <div class="panel-heading">
                     <i class="fa fa-hdd-o fa-lg" style="padding-right: 5px;"></i>盘符选图
                     <div style="float: right; position: relative; top: -4px; right: 0px;">
-                        <p style="margin-top:5px">当前选择盘符：<span id="currentFolder"></span></p>
+                        <p style="margin-top:5px">当前选择盘符：<span id="currentFolder" data-id=""></span></p>
 
                     </div>
                 </div>
@@ -87,20 +89,11 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-picture-o fa-lg" style="padding-right: 5px;"></i>图片列表
-                            <div style="float: right">
-
+                            <div style="float: right;font-size:14px">
                                 <input tabindex="5" type="checkbox" id="chkall">
-                                <label for="chkall"> 全选</label>
+                                <label for="chkall">全选</label>
 
-
-                                @*<div class="checkbox">
-                                        <label style="font-size:14px;color:green">
-                                            <input type="checkbox" id="chkall">全选
-                                        </label>
-                                    </div>*@
-                                @*<span style="font-weight: 500;"><i class="fa fa-square" style="color: #dcdcdc; font-size: 20px; padding-right: 5px; vertical-align: middle; margin-top: -3px;"></i>JPG</span>
-                                    <span style="margin-left: 10px; font-weight: 500;"><i class="fa fa-square" style="color: #97bbcd; font-size: 20px; padding-right: 5px; vertical-align: middle; margin-top: -3px;"></i>PNG</span>
-                                    <span style="font-weight: 500;"><i class="fa fa-square" style="color: #FDB45C; font-size: 20px; padding-right: 5px; vertical-align: middle; margin-top: -3px;"></i>GIF</span>*@
+                                <a id="NF-upload" style="margin-left:20px" class="btn btn-default btn-xs dropdown-text" onclick="btn_add()"><i class="fa fa-cloud-upload"></i> 导入图片</a>
                             </div>
                         </div>
                         <div class="panel-body">
@@ -474,11 +467,23 @@
         }
 
         .tz-gallery .caption h3 {
-            padding-left: 17px;
+            /*padding-left: 17px;*/
         }
 
         .caption {
             cursor: pointer;
+            height: 72px;
+        }
+
+
+
+        .fname {
+            width: 100%;
+            /*margin-left: 24px;*/
+            display: none;
+            line-height: 26px;
+            height: 26px;
+            margin-bottom: 10px;
         }
     </style>
 
@@ -517,7 +522,7 @@
             $("#btnOK").bind("click", function () {
                 var dash = $("#currentFolder").text();//获取当前盘符
                 var category = $("#selCategory").val();//图片分类
-                var cvalue = $("#selCategory").find("option:selected").text();
+                var cvalue = $("#selCategory").find("option:selected").text();//分类值
                 var count = $("#imglst :checkbox:checked").length;
                 var synchro = "";
                 if ($("#chksynchro").is(':checked')) {
@@ -536,10 +541,11 @@
                 var selectedData = [];
                 $("#imglst :checkbox:checked").each(function () {
                     var $this = $(this).parents(".caption").children("h3");
-                    var name = $this.attr("title");//文件名称
+                    var nick = $this.attr("title");//文件昵称
                     var type = $this.data("type");//文件类型
                     var size = $this.data("size");//文件大小
-                    selectedData.push({ filename: name, filetype: type, filesize: size });//加入数组
+                    var fullname = $this.data("fullname");
+                    selectedData.push({ filename: fullname, filetype: type, filesize: size, filenick: nick });//加入数组
                 });
                 var dat = JSON.stringify(selectedData);
 
@@ -566,8 +572,10 @@
 
             //绑定盘符点击事件
             $(".dashboard-stats").bind("click", function () {
-                var current = $(this).find(".m-top-none").text();
-                $("#currentFolder").text(current);
+                var $this = $(this);
+                var current = $this.find(".m-top-none").text();
+
+                $("#currentFolder").text(current).data("id", $this.attr("id"));
                 currpage = 1;//初始化分页
                 getImgLst(true);//加载该盘符下所有图片
             });
@@ -588,6 +596,7 @@
                 }
                 $('#imglst input[type="checkbox"]').iCheck(flag);
             });
+
         });
 
         //需要二次加载的js
@@ -600,7 +609,7 @@
                 checkboxClass: 'icheckbox_minimal-green',
                 radioClass: 'iradio_minimal-green'
             });
-            $("#imglst .icheckbox_minimal-green").css({ "margin": "-43px 0px 0px -2px", "float": "left" });
+            $("#imglst .icheckbox_minimal-green").css({ "margin": "-18px 0px 0px -2px", "float": "left" });
             $(".caption").unbind("click");
             //空白区域添加点击事件
             $(".caption").bind("click", function () {
@@ -612,6 +621,30 @@
                     $this.iCheck('check');
                 }
             });
+
+
+
+
+            $("#imglst .caption").hover(
+function () {
+    $(this).find("h3").hide();
+    $(this).find(":text").show();
+}, function () {
+    var text = $(this).find(":text");
+    var h3 = $(this).find("h3");
+    text.hide();
+    h3.show();
+    if ($.trim(text.val()) != '') {
+        h3.text(subString1(text.val(), 16));
+        h3.attr("title", text.val());
+    }
+
+});
+
+            $("#imglst input[type='text']").bind('focus', function () {
+                $(this).select();
+            })
+
         }
 
         //加载本机盘符及大小
@@ -627,10 +660,10 @@
                     $.each(data, function (idx, obj) {
                         var color = getColor(idx, 0);
                         if (idx < 5) {
-                            strhtm += '<div class="dashboard-stats">';
+                            strhtm += '<div id="dash' + idx + '" class="dashboard-stats">';
                             strhtm += '<div class="dashboard-stats-item" style="background-color: ' + color + ';">';
                             strhtm += '<h4 class="m-top-none">' + obj.Item1 + '</h4>';
-                            strhtm += '<h5>磁盘空间：' + obj.Item2 + '</h5>';
+                            strhtm += '<h5>可用空间：' + obj.Item2 + '</h5>';
                             strhtm += '<div class="stat-icon"> ';
                             strhtm += '<i class="fa fa-hdd-o fa-2x"></i>';
                             strhtm += '</div>';
@@ -722,7 +755,8 @@
                         strhtm += '<img src="' + obj.Item3 + '" alt="" style="height: 180px;">';
                         strhtm += '</a>';
                         strhtm += '<div class="caption">';
-                        strhtm += '<h3 data-size="' + obj.Item4 + '" data-type="' + obj.Item5 + '" title="' + obj.Item2 + '">' + subString1(obj.Item2, 14) + '</h3>';
+                        strhtm += ' <input type="text" class="form-control fname" value=' + obj.Item2 + '  />';
+                        strhtm += '<h3 data-size="' + obj.Item4 + '" data-type="' + obj.Item5 + '" data-fullname="' + obj.Item2 + '" title="' + obj.Item2 + '">' + subString1(obj.Item2, 16) + '</h3>';
                         strhtm += '<p>文件大小：' + obj.Item4 + '</p>';
                         strhtm += '<input type="checkbox">';
                         strhtm += '</div>';
@@ -767,6 +801,26 @@
             });
 
             $(".biaoqian").empty().append(html);
+        }
+
+        //导入图片
+        function btn_add() {
+            var dash = $("#currentFolder").text();//获取当前盘符
+            var dashid = $("#currentFolder").data("id");
+ 
+            if ($.trim(dashid) == '')
+            {
+                $.modalMsg('请选择上传磁盘', 'warning');
+                return;
+            }
+            layer.open({
+                title: "导入图片",
+                type: 2,
+                area: ['850px', '550px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: '/Canchong/PicHourse/Upload?dash=' + dash + '&dashid=' + dashid
+            });
         }
 
     </script>

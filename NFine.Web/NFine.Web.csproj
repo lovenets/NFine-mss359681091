@@ -1127,7 +1127,7 @@
     <Content Include="ErrorPath404.html" />
     <Content Include="Areas\Canchong\Views\Web.config" />
     <Content Include="Areas\Canchong\Views\PicHourse\Index.cshtml" />
-    <Content Include="Areas\Canchong\Views\PicHourse\Form.cshtml" />
+    <Content Include="Areas\Canchong\Views\PicHourse\Upload.cshtml" />
     <Content Include="Areas\Canchong\Views\PicList\Index.cshtml" />
     <Content Include="Areas\Canchong\Views\PicList\Form.cshtml" />
     <Content Include="Content\js\iCheck\css\custom.styl" />

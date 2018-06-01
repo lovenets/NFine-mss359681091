@@ -27,9 +27,33 @@ namespace NFine.Web.Areas.Canchong.Controllers
             return View();
         }
 
-        public ActionResult Form()
+        public ActionResult Upload()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase Filedata)
+        {
+            // 没有文件上传，直接返回
+            if (Filedata == null || string.IsNullOrEmpty(Filedata.FileName) || Filedata.ContentLength == 0)
+            {
+                return HttpNotFound();
+            }
+
+            var dash = Request["dash"];
+            dash = dash + Configs.GetValue("ImgFolder");//默认固定文件夹为ImgList
+            FileHelper.CreateDirectory(dash);//创建盘符存放图片文件夹
+
+            string fullpath = dash + "/" + Filedata.FileName;
+            if (!System.IO.File.Exists(fullpath))
+            {
+                Filedata.SaveAs(fullpath);
+            }
+ 
+            var data = new {  };
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -50,8 +74,8 @@ namespace NFine.Web.Areas.Canchong.Controllers
                 //Console.Write(item.Name + "---" + item.DriveType);
                 if (item.IsReady)
                 {
-                    var strgb = item.TotalSize / 1024 / 1024 / 1024;//B转GB
-                    listPerson.Add(new Tuple<string, string>(item.Name, strgb.ToString() + "GB"));
+                    var length = FileHelper.ToFileSize(item.TotalFreeSpace);//获取磁盘可用大小
+                    listPerson.Add(new Tuple<string, string>(item.Name, length));
                     //Console.Write(",容量：" + item.TotalSize + "，可用空间大小：" + item.TotalFreeSpace);
                 }
             }
@@ -171,6 +195,8 @@ namespace NFine.Web.Areas.Canchong.Controllers
                     model.F_FileType = filetype;//文件类型
                     model.F_Category = category;//所属类别
                     model.F_FileSize = filesize;//文件大小
+                    model.F_DeleteMark = false;//未删除
+                    model.F_EnabledMark = true;//可用
                     if (synchro == "True")
                     {
                         model.F_Synchro = true;
@@ -188,8 +214,6 @@ namespace NFine.Web.Areas.Canchong.Controllers
                     cache.RemoveCache(cacheKey);//根据键值移除该类别数据集缓存
                 }
             }
-
-
             return View();
         }
 

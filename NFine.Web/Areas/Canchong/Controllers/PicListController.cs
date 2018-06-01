@@ -59,20 +59,28 @@ namespace NFine.Web.Areas.Canchong.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
-            WebPictureEntity pictureEntity = pictureApp.GetForm(keyValue);
-            if (pictureEntity.F_FilePath.Length > 0)
+            if (!string.IsNullOrEmpty(keyValue))
             {
-                //删除原图
-                string fullFileName = Server.MapPath(pictureEntity.F_FilePath);
-                Thread t1 = new Thread(new ParameterizedThreadStart(DeleteFile));
-                t1.Start(fullFileName);
-                //删除缩略图
-                string thumbnailPath = Server.MapPath(pictureEntity.F_ThumbnailPath);
-                Thread t2 = new Thread(new ParameterizedThreadStart(DeleteFile));
-                t2.Start(thumbnailPath);
+                List<string> lstid = StringHelper.GetStrArray(keyValue, ',', false);
+                for (int i = 0; i < lstid.Count; i++)
+                {
+                    WebPictureEntity pictureEntity = pictureApp.GetForm(lstid[i]);
+                    if (pictureEntity.F_FilePath.Length > 0)
+                    {
+                        //删除原图
+                        string fullFileName = Server.MapPath(pictureEntity.F_FilePath);
+                        Thread t1 = new Thread(new ParameterizedThreadStart(DeleteFile));
+                        t1.Start(fullFileName);
+                        //删除缩略图
+                        string thumbnailPath = Server.MapPath(pictureEntity.F_ThumbnailPath);
+                        Thread t2 = new Thread(new ParameterizedThreadStart(DeleteFile));
+                        t2.Start(thumbnailPath);
+                    }
+                    pictureApp.DeleteForm(lstid[i]);
+                }
+                return Success("删除成功");
             }
-            pictureApp.DeleteForm(keyValue);
-            return Success("删除成功。");
+            return Success("请选择删除项");
         }
 
         /// <summary>
@@ -84,7 +92,6 @@ namespace NFine.Web.Areas.Canchong.Controllers
             FileHelper.DeleteFile(fullFileName.ToString());
         }
 
-
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
@@ -93,10 +100,14 @@ namespace NFine.Web.Areas.Canchong.Controllers
         {
             if (!string.IsNullOrEmpty(keyValue))
             {
-                WebPictureEntity pictureEntity = new WebPictureEntity();
-                pictureEntity.F_Id = keyValue;
-                pictureEntity.F_EnabledMark = false;
-                pictureApp.UpdateForm(pictureEntity);
+                List<string> lstid = StringHelper.GetStrArray(keyValue, ',', false);
+                for (int i = 0; i < lstid.Count; i++)
+                {
+                    WebPictureEntity pictureEntity = new WebPictureEntity();
+                    pictureEntity.F_Id = lstid[i];
+                    pictureEntity.F_EnabledMark = false;
+                    pictureApp.UpdateForm(pictureEntity);
+                }
                 return Success("禁用成功");
             }
             return Success("请选择禁用项");
@@ -110,16 +121,18 @@ namespace NFine.Web.Areas.Canchong.Controllers
         {
             if (!string.IsNullOrEmpty(keyValue))
             {
-                WebPictureEntity pictureEntity = new WebPictureEntity();
-                pictureEntity.F_Id = keyValue;
-                pictureEntity.F_EnabledMark = true;
-                pictureApp.UpdateForm(pictureEntity);
+                List<string> lstid = StringHelper.GetStrArray(keyValue, ',', false);
+                for (int i = 0; i < lstid.Count; i++)
+                {
+                    WebPictureEntity pictureEntity = new WebPictureEntity();
+                    pictureEntity.F_Id = lstid[i];
+                    pictureEntity.F_EnabledMark = true;
+                    pictureApp.UpdateForm(pictureEntity);
+                }
                 return Success("启用成功");
             }
             return Success("请选择启用项");
         }
-
-
 
         [HttpPost]
         [HandlerAjaxOnly]
@@ -129,12 +142,17 @@ namespace NFine.Web.Areas.Canchong.Controllers
         {
             if (!string.IsNullOrEmpty(keyValue))
             {
-                //进行同步操作
-                WebPictureEntity pictureEntity = new WebPictureEntity();
-                pictureEntity.F_Id = keyValue;
-                pictureEntity.F_Synchro = true;
-                pictureApp.UpdateForm(pictureEntity);
+                List<string> lstid = StringHelper.GetStrArray(keyValue, ',', false);
+                for (int i = 0; i < lstid.Count; i++)
+                {
+                    //进行同步操作
 
+                    //更改同步标识
+                    WebPictureEntity pictureEntity = new WebPictureEntity();
+                    pictureEntity.F_Id = lstid[i];
+                    pictureEntity.F_Synchro = true;
+                    pictureApp.UpdateForm(pictureEntity);
+                }
                 return Success("同步成功");
             }
             return Success("请选择同步项");
@@ -144,12 +162,43 @@ namespace NFine.Web.Areas.Canchong.Controllers
         [HandlerAuthorize]
         public void DownloadBackup(string keyValue)
         {
-            var data = pictureApp.GetForm(keyValue);
-            string filename = Server.UrlDecode(data.F_FullName);
-            string filepath = Server.MapPath(data.F_FilePath);
-            if (FileDownHelper.FileExists(filepath))
+            if (!string.IsNullOrEmpty(keyValue))
             {
-                FileDownHelper.DownLoadold(filepath, filename);
+                List<string> lstid = StringHelper.GetStrArray(keyValue, ',', false);
+                if (lstid.Count == 1)
+                {
+                    var data = pictureApp.GetForm(lstid[0]);
+                    //将压缩包下载
+                    FileDownHelper.DownLoadold(Server.MapPath(data.F_FilePath), data.F_FullName);//单个图片直接下载
+                    return;
+                }
+
+                //将图片拷贝至指定临时路径并压缩打包
+                string newFilename = DateTime.Now.ToString("yyyyMMddHHmmss");
+                string newFolder = "/Temp/" + newFilename + "/";
+                string newZip = Server.MapPath("/Temp/" + newFilename + ".zip");//压缩包
+                FileHelper.CreateDirectory(Server.MapPath(newFolder));//创建一个临时文件夹
+
+                for (int i = 0; i < lstid.Count; i++)
+                {
+                    var data = pictureApp.GetForm(lstid[i]);
+                    string filename = Server.UrlDecode(data.F_FullName);
+                    string filepath = Server.MapPath(data.F_FilePath);
+                    if (FileDownHelper.FileExists(filepath))
+                    {
+                        FileHelper.Copy(filepath,Server.MapPath(newFolder+ data.F_FullName) );//将文件拷贝到临时文件夹
+                    }
+                }
+                //将文件夹进行GZip压缩
+                ZipFloClass Zc = new ZipFloClass();
+                Zc.ZipFile(Server.MapPath(newFolder), newZip);//生成压缩包
+                if (FileDownHelper.FileExists(newZip))
+                {
+                    FileDownHelper.DownLoadold(newZip, newFilename + ".zip");//下载压缩包
+                }
+                //删除文件夹
+                FileHelper.DeleteDirectory(newFolder);//删除文件夹
+                FileHelper.DeleteFile(newZip);//删除临时压缩包
             }
         }
 
@@ -188,7 +237,6 @@ namespace NFine.Web.Areas.Canchong.Controllers
             var data = new { F_Nick = nickname, F_FilePath = categoryFolder + name, F_FullName = name, F_FileSize = length, F_ThumbnailPath = thumbnailFolder + name };
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-
 
         [HttpGet]
         public ActionResult ImgShow()

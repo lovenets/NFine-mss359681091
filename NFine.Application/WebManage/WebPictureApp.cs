@@ -33,7 +33,7 @@ namespace NFine.Application.WebManage
             if (!queryParam["keyword"].IsEmpty())
             {
                 string keyword = queryParam["keyword"].ToString();
-                expression = expression.And(t => (t.F_FullName.Contains(keyword) || t.F_Nick.Contains(keyword) || t.F_FileType.Contains(keyword)));
+                expression = expression.And(t => (t.F_FullName.Contains(keyword) || t.F_Nick.Contains(keyword) || t.F_FileType.Contains(keyword) || t.F_Alias.Contains(keyword)));
             }
             if (!queryParam["F_Category"].IsEmpty())
             {

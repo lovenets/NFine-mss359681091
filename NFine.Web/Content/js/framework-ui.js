@@ -280,7 +280,8 @@ $.fn.jqGridRowValue = function () {
             json.push(rowData);
         }
         return json;
-    } else {
+    }
+    else {
         return $grid.jqGrid('getRowData', $grid.jqGrid('getGridParam', 'selrow'));
     }
 }
@@ -445,3 +446,25 @@ function getUserName(fid) {
     });
     return result;
 };
+
+
+//获取多选主键集合
+$.fn.jqGridRowIds = function () {
+    var $grid = $(this);
+    return $grid.jqGrid("getGridParam", "selarrrow");
+}
+//获取多选实体集合
+$.fn.jqGridRowValues = function () {
+    var $grid = $(this);
+    var selectedRowIds = $grid.jqGrid("getGridParam", "selarrrow");
+    if (selectedRowIds != "") {
+        var json = [];
+        var len = selectedRowIds.length;
+        for (var i = 0; i < len ; i++) {
+            var rowData = $grid.jqGrid('getRowData', selectedRowIds[i]);
+            json.push(rowData);
+        }
+        return json;
+    }
+   
+}

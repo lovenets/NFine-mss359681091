@@ -136,6 +136,7 @@ namespace NFine.Code
 
         #endregion
 
+        #region 生成缩略图
         // <summary>
         /// 生成缩略图
         /// </summary>
@@ -230,6 +231,6 @@ namespace NFine.Code
                 g.Dispose();
             }
         }
-
+        #endregion
     }
 }

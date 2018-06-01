@@ -7,6 +7,15 @@
     var keyValue = $.request("keyValue");
     $(function () {
         initControl();
+    });
+
+    function initControl() {
+        //类别绑定
+        $("#F_Category").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "Category" },
+            search: true
+        });
         if (!!keyValue) {
             $.ajax({
                 url: "/Canchong/PicList/GetFormJson",
@@ -15,23 +24,10 @@
                 async: false,
                 success: function (data) {
                     $("#form1").formSerialize(data);
+                    $("#imgshow").attr({ src: $("#F_FilePath").val(), alt: $("#F_FullName").val() });
                 }
             });
         }
-
-
-        var username = getUserName($("#F_CreatorUserId").val());
-        $("#CreatorUserId").text(username);
-
-    });
-
-    function initControl() {
-        //类别绑定
-        $("#F_Category").bindSelect({
-            url: "/SystemManage/ItemsData/GetSelectJson",
-            param: { enCode: "Category" }
-        });
-
     }
 
     function submitForm() {
@@ -63,99 +59,121 @@
 <form id="form1">
     <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#">基本信息</a></li>
+            <li class="active"><a href="#a" data-toggle="tab">基本信息</a></li>
+            <li><a href="#b" data-toggle="tab">别称信息</a></li>
+            <li><a href="#c" data-toggle="tab">图片预览</a></li>
         </ul>
-        <div style="padding-top: 20px; margin-right: 30px;">
-            <table class="form">
-                <tr>
-                    <th class="formTitle">图片类别</th>
-                    <td class="formValue">
-                        <select id="F_Category" name="F_Category" class="form-control"></select>
-                    </td>
-                    <th class="formTitle">图片昵称</th>
-                    <td class="formValue">
-                        <input id="F_Nick" name="F_Nick" type="text" class="form-control " placeholder="" />
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">图片路径</th>
-                    <td class="formValue" colspan="3">
-                        <div class="input-group" style="width:100%">
-                            <input id="F_FilePath" name="F_FilePath" type="text" class="form-control " placeholder="" />
-                            <span class="input-group-btn">
-                                <a class="btn  btn-primary" onclick="btn_upload()"><i class="fa fa-ellipsis-h"></i></a>
-                            </span>
-                        </div>
-                    </td>
-                </tr>
+        <div class="tab-content" style="padding-top: 5px;">
+            <div id="a" class="tab-pane active" style="padding: 15px;">
+                <table class="form">
+                    <tr>
+                        <th class="formTitle">图片类别</th>
+                        <td class="formValue">
+                            <select id="F_Category" name="F_Category" class="form-control"></select>
+                        </td>
+                        <th class="formTitle">图片昵称</th>
+                        <td class="formValue">
+                            <input id="F_Nick" name="F_Nick" type="text" class="form-control " placeholder="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">图片路径</th>
+                        <td class="formValue" colspan="3">
+                            <div class="input-group" style="width:100%">
+                                <input id="F_FilePath" name="F_FilePath" type="text" class="form-control " placeholder="" />
+                                <span class="input-group-btn">
+                                    <a class="btn  btn-primary" onclick="btn_upload()"><i class="fa fa-ellipsis-h"></i></a>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
 
-                <tr>
-                    <th class="formTitle">图片名称</th>
-                    <td class="formValue">
-                        <input id="F_FullName" name="F_FullName" type="text" class="form-control " placeholder="" />
-                    </td>
-                    <th class="formTitle">图片大小</th>
-                    <td class="formValue">
-                        <input id="F_FileSize" name="F_FileSize" type="text" class="form-control " placeholder="" />
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">缩略图</th>
-                    <td class="formValue" colspan="3">
-                        <div class="input-group" style="width:100%">
-                            <input id="F_ThumbnailPath" name="F_ThumbnailPath" type="text" class="form-control " placeholder="" disabled="disabled" />
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">是否可用</th>
-                    <td class="formValue">
-                        <div class="ckbox">
-                            <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
-                        </div>
-                    </td>
-                    <th class="formTitle">排序号</th>
-                    <td class="formValue">
-                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control  digits" placeholder="请输入排序号" value="0" />
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">是否同步</th>
-                    <td class="formValue">
-                        <div class="ckbox">
-                            <input id="F_Synchro" name="F_Synchro" type="checkbox" checked="checked"><label for="F_Synchro">同步</label>
-                        </div>
-                    </td>
-                    <th class="formTitle"> </th>
-                    <td class="formValue"></td>
-                </tr>
-                <tr>
-                    <th class="formTitle">创建时间</th>
-                    <td class="formValue">
+                    <tr>
+                        <th class="formTitle">图片名称</th>
+                        <td class="formValue">
+                            <input id="F_FullName" name="F_FullName" type="text" class="form-control " placeholder="" />
+                        </td>
+                        <th class="formTitle">图片大小</th>
+                        <td class="formValue">
+                            <input id="F_FileSize" name="F_FileSize" type="text" class="form-control " placeholder="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">缩略图</th>
+                        <td class="formValue" colspan="3">
+                            <div class="input-group" style="width:100%">
+                                <input id="F_ThumbnailPath" name="F_ThumbnailPath" type="text" class="form-control " placeholder="" disabled="disabled" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">是否可用</th>
+                        <td class="formValue">
+                            <div class="ckbox">
+                                <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                            </div>
+                        </td>
+                        <th class="formTitle">排序号</th>
+                        <td class="formValue">
+                            <input id="F_SortCode" name="F_SortCode" type="text" class="form-control  digits" placeholder="请输入排序号" value="0" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">是否同步</th>
+                        <td class="formValue">
+                            <div class="ckbox">
+                                <input id="F_Synchro" name="F_Synchro" type="checkbox" checked="checked"><label for="F_Synchro">同步</label>
+                            </div>
+                        </td>
+                        <th class="formTitle"> </th>
+                        <td class="formValue"></td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">创建时间</th>
+                        <td class="formValue">
 
-                        <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                            <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
 
-                    </td>
+                        </td>
 
-                    <th class="formTitle">创建人</th>
-                    <td class="formValue">
+                        <th class="formTitle">创建人</th>
+                        <td class="formValue">
 
-                        <input id="F_CreatorUserId" name="F_CreatorUserId" type="text" class="form-control " placeholder="" style="display:none" />
+                            <input id="F_CreatorUserId" name="F_CreatorUserId" type="text" class="form-control " placeholder="" style="display:none" />
 
-                        <span id="CreatorUserId"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle" valign="top" style="padding-top: 5px;">
-                        图片简介
-                    </th>
-                    <td class="formValue" colspan="3">
-                        <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
-                    </td>
-                </tr>
-            </table>
+                            <span id="CreatorUserId"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle" valign="top" style="padding-top: 5px;">
+                            图片简介
+                        </th>
+                        <td class="formValue" colspan="3">
+                            <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="b" class="tab-pane" style="padding: 15px;">
+                <table class="form">
+                    <tr style="color:red">
+                        <th class="formTitle">温馨提示</th>
+                        <td class="formValue" colspan="3">
+                            多个别称用英文逗号隔开,例子( 面条,馒头,烧饼 )
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">图片别称</th>
+                        <td class="formValue" colspan="3">
+                            <textarea id="F_Alias" name="F_Alias" class="form-control" style="height: 80px;"></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="c" class="tab-pane" style="padding: 15px;">
+                <img id="imgshow" src="" alt="" class="img-thumbnail " style="width:100%">
+            </div>
         </div>
     </div>
-
 </form>
 
