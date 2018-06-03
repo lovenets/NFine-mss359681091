@@ -32,14 +32,7 @@ namespace NFine.Application.SystemManage
         }
         public OrganizeEntity GetForm(string keyValue)
         {
-            cacheKey = cacheKey + "2_" + keyValue;//拼接有参key值
-            var cacheEntity = cache.GetCache<OrganizeEntity>(cacheKey);
-            if (cacheEntity == null)
-            {
-                cacheEntity = service.FindEntity(keyValue);
-                cache.WriteCache<OrganizeEntity>(cacheEntity, cacheKey, "UserCacheDependency", "Sys_Organize");
-            }
-            return cacheEntity;
+            return service.FindEntity(keyValue);
         }
         public void DeleteForm(string keyValue)
         {
@@ -50,6 +43,7 @@ namespace NFine.Application.SystemManage
             else
             {
                 service.Delete(t => t.F_Id == keyValue);
+                cache.RemoveCache(cacheKey);//移除缓存
             }
         }
         public void SubmitForm(OrganizeEntity organizeEntity, string keyValue)
@@ -64,6 +58,7 @@ namespace NFine.Application.SystemManage
                 organizeEntity.Create();
                 service.Insert(organizeEntity);
             }
+            cache.RemoveCache(cacheKey);//移除缓存
         }
     }
 }

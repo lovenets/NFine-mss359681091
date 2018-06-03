@@ -1,14 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NFine.Application.WebManage;
+﻿using NFine.Application.WebManage;
 using NFine.Code;
 using NFine.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Web;
 using System.Web.Mvc;
 
@@ -31,6 +27,36 @@ namespace NFine.Web.Areas.Canchong.Controllers
         {
             return View();
         }
+        public ActionResult WebUploader()
+        {
+            return View();
+        }
+
+        public ActionResult UpLoadProcess(string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file, string param_uploader)
+        {
+            string filePathName = string.Empty;
+            string localPath = Path.Combine(param_uploader, Configs.GetValue("ImgFolder"));
+            if (Request.Files.Count == 0)
+            {
+                return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = "id" });
+            }
+
+            //string ex = Path.GetExtension(file.FileName);
+            //filePathName = Guid.NewGuid().ToString("N") + ex;
+            if (!System.IO.Directory.Exists(localPath))
+            {
+                System.IO.Directory.CreateDirectory(localPath);
+            }
+            file.SaveAs(Path.Combine(localPath, file.FileName));
+
+            return Json(new
+            {
+                jsonrpc = "2.0",
+                id = id,
+                filePath = Path.Combine(param_uploader, Configs.GetValue("ImgFolder")) + "/" + file.FileName
+            });
+
+        }
 
 
         [HttpPost]
@@ -51,8 +77,8 @@ namespace NFine.Web.Areas.Canchong.Controllers
             {
                 Filedata.SaveAs(fullpath);
             }
- 
-            var data = new {  };
+
+            var data = new { };
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
@@ -145,6 +171,8 @@ namespace NFine.Web.Areas.Canchong.Controllers
             return pageImgLst;
         }
 
+
+        [HandlerAjaxOnly]
         /// <summary>
         /// 图片归档
         /// </summary>
@@ -177,10 +205,14 @@ namespace NFine.Web.Areas.Canchong.Controllers
                     var filenick = my[i].filenick;//文件昵称
 
                     //第二步：将文件剪切至类别文件夹
-                    FileHelper.MoveFile("/Temp/" + filename, categoryFolder + filename); //移动文件，将文件从临时文件夹转移至归档文件
+                    if (!FileHelper.IsExistFile(Server.MapPath(categoryFolder + filename)))
+                    {
+                        FileHelper.MoveFile("/Temp/" + filename, categoryFolder + filename); //移动文件，将文件从临时文件夹转移至归档文件
 
-                    //第三步：生成缩略图
-                    NFine.Code.Common.MakeThumbnail(Server.MapPath(categoryFolder + filename), Server.MapPath(thumbnailFolder + filename), 600, 350, "W", "jpg");
+                        //第三步：生成缩略图
+                        NFine.Code.Common.MakeThumbnail(Server.MapPath(categoryFolder + filename), Server.MapPath(thumbnailFolder + filename), 600, 350, "W", "jpg");
+                    }
+
                     if (string.IsNullOrEmpty(filenick))
                     {
                         filenick = Path.GetFileNameWithoutExtension(Server.MapPath(categoryFolder + filename));//获取昵称

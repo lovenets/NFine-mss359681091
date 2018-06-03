@@ -85,6 +85,7 @@ namespace NFine.Application.WebManage
                 service.Insert(entity);
             }
         }
+
         public void UpdateForm(WebPictureEntity entity)
         {
             service.Update(entity);

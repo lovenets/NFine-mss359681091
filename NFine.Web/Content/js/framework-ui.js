@@ -411,7 +411,8 @@ $.fn.dataGrid = function (options) {
         autowidth: true,
         rownumbers: true,
         shrinkToFit: false,
-        gridview: true
+        gridview: true,
+        isdbclick: true
     };
     var options = $.extend(defaults, options);
     var $element = $(this);
@@ -426,6 +427,12 @@ $.fn.dataGrid = function (options) {
         $operate.find('.close').click(function () {
             $operate.animate({ "left": '-100.1%' }, 200);
         })
+    };
+    options["ondblClickRow"] = function (rowid) {
+        if (options["isdbclick"])
+        {
+            btn_edit();
+        }
     };
     $element.jqGrid(options);
 };
@@ -466,5 +473,5 @@ $.fn.jqGridRowValues = function () {
         }
         return json;
     }
-   
+
 }

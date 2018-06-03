@@ -93,7 +93,7 @@
                                 <input tabindex="5" type="checkbox" id="chkall">
                                 <label for="chkall">全选</label>
 
-                                <a id="NF-upload" style="margin-left:20px" class="btn btn-default btn-xs dropdown-text" onclick="btn_add()"><i class="fa fa-cloud-upload"></i> 导入图片</a>
+                                <a id="NF-upload" style="margin-left:20px" class="btn btn-info btn-xs " onclick="btn_add()"><i class="fa fa-cloud-upload"></i> 导入图片</a>
                             </div>
                         </div>
                         <div class="panel-body">
@@ -326,7 +326,7 @@
                             </div>
 
                             <div style="margin-top: 20px; padding-top: 18px; height: 60px; border-top: 1px solid #e6e6e6;">
-                                <select id="selCategory" name="selCategory" class="select2 form-control">
+                                <select id="selCategory" name="selCategory" class="select2 form-control" >
                                     <option value="">==请选择类别==</option>
                                     @*<option value="" selected="selected">请选择类别</option>
                                         <option value="1">东北菜</option>
@@ -340,7 +340,7 @@
                                         <option value="9">面点</option>
                                         <option value="10">野味</option>*@
                                 </select>
-                                <div style="margin-top:10px">
+                                <div style="margin-top:10px;font-size:14px" >
                                     <input tabindex="5" type="checkbox" id="chksynchro">
                                     <label for="chksynchro"> 是否同步</label>
                                 </div>
@@ -485,6 +485,10 @@
             height: 26px;
             margin-bottom: 10px;
         }
+        .select2-selection,.select2-results__option {
+        font-size:14px;
+        }
+
     </style>
 
     <script type="text/javascript">
@@ -515,7 +519,7 @@
             $(".biaoqian a").bind("click", function () {
                 var id = $(this).data("id");
                 $("#selCategory").val(id).trigger("change");
-                areaObj.change();
+                //areaObj.change();
             });
 
             //绑定归类点击事件
@@ -548,8 +552,8 @@
                     selectedData.push({ filename: fullname, filetype: type, filesize: size, filenick: nick });//加入数组
                 });
                 var dat = JSON.stringify(selectedData);
-
                 $.ajax({
+                    type: "post",
                     url: "/Canchong/PicHourse/FnFile",
                     data: { dash: dash, category: category, dat: dat, cvalue: cvalue, synchro: synchro },
                     dataType: "json",
@@ -807,20 +811,32 @@ function () {
         function btn_add() {
             var dash = $("#currentFolder").text();//获取当前盘符
             var dashid = $("#currentFolder").data("id");
- 
-            if ($.trim(dashid) == '')
-            {
+
+            if ($.trim(dashid) == '') {
                 $.modalMsg('请选择上传磁盘', 'warning');
                 return;
             }
+
             layer.open({
                 title: "导入图片",
                 type: 2,
-                area: ['850px', '550px'],
+                area: ['920px', '520px'],
                 fixed: false, //不固定
                 maxmin: true,
-                content: '/Canchong/PicHourse/Upload?dash=' + dash + '&dashid=' + dashid
+                end: function () {
+                    $("#" + dashid).click();
+                },
+                content: '/Canchong/PicHourse/WebUploader?dash=' + dash
             });
+
+            //layer.open({
+            //    title: "导入图片",
+            //    type: 2,
+            //    area: ['850px', '550px'],
+            //    fixed: false, //不固定
+            //    maxmin: true,
+            //    content: '/Canchong/PicHourse/Upload?dash=' + dash + '&dashid=' + dashid
+            //});
         }
 
     </script>

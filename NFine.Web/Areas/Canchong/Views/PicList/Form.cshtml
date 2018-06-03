@@ -50,7 +50,7 @@
             area: ['100%', '100%'],
             fixed: false, //不固定
             maxmin: true,
-            content: '/Canchong/PicList/Upload?category=' + encodeURI(cvalue)
+            content: '/Canchong/PicList/WebUploader?category=' + encodeURI(cvalue)
         });
     }
 
@@ -73,7 +73,7 @@
                         </td>
                         <th class="formTitle">图片昵称</th>
                         <td class="formValue">
-                            <input id="F_Nick" name="F_Nick" type="text" class="form-control " placeholder="" />
+                            <input id="F_Nick" name="F_Nick" type="text" class="form-control required" placeholder="请输入昵称" />
                         </td>
                     </tr>
                     <tr>
@@ -91,7 +91,7 @@
                     <tr>
                         <th class="formTitle">图片名称</th>
                         <td class="formValue">
-                            <input id="F_FullName" name="F_FullName" type="text" class="form-control " placeholder="" />
+                            <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入名称" />
                         </td>
                         <th class="formTitle">图片大小</th>
                         <td class="formValue">

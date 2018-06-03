@@ -1,5 +1,160 @@
 ﻿@{
-    ViewBag.Title = "ImgShow";
+    ViewBag.Title = "图片浏览";
+    Layout = "~/Views/Shared/_Index.cshtml";
 }
+<link href="~/Content/js/select2/select2.min.css" rel="stylesheet" />
+<script src="~/Content/js/select2/select2.min.js"></script>
+<link href="~/Content/js/Gallery-master/css/blueimp-gallery.min.css" rel="stylesheet" />
 
-<h2>ImgShow</h2>
+<style>
+    .lightBoxGallery img {
+        margin: 5px;
+        /*width: 164px;*/
+        height:180px;
+    }
+</style>
+
+
+
+<script>
+
+    var currpage = 1;//默认当前第一页
+
+    $(function () {
+
+        //类别绑定
+        $("#F_Category").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "Category" },
+            search: true
+        });
+
+        $("#F_Category").change(function () {
+            var category = $(this).find("option:selected").text();
+            $(".ibox-content h2").text(category);
+            loadImgList(true);
+        });
+
+        $("#btnMore").bind("click", function () {
+            currpage = currpage + 1;
+            loadImgList(false);//加载更多图片
+        });
+
+        $("#btn_search").bind("click", function () {
+            loadImgList(true);
+        });
+
+        //加载图片列表
+        loadImgList(true);
+
+    })
+
+    //加载图片列表，默认21条
+    function loadImgList(isEmpty) {
+
+        if (isEmpty) {
+            currpage = 1;
+        }
+        var category = $("#F_Category").val();
+        var txt_keyword = $("#txt_keyword").val();
+        var strhtm = '';
+        $.ajax({
+            url: "/Canchong/PicList/GetImglstJson",
+            data: { category: category, page: currpage, keyword: txt_keyword },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $.each(data, function (idx, obj) {
+                    strhtm += '<a href="' + obj.F_ThumbnailPath + '" title="' + obj.F_Nick + '" data-gallery="">';
+                    strhtm += '<img src="' + obj.F_ThumbnailPath + '"></a>';
+                });
+                if (isEmpty) {
+
+                    $("#imgArea").empty().append(strhtm);
+                    if ($.trim(strhtm) == '') {
+                        $.modalMsg('该目录暂无图片', 'warning');
+                        return;
+                    }
+                }
+                else {
+                    if ($.trim(strhtm) == '') {
+                        $.modalMsg('没有更多了', 'warning');
+                        return;
+                    }
+                    $("#imgArea").append(strhtm);
+
+                }
+            }
+        });
+    }
+
+</script>
+
+<div class="topPanel">
+    <div class="toolbar">
+
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入关键词" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+
+                <td style="padding-left:15px; font-weight:600">
+                    所属类别：
+                </td>
+                <td style="width:150px">
+                    <select id="F_Category" name="F_Category" class="form-control">
+                        <option value="">==请选择==</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="row" style="margin:0;padding-bottom:10px">
+        <div class="col-lg-11">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content">
+
+                    <h2>全部类别</h2>
+                    <p>
+                        <strong>温馨提示：</strong>支持移动设备，同时也支持桌面浏览器，支持触摸操作，支持全屏播放等。
+                    </p>
+
+                    <div class="lightBoxGallery">
+                        <div id="imgArea">
+
+                        </div>
+
+                        <div id="blueimp-gallery" class="blueimp-gallery">
+                            <div class="slides"></div>
+                            <h3 class="title"></h3>
+                            <a class="prev">‹</a>
+                            <a class="next">›</a>
+                            <a class="close">×</a>
+                            <a class="play-pause"></a>
+                            <ol class="indicator"></ol>
+                        </div>
+                    </div>
+
+                    <button type="button" id="btnMore" class="btn" style="width:1030px;margin-top:10px">加载更多</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/js/Gallery-master/js/jquery.blueimp-gallery.min.js"></script>

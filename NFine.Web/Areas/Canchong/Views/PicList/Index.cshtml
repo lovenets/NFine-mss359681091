@@ -70,7 +70,8 @@
             pager: "#gridPager",
             sortname: 'F_CreatorTime desc',
             multiselect: true,
-            viewrecords: true
+            viewrecords: true,
+            isdbclick: false
         });
 
         $("#btn_search").click(function () {
@@ -86,8 +87,8 @@
             id: "Form",
             title: "新增图片",
             url: "/Canchong/PicList/Form",
-            width: "700px",
-            height: "510px",
+            width: "850px",
+            height: "530px",
             callBack: function (iframeId) {
                 top.frames[iframeId].submitForm();
             }
@@ -110,8 +111,8 @@
             id: "Form",
             title: "修改图片",
             url: "/Canchong/PicList/Form?keyValue=" + keyValue,
-            width: "700px",
-            height: "510px",
+            width: "850px",
+            height: "530px",
             callBack: function (iframeId) {
                 top.frames[iframeId].submitForm();
             }

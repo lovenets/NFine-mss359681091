@@ -186,7 +186,7 @@ namespace NFine.Web.Areas.Canchong.Controllers
                     string filepath = Server.MapPath(data.F_FilePath);
                     if (FileDownHelper.FileExists(filepath))
                     {
-                        FileHelper.Copy(filepath,Server.MapPath(newFolder+ data.F_FullName) );//将文件拷贝到临时文件夹
+                        FileHelper.Copy(filepath, Server.MapPath(newFolder + data.F_FullName));//将文件拷贝到临时文件夹
                     }
                 }
                 //将文件夹进行GZip压缩
@@ -242,6 +242,63 @@ namespace NFine.Web.Areas.Canchong.Controllers
         public ActionResult ImgShow()
         {
             return View();
+        }
+
+        [HttpGet]
+        [HandlerAjaxOnly]
+        public ActionResult GetImglstJson(string category, string page, string keyword)
+        {
+            string queryJson = "{ \"F_Category\":\"" + category + "\",\"keyword\":\"" + keyword + "\"}";
+            Pagination pagination = new Pagination();
+            pagination.page = Convert.ToInt32(page);
+            pagination.rows = 18;//每页21条
+            pagination.sord = "asc";
+            pagination.sidx = "F_Category desc";
+            var data = pictureApp.GetList(pagination, queryJson);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult WebUploader()
+        {
+            return View();
+        }
+
+        public ActionResult UpLoadProcess(string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file, string param_uploader)
+        {
+            string filePathName = string.Empty;
+            param_uploader= System.Web.HttpUtility.UrlDecode(param_uploader);//改格式
+            if (Request.Files.Count == 0)
+            {
+                return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = "id" });
+            }
+            string filename = name;//图片名称
+            string nickname = Path.GetFileNameWithoutExtension(file.FileName);//图片昵称
+            string categoryFolder = "/Temp/" + param_uploader + "/";
+            string thumbnailFolder = "/Temp/" + param_uploader + "_s/";
+            FileHelper.CreateDirectory(Server.MapPath(categoryFolder));
+            FileHelper.CreateDirectory(Server.MapPath(thumbnailFolder));
+
+            string fullpath = Server.MapPath(categoryFolder + filename);//图片物理路径
+
+            if (!System.IO.File.Exists(fullpath))
+            {
+                file.SaveAs(fullpath);
+            }
+            NFine.Code.Common.MakeThumbnail(fullpath, Server.MapPath(thumbnailFolder + filename), 600, 350, "W", "jpg");//生成缩略图
+
+            var length = FileHelper.ToFileSize(file.ContentLength);//获取图片大小 
+
+            return Json(new
+            {
+                jsonrpc = "2.0",
+                id = id,
+                F_Nick = nickname,
+                F_FilePath = categoryFolder + filename,
+                F_FullName = filename,
+                F_FileSize = length,
+                F_ThumbnailPath = thumbnailFolder + filename
+            });
+
         }
     }
 }
