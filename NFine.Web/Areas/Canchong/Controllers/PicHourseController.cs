@@ -10,37 +10,38 @@ using System.Web.Mvc;
 
 namespace NFine.Web.Areas.Canchong.Controllers
 {
-
-    public class PicHourseController : Controller
+    public class PicHourseController : ControllerBase
     {
         private WebPictureApp picApp = new WebPictureApp();
 
-        //
-        // GET: /Canchong/Home/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Upload()
-        {
-            return View();
-        }
         public ActionResult WebUploader()
         {
             return View();
         }
 
+        #region public ActionResult UpLoadProcess() 后台处理程序
+        /// <summary>
+        /// webUploader后台处理程序
+        /// </summary>
+        /// <param name="id">自生成id</param>
+        /// <param name="name">文件名称</param>
+        /// <param name="type">文件类型</param>
+        /// <param name="lastModifiedDate">最后修改日期</param>
+        /// <param name="size">文件大小</param>
+        /// <param name="file">文件流</param>
+        /// <param name="param_uploader">前台参数</param>
+        /// <returns></returns>
         public ActionResult UpLoadProcess(string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file, string param_uploader)
         {
+            string cacheKey = param_uploader;//缓存键值
+            ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
+
             string filePathName = string.Empty;
             string localPath = Path.Combine(param_uploader, Configs.GetValue("ImgFolder"));
             if (Request.Files.Count == 0)
             {
                 return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = "id" });
             }
-
             //string ex = Path.GetExtension(file.FileName);
             //filePathName = Guid.NewGuid().ToString("N") + ex;
             if (!System.IO.Directory.Exists(localPath))
@@ -48,40 +49,16 @@ namespace NFine.Web.Areas.Canchong.Controllers
                 System.IO.Directory.CreateDirectory(localPath);
             }
             file.SaveAs(Path.Combine(localPath, file.FileName));
-
+            cache.RemoveCache(cacheKey);//根据键值移除该类别数据集缓存
             return Json(new
             {
                 jsonrpc = "2.0",
-                id = id,
-                filePath = Path.Combine(param_uploader, Configs.GetValue("ImgFolder")) + "/" + file.FileName
+                id = id
             });
-
         }
+        #endregion
 
-
-        [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase Filedata)
-        {
-            // 没有文件上传，直接返回
-            if (Filedata == null || string.IsNullOrEmpty(Filedata.FileName) || Filedata.ContentLength == 0)
-            {
-                return HttpNotFound();
-            }
-
-            var dash = Request["dash"];
-            dash = dash + Configs.GetValue("ImgFolder");//默认固定文件夹为ImgList
-            FileHelper.CreateDirectory(dash);//创建盘符存放图片文件夹
-
-            string fullpath = dash + "/" + Filedata.FileName;
-            if (!System.IO.File.Exists(fullpath))
-            {
-                Filedata.SaveAs(fullpath);
-            }
-
-            var data = new { };
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
+        #region public ActionResult GetDriveJson() 获取磁盘信息
         [HttpGet]
         [HandlerAjaxOnly]
         /// <summary>
@@ -90,29 +67,31 @@ namespace NFine.Web.Areas.Canchong.Controllers
         public ActionResult GetDriveJson()
         {
             List<Tuple<string, string>> listPerson = new List<Tuple<string, string>>();
-
             DriveInfo[] allDirves = DriveInfo.GetDrives();
             //检索计算机上的所有逻辑驱动器名称
             foreach (DriveInfo item in allDirves)
             {
                 ////Fixed 硬盘
                 ////Removable 可移动存储设备，如软盘驱动器或USB闪存驱动器。
-                //Console.Write(item.Name + "---" + item.DriveType);
                 if (item.IsReady)
                 {
                     var length = FileHelper.ToFileSize(item.TotalFreeSpace);//获取磁盘可用大小
                     listPerson.Add(new Tuple<string, string>(item.Name, length));
-                    //Console.Write(",容量：" + item.TotalSize + "，可用空间大小：" + item.TotalFreeSpace);
                 }
             }
             return Json(listPerson.ToList(), JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
+        #region  public ActionResult GetImglstJson() 获取原始磁盘资源分页列表
         [HttpGet]
         [HandlerAjaxOnly]
         /// <summary>
         /// 获取原始磁盘资源分页列表
         /// </summary>
+        /// <param name="dash">所在盘符</param>
+        /// <param name="page">当前页数</param>
+        /// <returns></returns>
         public ActionResult GetImglstJson(string dash, int page = 1)
         {
             //参数0：索引，参数1：名称，参数2：图片路径，参数3：图片大小，参数4：图片扩展名
@@ -122,7 +101,7 @@ namespace NFine.Web.Areas.Canchong.Controllers
             var cacheImgLst = cache.GetCache<List<Tuple<int, string, string, string, string>>>(cacheKey);
             if (cacheImgLst == null)
             {
-                dash = dash + Configs.GetValue("ImgFolder");//默认固定文件夹为ImgList
+                dash = Path.Combine(dash, Configs.GetValue("ImgFolder"));//默认固定文件夹为ImgList
                 if (FileHelper.IsExistDirectory(dash))
                 {
                     DirectoryInfo di = new DirectoryInfo(dash);
@@ -134,7 +113,7 @@ namespace NFine.Web.Areas.Canchong.Controllers
                         var length = FileHelper.ToFileSize(item.Length);//获取图片大小
                         imgLst.Add(new Tuple<int, string, string, string, string>(count, item.Name, item.FullName, length.ToString(), item.Extension));
                     }
-                    cache.WriteCache<List<Tuple<int, string, string, string, string>>>(imgLst, dash);//写入缓存
+                    cache.WriteCache<List<Tuple<int, string, string, string, string>>>(imgLst, cacheKey);//写入缓存
                 }
                 cacheImgLst = imgLst;
             }
@@ -143,7 +122,9 @@ namespace NFine.Web.Areas.Canchong.Controllers
 
             return Json(pageImgLst.ToList(), JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
+        #region private List<Tuple<int, string, string, string, string>> GetpageImgLst() 分页并处理图片移动
         /// <summary>
         /// 分页并处理图片移动
         /// </summary>
@@ -170,8 +151,9 @@ namespace NFine.Web.Areas.Canchong.Controllers
 
             return pageImgLst;
         }
+        #endregion
 
-
+        #region  public ActionResult FnFile()  图片归档
         [HandlerAjaxOnly]
         /// <summary>
         /// 图片归档
@@ -184,8 +166,8 @@ namespace NFine.Web.Areas.Canchong.Controllers
         /// <returns></returns>
         public ActionResult FnFile(string dash, string category, string dat, string cvalue, string synchro)
         {
-            List<ToJsonMy> my = NFine.Code.Json.ToObject<List<ToJsonMy>>(dat);
-            string originalPath = dash + Configs.GetValue("ImgFolder");//获取源文件坐在盘符
+            List<ToJsonFile> paramdat = NFine.Code.Json.ToObject<List<ToJsonFile>>(dat);//接收参数
+            string originalPath = Path.Combine(dash, Configs.GetValue("ImgFolder"));//获取源文件坐在盘符
 
             string cacheKey = dash;//缓存键值
             ICache cache = CacheFactory.Cache();//实例化缓存，默认自带缓存
@@ -195,14 +177,14 @@ namespace NFine.Web.Areas.Canchong.Controllers
             string thumbnailFolder = "/Temp/" + cvalue + "_s/";
             FileHelper.CreateDirectory(Server.MapPath(categoryFolder));
             FileHelper.CreateDirectory(Server.MapPath(thumbnailFolder));
-            if (my.Count > 0)
+            if (paramdat.Count > 0)
             {
-                for (int i = 0; i < my.Count; i++)
+                for (int i = 0; i < paramdat.Count; i++)
                 {
-                    var filename = my[i].filename;//文件名称
-                    var filetype = my[i].filetype;//文件扩展名
-                    var filesize = my[i].filesize;//文件大小
-                    var filenick = my[i].filenick;//文件昵称
+                    var filename = paramdat[i].filename;//文件名称
+                    var filetype = paramdat[i].filetype;//文件扩展名
+                    var filesize = paramdat[i].filesize;//文件大小
+                    var filenick = paramdat[i].filenick;//文件昵称
 
                     //第二步：将文件剪切至类别文件夹
                     if (!FileHelper.IsExistFile(Server.MapPath(categoryFolder + filename)))
@@ -248,8 +230,40 @@ namespace NFine.Web.Areas.Canchong.Controllers
             }
             return View();
         }
+        #endregion
 
-        public struct ToJsonMy
+        #region uploadify 上传【弃用】
+
+        public ActionResult Upload()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase Filedata)
+        {
+            // 没有文件上传，直接返回
+            if (Filedata == null || string.IsNullOrEmpty(Filedata.FileName) || Filedata.ContentLength == 0)
+            {
+                return HttpNotFound();
+            }
+
+            var dash = Request["dash"];
+            dash = dash + Configs.GetValue("ImgFolder");//默认固定文件夹为ImgList
+            FileHelper.CreateDirectory(dash);//创建盘符存放图片文件夹
+
+            string fullpath = dash + "/" + Filedata.FileName;
+            if (!System.IO.File.Exists(fullpath))
+            {
+                Filedata.SaveAs(fullpath);
+            }
+
+            var data = new { };
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        public struct ToJsonFile
         {
             public string filename { get; set; }
             public string filetype { get; set; }

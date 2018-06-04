@@ -140,6 +140,8 @@
     <Compile Include="Areas\Canchong\CanchongAreaRegistration.cs" />
     <Compile Include="Areas\Canchong\Controllers\PicHourseController.cs" />
     <Compile Include="Areas\Canchong\Controllers\PicListController.cs" />
+    <Compile Include="Areas\Canchong\Controllers\SourceHourseController.cs" />
+    <Compile Include="Areas\Canchong\Controllers\SourceListController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\BarCodeController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\PrintController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\SendMailController.cs" />
@@ -1203,6 +1205,11 @@
     <Content Include="Content\js\webuploader-0.1.5\README.md" />
     <Content Include="Areas\Canchong\Views\PicHourse\WebUploader.cshtml" />
     <Content Include="Areas\Canchong\Views\PicList\WebUploader.cshtml" />
+    <Content Include="Areas\Canchong\Views\SourceHourse\Index.cshtml" />
+    <Content Include="Areas\Canchong\Views\SourceHourse\WebUploader.cshtml" />
+    <Content Include="Areas\Canchong\Views\SourceList\Index.cshtml" />
+    <Content Include="Areas\Canchong\Views\SourceList\Form.cshtml" />
+    <Content Include="Areas\Canchong\Views\SourceList\WebUploader.cshtml" />
     <None Include="Properties\PublishProfiles\NFine.Framework.Release.pubxml" />
     <Content Include="Views\Home\Upload.cshtml" />
     <Content Include="Views\Site\Index.cshtml" />

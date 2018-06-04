@@ -8,19 +8,14 @@
     <link href="~/Content/css/framework-theme.css" rel="stylesheet" />
     <link href="~/Content/js/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/css/framework-theme.css" rel="stylesheet" />
-
     <link href="~/Content/js/baguetteBox/css/baguetteBox.min.css" rel="stylesheet" />
     <link href="~/Content/js/baguetteBox/css/thumbnail-gallery.css" rel="stylesheet" />
-    <script src="~/Content/js/baguetteBox/js/baguetteBox.min.js"></script>
-
+    <script src="~/Content/js/baguetteBox/js/baguetteBox.min.js"></script> 
     <link href="~/Content/js/select2/select2.min.css" rel="stylesheet" />
     <script src="~/Content/js/select2/select2.min.js"></script>
-
     <script src="~/Content/js/common.js"></script>
     <link href="~/Content/js/iCheck/skins/all.css" rel="stylesheet" />
-
     <script src="~/Content/js/iCheck/icheck.min.js"></script>
-
     <script src="~/Content/js/layer/layer.js"></script>
 </head>
 <body>
@@ -35,7 +30,7 @@
                     </div>
                 </div>
                 <div id="dashboardlst" class="panel-body">
-                    <div class="dashboard-stats">
+                    @*<div class="dashboard-stats">
                         <div class="dashboard-stats-item" style="background-color: #fc8675;">
                             <h4 class="m-top-none">C盘</h4>
                             <h5>磁盘空间：40GB</h5>
@@ -43,67 +38,27 @@
                                 <i class="fa fa-hdd-o fa-2x"></i>
                             </div>
                         </div>
-                    </div>
-                    <div class="dashboard-stats">
-                        <div class="dashboard-stats-item" style="background-color: #6bafbd;">
-                            <h4 class="m-top-none">D盘</h4>
-                            <h5>磁盘空间：130GB</h5>
-                            <div class="stat-icon">
-                                <i class="fa fa-hdd-o fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dashboard-stats">
-                        <div class="dashboard-stats-item" style="background-color: #f3ce85;">
-                            <h4 class="m-top-none">E盘</h4>
-                            <h5>磁盘空间：120GB</h5>
-                            <div class="stat-icon">
-                                <i class="fa fa-hdd-o fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dashboard-stats">
-                        <div class="dashboard-stats-item" style="background-color: #949FB1;">
-                            <h4 class="m-top-none">F盘</h4>
-                            <h5>磁盘空间：120GB</h5>
-                            <div class="stat-icon">
-                                <i class="fa fa-hdd-o fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dashboard-stats">
-                        <div class="dashboard-stats-item" style="background-color: #65cea7; margin-right: 0px;">
-                            <h4 class="m-top-none">H盘</h4>
-                            <h5>磁盘空间：4GB</h5>
-                            <div class="stat-icon">
-                                <i class="fa fa-hdd-o fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>
         <div class="rows" style="margin-bottom: 1%; overflow: hidden;">
             <div style="float: left; width: 80%;">
-                <div style=" border: 1px solid #e6e6e6; background-color: #fff;">
+                <div style="border: 1px solid #e6e6e6; background-color: #fff;">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-picture-o fa-lg" style="padding-right: 5px;"></i>图片列表
                             <div style="float: right;font-size:14px">
                                 <input tabindex="5" type="checkbox" id="chkall">
                                 <label for="chkall">全选</label>
-
                                 <a id="NF-upload" style="margin-left:20px" class="btn btn-info btn-xs " onclick="btn_add()"><i class="fa fa-cloud-upload"></i> 导入图片</a>
                             </div>
                         </div>
                         <div class="panel-body">
-
                             <div class="htmleaf-container">
                                 <div class="container gallery-container">
                                     <div class="tz-gallery">
-
                                         <div id="imglst" class="row">
-
                                             @*<div class="col-sm-6 col-md-2">
                                                     <div class="thumbnail">
                                                         <a class="lightbox" href="/Content/js/baguetteBox/images/park.jpg">
@@ -120,182 +75,8 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/bridge.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/bridge.jpg" alt="Bridge">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/tunnel.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/tunnel.jpg" alt="Tunnel">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/coast.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/coast.jpg" alt="Coast">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/rails.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/rails.jpg" alt="Rails">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/traffic.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/traffic.jpg" alt="Traffic">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/park.jpg">
-                                                            <img src="/Content/js/baguetteBox/images/park.jpg" alt="Park">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <p>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox">选择
-                                                                    </label>
-                                                                </div>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/bridge.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/bridge.jpg" alt="Bridge">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/tunnel.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/tunnel.jpg" alt="Tunnel">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/coast.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/coast.jpg" alt="Coast">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/rails.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/rails.jpg" alt="Rails">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="thumbnail">
-                                                        <a class="lightbox" href="/Content/js/baguetteBox/images/traffic.jpg">
-                                                            <img src="~/Content/js/baguetteBox/images/traffic.jpg" alt="Traffic">
-                                                        </a>
-                                                        <div class="caption">
-                                                            <h3>Thumbnail label</h3>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox">选择
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>*@
-
-
-                                            <div style="clear:both ">
-
-                                            </div>
                                         </div>
-
                                         <button type="button" id="btnMore" class="btn" style="width:100%;margin-top:10px">加载更多</button>
                                     </div>
                                 </div>
@@ -310,41 +91,17 @@
                         <div class="panel-heading"><i class="fa fa-pie-chart fa-lg" style="padding-right: 5px;"></i>图片类别</div>
                         <div class="panel-body" style="padding-top: 20px;">
                             <div class="biaoqian" style="text-align: center; padding-top: 20px;">
-
-                                @*<a class="btn btn-info btn-xs" href="#" role="button" data-id="1">东北菜</a>
-                                    <a class="btn btn-primary btn-xs" href="#" role="button" data-id="2">宁波菜</a>
-                                    <a class="btn btn-success btn-xs" href="#" role="button" data-id="3">川湘菜</a>
-                                    <a class="btn btn-info btn-xs" href="#" role="button" data-id="4">广东粤菜</a>
-                                    <a class="btn btn-warning btn-xs" href="#" role="button" data-id="5">海鲜</a>
-                                    <a class="btn btn-danger btn-xs" href="#" role="button" data-id="6">火锅</a>
-
-                                    <a class="btn btn-info btn-xs" href="#" role="button" data-id="7">串串香</a>
-                                    <a class="btn btn-primary btn-xs" href="#" role="button" data-id="8">徽菜</a>
-                                    <a class="btn btn-success btn-xs" href="#" role="button" data-id="9">面点</a>
-                                    <a class="btn btn-warning btn-xs" href="#" role="button" data-id="10">野味</a>*@
-
+                                @*<a class="btn btn-info btn-xs" href="#" role="button" data-id="1">东北菜</a>*@
                             </div>
 
                             <div style="margin-top: 20px; padding-top: 18px; height: 60px; border-top: 1px solid #e6e6e6;">
                                 <select id="selCategory" name="selCategory" class="select2 form-control" >
                                     <option value="">==请选择类别==</option>
-                                    @*<option value="" selected="selected">请选择类别</option>
-                                        <option value="1">东北菜</option>
-                                        <option value="2">宁波菜</option>
-                                        <option value="3">川湘菜</option>
-                                        <option value="4">广东粤菜</option>
-                                        <option value="5">海鲜</option>
-                                        <option value="6">火锅</option>
-                                        <option value="7">串串香</option>
-                                        <option value="8">徽菜</option>
-                                        <option value="9">面点</option>
-                                        <option value="10">野味</option>*@
                                 </select>
                                 <div style="margin-top:10px;font-size:14px" >
                                     <input tabindex="5" type="checkbox" id="chksynchro">
                                     <label for="chksynchro"> 是否同步</label>
                                 </div>
-
                                 <button type="button" id="btnOK" class="btn btn-info" style="width:100%;margin-top:20px">归类</button>
                             </div>
                         </div>
@@ -352,7 +109,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     <style>
         .dashboard-stats {
@@ -371,26 +127,25 @@
             padding: 20px 20px;
         }
 
-            .dashboard-stats-item .m-top-none {
+        .dashboard-stats-item .m-top-none {
                 margin-top: 2px;
             }
 
-            .dashboard-stats-item h2 {
+        .dashboard-stats-item h2 {
                 font-size: 35px;
                 font-family: inherit;
                 line-height: 1.1;
                 font-weight: 500;
             }
 
-            .dashboard-stats-item h5 {
+        .dashboard-stats-item h5 {
                 font-size: 14px;
                 font-family: inherit;
                 margin-top: 3px;
                 line-height: 1.1;
             }
 
-
-            .dashboard-stats-item .stat-icon {
+        .dashboard-stats-item .stat-icon {
                 position: absolute;
                 top: 10px;
                 right: 10px;
@@ -416,37 +171,36 @@
             -webkit-box-shadow: none;
         }
 
-            .panel-default > .panel-heading {
+        .panel-default > .panel-heading {
                 color: #777;
                 background-color: #fff;
                 border-color: #e6e6e6;
                 padding: 10px 10px;
             }
 
-            .panel-default > .panel-body {
-                padding: 10px 10px 15px 10px;
+        .panel-default > .panel-body {
+                padding: 10px 10px 0px 10px;
             }
 
-                .panel-default > .panel-body ul {
+        .panel-default > .panel-body ul {
                     overflow: hidden;
                     padding: 0;
                     margin: 0px;
                     margin-top: -5px;
                 }
 
-                    .panel-default > .panel-body ul li {
+        .panel-default > .panel-body ul li {
                         line-height: 27px;
                         list-style-type: none;
                         white-space: nowrap;
                         text-overflow: ellipsis;
                     }
 
-                        .panel-default > .panel-body ul li .time {
+        .panel-default > .panel-body ul li .time {
                             color: #a1a1a1;
                             float: right;
                             padding-right: 5px;
                         }
-
 
         .caption label {
             font-size: 14px;
@@ -460,22 +214,15 @@
             margin-bottom: 5px;
         }
 
-
         .checkbox, .radio {
             margin-top: 0px;
             margin-bottom: 0px;
-        }
-
-        .tz-gallery .caption h3 {
-            /*padding-left: 17px;*/
         }
 
         .caption {
             cursor: pointer;
             height: 72px;
         }
-
-
 
         .fname {
             width: 100%;
@@ -485,6 +232,7 @@
             height: 26px;
             margin-bottom: 10px;
         }
+
         .select2-selection,.select2-results__option {
         font-size:14px;
         }
@@ -494,7 +242,6 @@
     <script type="text/javascript">
 
         var currpage = 1;//默认当前第一页
-
         var arrcolor1 = ["#fc8675", "#6bafbd", "#f3ce85", "#949FB1", "#65cea7"];
         var arrcolor2 = ["info", "primary", "success", "danger", "warning"];
 

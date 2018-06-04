@@ -59,6 +59,7 @@
     <Compile Include="WebManage\WebFriendLinksRepository.cs" />
     <Compile Include="WebManage\WebNodeRepository.cs" />
     <Compile Include="WebManage\WebPictureRepository.cs" />
+    <Compile Include="WebManage\WebSourceFileRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NFine.Code\NFine.Code.csproj">

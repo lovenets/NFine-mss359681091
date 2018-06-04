@@ -63,6 +63,7 @@
     <Compile Include="03 Entity\WebManage\WebFriendLinksEntity.cs" />
     <Compile Include="03 Entity\WebManage\WebNodeEntity.cs" />
     <Compile Include="03 Entity\WebManage\WebPictureEntity.cs" />
+    <Compile Include="03 Entity\WebManage\WebSourceFileEntity.cs" />
     <Compile Include="04 IRepository\SystemManage\IAreaRepository.cs" />
     <Compile Include="04 IRepository\SystemManage\IItemsDetailRepository.cs" />
     <Compile Include="04 IRepository\SystemManage\IItemsRepository.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="04 IRepository\WebManage\IWebFriendLinksRepository.cs" />
     <Compile Include="04 IRepository\WebManage\IWebNodeRepository.cs" />
     <Compile Include="04 IRepository\WebManage\IWebPictureRepository.cs" />
+    <Compile Include="04 IRepository\WebManage\IWebSourceFileRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
